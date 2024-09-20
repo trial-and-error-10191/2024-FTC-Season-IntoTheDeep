@@ -22,10 +22,10 @@ public class Centerstage_TeleOp extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-
-            // This controls the drive train using three double input methods.
-            // The fourth input is a boolean for the direction toggle.
-            // The last input is the time the function uses to space out inputs for the direction switch.
+            //
+            //            // This controls the drive train using three double input methods.
+            //            // The fourth input is a boolean for the direction toggle.
+            //            // The last input is the time the function uses to space out inputs for the direction switch.
             robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
             // Provides telemetry for all motors, servos, and sensors.

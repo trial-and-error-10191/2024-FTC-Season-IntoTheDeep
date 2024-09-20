@@ -31,7 +31,7 @@ public class DriveTrain {
     // This function needs an axial, lateral, and yaw input. It uses this input to drive the drive train motors.
     // The last two variables are for direction switching.
     public void drive(double axial, double lateral, double yaw) {
-
+        double sensitivity = 0.6;
         double leftFrontPower = 0;
         double rightFrontPower = 0;
         double leftBackPower = 0;
@@ -56,7 +56,13 @@ public class DriveTrain {
             rightBackPower /= max;
         }
 
-        // The next eleven lines gives the calculated power to each motor.
+        // Calculates power using sensitivity variable.
+        leftFrontPower *= sensitivity;
+        leftBackPower *= sensitivity;
+        rightFrontPower *= sensitivity;
+        rightBackPower *= sensitivity;
+
+        // The next four lines gives the calculated power to each motor.
             leftFrontDrive.setPower(leftFrontPower);
             rightFrontDrive.setPower(rightFrontPower);
             leftBackDrive.setPower(leftBackPower);
