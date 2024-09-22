@@ -12,6 +12,7 @@ public class DriveTrain {
 
     DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
 
+
     // All subsystems should have a hardware function that labels all of the hardware required of it.
     public DriveTrain(HardwareMap hwMap) {
 
@@ -68,11 +69,56 @@ public class DriveTrain {
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
     }
-  
-    public void stop() { // Makes the robot stop whenever this function is called
+    public void moveForward(int distance, double seconds) { // Makes the robot move forward
+        leftFrontDrive.setPower(1);
+        rightFrontDrive.setPower(1);
+        leftBackDrive.setPower(1);
+        rightBackDrive.setPower(1);
+    }
+    public void strafeLeft(int distance, double seconds) { // Makes the robot strafe to the left
+        leftFrontDrive.setPower(1);
+        rightFrontDrive.setPower(-1);
+        leftBackDrive.setPower(1);
+        rightBackDrive.setPower(-1);
+    }
+    public void strafeRight(int distance, double seconds) { // Makes the robot strafe to the right
+        leftFrontDrive.setPower(-1);
+        rightFrontDrive.setPower(1);
+        leftBackDrive.setPower(-1);
+        rightBackDrive.setPower(1);
+    }
+    public void turnClockwise(int distance, double seconds) { // Makes the robot turn clockwise
+        leftFrontDrive.setPower(1);
+        rightFrontDrive.setPower(1);
+        leftBackDrive.setPower(-1);
+        rightBackDrive.setPower(-1);
+    }
+    public void turnCounterClockwise(int distance, double seconds) { // Makes the robot turn clockwise
+        leftFrontDrive.setPower(-1);
+        rightFrontDrive.setPower(-1);
+        leftBackDrive.setPower(1);
+        rightBackDrive.setPower(1);
+    }
+    public void stop(double seconds) { // Makes the robot stop whenever this function is called
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
         leftBackDrive.setPower(0);
         rightBackDrive.setPower(0);
+    }
+    public void autonomous1 () {
+        moveForward(3,0.5);
+        stop(0.1);
+        strafeRight(4,0.5);
+        stop(0.1);
+        moveForward(4, 0.5);
+        stop(0.1);
+        turnCounterClockwise(2, 0.5);
+        stop(0.1);
+        moveForward(7, 0.5);
+        stop(0.1);
+        strafeLeft(4,0.5);
+        stop(0.1);
+        moveForward(-4,0.5);
+        stop(0.1);
     }
 }
