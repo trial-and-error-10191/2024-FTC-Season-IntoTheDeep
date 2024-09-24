@@ -31,17 +31,23 @@ public class DriveTrain {
     // This function needs an axial, lateral, and yaw input. It uses this input to drive the drive train motors.
     // The last two variables are for direction switching.
     public void drive(double axial, double lateral, double yaw) {
+
+        // initializes deadzone
+        double deadzone = 0.05;
+        // initializes sensitivity
         double sensitivity = 0.6;
+
         double leftFrontPower = 0;
         double rightFrontPower = 0;
         double leftBackPower = 0;
         double rightBackPower = 0;
 
-        leftFrontPower = axial + lateral + yaw;
-        rightFrontPower = axial - lateral - yaw;
-        leftBackPower = axial - lateral + yaw;
-        rightBackPower = axial + lateral - yaw;
-
+       if (Math.abs(axial) > deadzone || Math.abs(lateral) > deadzone || Math.abs(yaw) > deadzone) {
+           leftFrontPower = axial + lateral + yaw;
+           rightFrontPower = axial - lateral - yaw;
+           leftBackPower = axial - lateral + yaw;
+           rightBackPower = axial + lateral - yaw;
+       }
         double max;
 
         // All code below this comment normalizes the values so no wheel power exceeds 100%.
