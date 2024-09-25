@@ -4,6 +4,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -23,10 +24,10 @@ public class DriveTrain {
         rightBackDrive = hwMap.get(DcMotor.class, "rightBack");
 
         // Initializes motor directions:
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
     }
 
     // This function needs an axial, lateral, and yaw input. It uses this input to drive the drive train motors.
@@ -64,51 +65,57 @@ public class DriveTrain {
         rightBackPower *= sensitivity;
 
         // The next four lines gives the calculated power to each motor.
-            leftFrontDrive.setPower(leftFrontPower);
-            rightFrontDrive.setPower(rightFrontPower);
-            leftBackDrive.setPower(leftBackPower);
-            rightBackDrive.setPower(rightBackPower);
+        leftFrontDrive.setPower(leftFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
+        leftBackDrive.setPower(leftBackPower);
+        rightBackDrive.setPower(rightBackPower);
     }
+
     public void moveForward(int distance, double seconds) { // Makes the robot move forward
         leftFrontDrive.setPower(1);
         rightFrontDrive.setPower(1);
         leftBackDrive.setPower(1);
         rightBackDrive.setPower(1);
     }
+
     public void strafeLeft(int distance, double seconds) { // Makes the robot strafe to the left
         leftFrontDrive.setPower(1);
         rightFrontDrive.setPower(-1);
         leftBackDrive.setPower(1);
         rightBackDrive.setPower(-1);
     }
+
     public void strafeRight(int distance, double seconds) { // Makes the robot strafe to the right
         leftFrontDrive.setPower(-1);
         rightFrontDrive.setPower(1);
         leftBackDrive.setPower(-1);
         rightBackDrive.setPower(1);
     }
+
     public void turnClockwise(int distance, double seconds) { // Makes the robot turn clockwise
         leftFrontDrive.setPower(1);
         rightFrontDrive.setPower(1);
         leftBackDrive.setPower(-1);
         rightBackDrive.setPower(-1);
     }
+
     public void turnCounterClockwise(int distance, double seconds) { // Makes the robot turn clockwise
         leftFrontDrive.setPower(-1);
         rightFrontDrive.setPower(-1);
         leftBackDrive.setPower(1);
         rightBackDrive.setPower(1);
     }
+
     public void stop(double seconds) { // Makes the robot stop whenever this function is called
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
         leftBackDrive.setPower(0);
         rightBackDrive.setPower(0);
     }
-    public void autonomous1 () {
-        moveForward(3,0.5);
+    public void autonomous1() {
+        moveForward(3, 0.5);
         stop(0.1);
-        strafeRight(4,0.5);
+        strafeRight(4, 0.5);
         stop(0.1);
         moveForward(4, 0.5);
         stop(0.1);
@@ -116,9 +123,9 @@ public class DriveTrain {
         stop(0.1);
         moveForward(7, 0.5);
         stop(0.1);
-        strafeLeft(4,0.5);
+        strafeLeft(4, 0.5);
         stop(0.1);
-        moveForward(-4,0.5);
+        moveForward(-4, 0.5);
         stop(0.1);
     }
 }
