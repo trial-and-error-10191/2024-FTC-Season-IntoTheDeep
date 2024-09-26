@@ -105,27 +105,26 @@ public class DriveTrain {
         leftBackDrive.setPower(1);
         rightBackDrive.setPower(1);
     }
-
-    public void stop(double seconds) { // Makes the robot stop whenever this function is called
+    public void stop() { // Makes the robot stop whenever this function is called
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
         leftBackDrive.setPower(0);
         rightBackDrive.setPower(0);
     }
-    public void autonomous1() {
+    public void autonomous1() { // Autonomous for IntoTheDeep
         moveForward(3, 0.5);
-        stop(0.1);
+        stop();
         strafeRight(4, 0.5);
-        stop(0.1);
+        stop();
         moveForward(4, 0.5);
-        stop(0.1);
+        stop();
         turnCounterClockwise(2, 0.5);
-        stop(0.1);
+        stop();
         moveForward(7, 0.5);
-        stop(0.1);
+        stop();
         strafeLeft(4, 0.5);
-        stop(0.1);
+        stop();
         moveForward(-4, 0.5);
-        stop(0.1);
+        stop();
     }
 }

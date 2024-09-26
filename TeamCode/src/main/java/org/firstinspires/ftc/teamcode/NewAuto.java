@@ -12,6 +12,12 @@ public class NewAuto extends LinearOpMode {
     Robot robot = null;
     ElapsedTime runtimeTimer = null;
     @Override
+//    public void Wait(double seconds) {
+//        ElapsedTime.reset();
+//        while (ElapsedTime.time() < seconds) {
+//            // this statement is supposed to be empty.
+//        }
+//    }
     public void runOpMode(){
         runtimeTimer = new ElapsedTime();
         runtimeTimer.startTime();
