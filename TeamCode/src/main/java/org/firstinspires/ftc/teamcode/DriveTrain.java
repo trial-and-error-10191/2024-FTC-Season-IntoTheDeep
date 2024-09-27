@@ -12,7 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class DriveTrain {
 
     DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
-
+    private ElapsedTime runtime = new ElapsedTime();
+    // for move vertically only
+    double motor;
 
     // All subsystems should have a hardware function that labels all of the hardware required of it.
     public DriveTrain(HardwareMap hwMap) {
@@ -71,60 +73,86 @@ public class DriveTrain {
         rightBackDrive.setPower(rightBackPower);
     }
 
-    public void moveForward(int distance, double seconds) { // Makes the robot move forward
-        leftFrontDrive.setPower(1);
-        rightFrontDrive.setPower(1);
-        leftBackDrive.setPower(1);
-        rightBackDrive.setPower(1);
+    public void moveVertically(double power, double seconds) { // Makes the robot go forward if the number is a positive, but moves it backward when it's a negative number
+        runtime.reset();
+        while (runtime.time() < seconds) {
+            leftFrontDrive.setPower(power);
+            rightFrontDrive.setPower(power);
+            leftBackDrive.setPower(power);
+            rightBackDrive.setPower(power);
+        }
     }
 
-    public void strafeLeft(int distance, double seconds) { // Makes the robot strafe to the left
-        leftFrontDrive.setPower(1);
-        rightFrontDrive.setPower(-1);
-        leftBackDrive.setPower(1);
-        rightBackDrive.setPower(-1);
+    public void strafeLeft(double power, double seconds) { // Makes the robot strafe to the left
+        runtime.reset();
+        while (runtime.time() < seconds) {
+            leftFrontDrive.setPower(-power);
+            rightFrontDrive.setPower(power);
+            leftBackDrive.setPower(power);
+            rightBackDrive.setPower(-power);
+        }
     }
 
-    public void strafeRight(int distance, double seconds) { // Makes the robot strafe to the right
-        leftFrontDrive.setPower(-1);
-        rightFrontDrive.setPower(1);
-        leftBackDrive.setPower(-1);
-        rightBackDrive.setPower(1);
+    public void strafeRight(double power, double seconds) { // Makes the robot strafe to the right
+        runtime.reset();
+        while (runtime.time() < seconds) {
+            leftFrontDrive.setPower(power);
+            rightFrontDrive.setPower(-power);
+            leftBackDrive.setPower(-power);
+            rightBackDrive.setPower(power);
+        }
     }
 
-    public void turnClockwise(int distance, double seconds) { // Makes the robot turn clockwise
-        leftFrontDrive.setPower(1);
-        rightFrontDrive.setPower(1);
-        leftBackDrive.setPower(-1);
-        rightBackDrive.setPower(-1);
+    public void turnClockwise(double power, double seconds) { // Makes the robot turn clockwise
+        runtime.reset();
+        while (runtime.time() < seconds) {
+            leftFrontDrive.setPower(power);
+            rightFrontDrive.setPower(-power);
+            leftBackDrive.setPower(power);
+            rightBackDrive.setPower(-power);
+        }
     }
 
-    public void turnCounterClockwise(int distance, double seconds) { // Makes the robot turn clockwise
-        leftFrontDrive.setPower(-1);
-        rightFrontDrive.setPower(-1);
-        leftBackDrive.setPower(1);
-        rightBackDrive.setPower(1);
+    public void turnCounterClockwise(double power, double seconds) { // Makes the robot turn clockwise
+        runtime.reset();
+        while (runtime.time() < seconds) {
+            leftFrontDrive.setPower(-power);
+            rightFrontDrive.setPower(power);
+            leftBackDrive.setPower(-power);
+            rightBackDrive.setPower(power);
+        }
     }
+
     public void stop() { // Makes the robot stop whenever this function is called
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
         leftBackDrive.setPower(0);
         rightBackDrive.setPower(0);
     }
+
+    public void Wait(double seconds) {
+        runtime.reset();
+        while (runtime.time() < seconds) {
+           // this statement is supposed to be empty.
+        }
+    }
     public void autonomous1() { // Autonomous for IntoTheDeep
-        moveForward(3, 0.5);
+        strafeRight(0.7,0.8);
         stop();
-        strafeRight(4, 0.5);
+        Wait(1);
+        moveVertically(0.5, 0.5);
         stop();
-        moveForward(4, 0.5);
+        Wait(1);
+        moveVertically(1, 0.5);
         stop();
+        Wait(20);
         turnCounterClockwise(2, 0.5);
         stop();
-        moveForward(7, 0.5);
+        moveVertically(7, 0.5);
         stop();
         strafeLeft(4, 0.5);
         stop();
-        moveForward(-4, 0.5);
+        moveVertically(-4, 0.5);
         stop();
     }
 }
