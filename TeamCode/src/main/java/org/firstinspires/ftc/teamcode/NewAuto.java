@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 // import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -11,6 +12,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class NewAuto extends LinearOpMode {
     Robot robot = null;
     ElapsedTime runtimeTimer = null;
+    public DistanceSensor sensorDistance;
+    public
     @Override
     public void runOpMode(){
         runtimeTimer = new ElapsedTime();
