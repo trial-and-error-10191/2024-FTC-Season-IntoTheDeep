@@ -13,9 +13,10 @@ public class NewAuto extends LinearOpMode {
     Robot robot = null;
     ElapsedTime runtimeTimer = null;
     public DistanceSensor sensorDistance;
+    public RobotAutoDriveByEncoder_Linear EncoderDrive;
     public
     @Override
-    public void runOpMode(){
+    void runOpMode(){
         runtimeTimer = new ElapsedTime();
         runtimeTimer.startTime();
 
