@@ -13,7 +13,7 @@ public class NewAuto extends LinearOpMode {
     Robot robot = null;
     ElapsedTime runtimeTimer = null;
     public DistanceSensor sensorDistance;
-    public RobotAutoDriveByEncoder_Linear EncoderDrive;
+    //public RobotAutoDriveByEncoder_Linear EncoderDrive;
     public
     @Override
     void runOpMode(){
@@ -24,7 +24,8 @@ public class NewAuto extends LinearOpMode {
 
         waitForStart(); {
             if (opModeIsActive()) {
-                robot.driveTrain.autonomous1();
+                EncoderDrive.encoderDrive(1,0,0, 1);
+
             }
         }
     }   // end runOpMode()

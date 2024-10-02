@@ -72,56 +72,72 @@ public class DriveTrain {
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
     }
+    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double     WHEEL_DIAMETER_INCHES   = 3.5 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     DRIVE_SPEED             = 0.6;
+    static final double     TURN_SPEED              = 0.5;
 
-    public void moveVertically(double power, double seconds) { // Makes the robot go forward if the number is a positive, but moves it backward when it's a negative number
-        runtime.reset();
-        while (runtime.time() < seconds) {
-            leftFrontDrive.setPower(power);
-            rightFrontDrive.setPower(power);
-            leftBackDrive.setPower(power);
-            rightBackDrive.setPower(power);
+    public void encoderDrive(double speed, double leftInches, double rightInches,double timeoutS) {
+        int newLeftTarget;
+        int newRightTarget;
+            // Determine new target position, and pass to motor controller
+            newLeftTarget = leftFrontDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newLeftTarget = leftBackDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newRightTarget = rightFrontDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newRightTarget = rightBackDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            leftFrontDrive.setTargetPosition(newLeftTarget);
+            leftBackDrive.setTargetPosition(newLeftTarget);
+            rightFrontDrive.setTargetPosition(newRightTarget);
+            rightBackDrive.setTargetPosition(newLeftTarget);
+
+            // Turn On RUN_TO_POSITION
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            leftFrontDrive.setPower(Math.abs(speed));
+            leftBackDrive.setPower(Math.abs(speed));
+            rightFrontDrive.setPower(Math.abs(speed));
+            rightBackDrive.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+//            while (opModeIsActive() && (runtime.seconds() < timeoutS) && (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && leftBackDrive.isBusy() && rightBackDrive.isBusy())) {
+//
+//                // Display it for the driver.
+//                telemetry.addData("Running to",  " %7d :%7d", newLeftTarget,  newRightTarget);
+//                telemetry.addData("Currently at",  " at %7d :%7d",
+//                        leftFrontDrive.getCurrentPosition(), leftBackDrive.getCurrentPosition(), rightFrontDrive.getCurrentPosition(), rightBackDrive.getCurrentPosition());
+//                telemetry.update();
+//            }
+
+            // Stop all motion;
+            leftFrontDrive.setPower(0);
+            leftBackDrive.setPower(0);
+            rightFrontDrive.setPower(0);
+            rightBackDrive.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            sleep(250);   // optional pause after each move.
         }
     }
+}
 
-    public void strafeLeft(double power, double seconds) { // Makes the robot strafe to the left
-        runtime.reset();
-        while (runtime.time() < seconds) {
-            leftFrontDrive.setPower(-power);
-            rightFrontDrive.setPower(power);
-            leftBackDrive.setPower(power);
-            rightBackDrive.setPower(-power);
-        }
-    }
-
-    public void strafeRight(double power, double seconds) { // Makes the robot strafe to the right
-        runtime.reset();
-        while (runtime.time() < seconds) {
-            leftFrontDrive.setPower(power);
-            rightFrontDrive.setPower(-power);
-            leftBackDrive.setPower(-power);
-            rightBackDrive.setPower(power);
-        }
-    }
-
-    public void turnClockwise(double power, double seconds) { // Makes the robot turn clockwise
-        runtime.reset();
-        while (runtime.time() < seconds) {
-            leftFrontDrive.setPower(power);
-            rightFrontDrive.setPower(-power);
-            leftBackDrive.setPower(power);
-            rightBackDrive.setPower(-power);
-        }
-    }
-
-    public void turnCounterClockwise(double power, double seconds) { // Makes the robot turn clockwise
-        runtime.reset();
-        while (runtime.time() < seconds) {
-            leftFrontDrive.setPower(-power);
-            rightFrontDrive.setPower(power);
-            leftBackDrive.setPower(-power);
-            rightBackDrive.setPower(power);
-        }
-    }
 
     public void stop() { // Makes the robot stop whenever this function is called
         leftFrontDrive.setPower(0);
@@ -135,37 +151,5 @@ public class DriveTrain {
         while (runtime.time() < seconds) {
            // this statement is supposed to be empty.
         }
-    }
-    public void autonomous1() { // Autonomous for IntoTheDeep
-        strafeRight(0.4, 0.3);
-        stop();
-        Wait(1);
-        moveVertically(0.9, 1.35);
-        stop();
-        Wait(0.1);
-        moveVertically(-0.1, 0.1);
-        stop();
-        Wait(0.3);
-        moveVertically(-0.9, 1.5);
-        stop();
-        Wait(0.1);
-        moveVertically(0.1, 0.1);
-        stop();
-        Wait(0.3);
-//        strafeLeft(0.8, 0.5);
-//        moveVertically(0.5, 0.5);
-//        stop();
-//        Wait(1);
-//        moveVertically(1, 0.5);
-//        stop();
-//        Wait(20);
-//        turnCounterClockwise(2, 0.5);
-//        stop();
-//        moveVertically(7, 0.5);
-//        stop();
-//        strafeLeft(4, 0.5);
-//        stop();
-//        moveVertically(-4, 0.5);
-//        stop();
     }
 }
