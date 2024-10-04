@@ -20,11 +20,11 @@ public class NewAuto extends LinearOpMode {
         runtimeTimer = new ElapsedTime();
         runtimeTimer.startTime();
 
-        robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap, telemetry);
 
         waitForStart(); {
             if (opModeIsActive()) {
-                EncoderDrive.encoderDrive(1,0,0, 1);
+                robot.driveTrain.encoderDrive(5,1,1, 1);
 
             }
         }
