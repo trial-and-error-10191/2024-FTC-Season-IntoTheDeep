@@ -24,7 +24,7 @@ public class NewAuto extends LinearOpMode {
 
         waitForStart(); {
             if (opModeIsActive()) {
-                robot.driveTrain.encoderDrive(5,1,1, 1);
+                robot.driveTrain.encoderDrive(1,3,3, 1);
 
             }
         }
