@@ -123,8 +123,8 @@ public class DriveTrain {
         while ((runtime.seconds() < timeoutS) && (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && leftBackDrive.isBusy() && rightBackDrive.isBusy())) {
 
             // Display it for the driver.
-            telemetry.addData("Running to",  " %7d :%7d :%7d :%7d", newLeftFrontTarget, newLeftBackTarget, newRightFrontTarget, newRightBackTarget);
-            telemetry.addData("Currently at",  "at %7d :%7d :%7d :%7d",
+            telemetry.addData("Running to",  "lf %7d lb :%7d rf :%7d rb :%7d", newLeftFrontTarget, newLeftBackTarget, newRightFrontTarget, newRightBackTarget);
+            telemetry.addData("Currently at",  "at lf %7d lb :%7d rf:%7d rb :%7d",
                     leftFrontDrive.getCurrentPosition(), leftBackDrive.getCurrentPosition(), rightFrontDrive.getCurrentPosition(), rightBackDrive.getCurrentPosition());
             telemetry.update();
         }
