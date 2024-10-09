@@ -82,21 +82,23 @@ public class DriveTrain {
     static final double     WHEEL_DIAMETER_INCHES   = 3.5 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.6;
+    static final double     DRIVE_SPEED             = 1;
     static final double     TURN_SPEED              = 0.5;
 
     public void encoderDrive(double speed, double leftInches, double rightInches,double timeoutS) {
-        int newLeftTarget;
-        int newRightTarget;
+        int newLeftFrontTarget;
+        int newLeftBackTarget;
+        int newRightFrontTarget;
+        int newRightBackTarget;
         // Determine new target position, and pass to motor controller
-        newLeftTarget = leftFrontDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-        newLeftTarget = leftBackDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-        newRightTarget = rightFrontDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-        newRightTarget = rightBackDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-        leftFrontDrive.setTargetPosition(newLeftTarget);
-        leftBackDrive.setTargetPosition(newLeftTarget);
-        rightFrontDrive.setTargetPosition(newRightTarget);
-        rightBackDrive.setTargetPosition(newRightTarget);
+        newLeftFrontTarget = leftFrontDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+        newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+        newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+        newRightBackTarget = rightBackDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+        leftFrontDrive.setTargetPosition(newLeftFrontTarget);
+        leftBackDrive.setTargetPosition(newLeftBackTarget);
+        rightFrontDrive.setTargetPosition(newRightFrontTarget);
+        rightBackDrive.setTargetPosition(newRightBackTarget);
 
         // Turn On RUN_TO_POSITION
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -121,8 +123,8 @@ public class DriveTrain {
         while ((runtime.seconds() < timeoutS) && (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && leftBackDrive.isBusy() && rightBackDrive.isBusy())) {
 
             // Display it for the driver.
-            telemetry.addData("Running to",  " %7d :%7d", newLeftTarget,  newRightTarget);
-            telemetry.addData("Currently at",  " at %7d :%7d",
+            telemetry.addData("Running to",  " %7d :%7d :%7d :%7d", newLeftFrontTarget, newLeftBackTarget, newRightFrontTarget, newRightBackTarget);
+            telemetry.addData("Currently at",  "at %7d :%7d :%7d :%7d",
                     leftFrontDrive.getCurrentPosition(), leftBackDrive.getCurrentPosition(), rightFrontDrive.getCurrentPosition(), rightBackDrive.getCurrentPosition());
             telemetry.update();
         }
