@@ -16,6 +16,7 @@ public class NewAuto extends LinearOpMode {
     //public RobotAutoDriveByEncoder_Linear EncoderDrive;
     public
     @Override
+
     void runOpMode(){
         runtimeTimer = new ElapsedTime();
         runtimeTimer.startTime();
@@ -25,7 +26,6 @@ public class NewAuto extends LinearOpMode {
         waitForStart(); {
             if (opModeIsActive()) {
                 robot.driveTrain.encoderDrive(1,40,40, 15);
-
             }
         }
     }   // end runOpMode()
