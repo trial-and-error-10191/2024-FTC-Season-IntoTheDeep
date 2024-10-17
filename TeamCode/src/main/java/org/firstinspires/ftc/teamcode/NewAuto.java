@@ -26,8 +26,8 @@ public class NewAuto extends LinearOpMode {
         waitForStart(); {
             if (opModeIsActive()) {
                 // Putting the leftinches and rightinches as the same number will make the robot spin
-                robot.driveTrain.encoderDrive(1,130,130, 1);
-                //robot.driveTrain.encoderDrive(1,-48,-48, 5);
+                robot.driveTrain.encoderDrive(0.6,92,92, 2.3);
+                robot.driveTrain.encoderDrive(0.6,-119,-119, 3.1);
             }
         }
     }   // end runOpMode()
