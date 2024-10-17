@@ -3,21 +3,31 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 /** @noinspection ALL*/
 public class DriveTrain {
 
     DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
+
     private ElapsedTime runtime = new ElapsedTime();
-    // for move vertically only
-    double motor;
+
     Telemetry telemetry;
+
+    // variables for encoders
+    static final double     COUNTS_PER_MOTOR_REV    = 537.6;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double     WHEEL_DIAMETER_INCHES   = 3.5 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     DRIVE_SPEED             = 1;
+    static final double     TURN_SPEED              = 0.5;
 
     // All subsystems should have a hardware function that labels all of the hardware required of it.
     public DriveTrain(HardwareMap hwMap, Telemetry telemetry) {
@@ -33,6 +43,11 @@ public class DriveTrain {
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         this.telemetry = telemetry;
     }
@@ -77,19 +92,20 @@ public class DriveTrain {
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
     }
-    static final double     COUNTS_PER_MOTOR_REV    = 537.6;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
-    static final double     WHEEL_DIAMETER_INCHES   = 3.5 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 1;
-    static final double     TURN_SPEED              = 0.5;
+
 
     public void encoderDrive(double speed, double leftInches, double rightInches,double timeoutS) {
         int newLeftFrontTarget;
         int newLeftBackTarget;
         int newRightFrontTarget;
         int newRightBackTarget;
+
+        // Turn on drive by encoder
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         // Determine new target position, and pass to motor controller
         newLeftFrontTarget = leftFrontDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
         newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
@@ -143,6 +159,7 @@ public class DriveTrain {
 
         Wait(timeoutS);   // optional pause after each move.
     }
+
     public void stopr() { // Makes the robot stop whenever this function is called
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
@@ -153,7 +170,6 @@ public class DriveTrain {
     public void Wait(double seconds) {
         runtime.reset();
         while (runtime.time() < seconds) {
-           // this statement is supposed to be empty.
         }
     }
 }
