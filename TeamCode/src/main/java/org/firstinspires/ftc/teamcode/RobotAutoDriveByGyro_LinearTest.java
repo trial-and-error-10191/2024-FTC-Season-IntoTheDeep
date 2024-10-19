@@ -28,9 +28,9 @@
  */
 
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -88,7 +88,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  */
 
 @Autonomous(name="Robot: DeepGyroDrive", group="Robot")
-//@Disabled
+@Disabled
 public class RobotAutoDriveByGyro_LinearTest extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -192,11 +192,6 @@ public class RobotAutoDriveByGyro_LinearTest extends LinearOpMode {
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
-        driveStraight(DRIVE_SPEED,50.0, 0.0);
-        turnToHeading(TURN_SPEED, 90);
-        driveStraight(DRIVE_SPEED,10.0, 90);    // Drive in Reverse 48" (should return to approx. staring position)
-        turnToHeading(TURN_SPEED, 180);
-        driveStraight(DRIVE_SPEED,50, 180);
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // Pause to display last telemetry message.
@@ -284,7 +279,27 @@ public class RobotAutoDriveByGyro_LinearTest extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
+public void StrafeRobot(double maxDriveSpeed, double distance) {
+    // Determine new target position, and pass to motor controller
+    int moveCounts = (int)(distance * COUNTS_PER_INCH);
+    leftTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
+    leftTarget = leftBackDrive.getCurrentPosition() + moveCounts;
+    rightTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
+    rightTarget = rightBackDrive.getCurrentPosition() + moveCounts;
 
+    // Set Target FIRST, then turn on RUN_TO_POSITION
+    // If Strafing then reverse motor directions
+    leftFrontDrive.setTargetPosition(leftTarget);
+    rightFrontDrive.setTargetPosition(rightTarget);
+    leftBackDrive.setTargetPosition(leftTarget);
+    rightBackDrive.setTargetPosition(rightTarget);
+
+    leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+}
     /**
      *  Spin on the central axis to point in a new direction.
      *  <p>
