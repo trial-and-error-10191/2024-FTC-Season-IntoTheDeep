@@ -87,7 +87,7 @@ public class DriveTrain {
         rightBackDrive.setPower(rightBackPower);
     }
 
-    public void encoderDrive(double speed, double leftInches, double rightInches,double timeoutS) {
+    public void encoderDrive(double speed, double leftFrontInches, double leftBackInches, double rightFrontInches, double rightBackInches,double timeoutS) {
 
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -106,10 +106,10 @@ public class DriveTrain {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Determine new target position, and pass to motor controller
-        newLeftFrontTarget = leftFrontDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-        newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-        newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-        newRightBackTarget = rightBackDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+        newLeftFrontTarget = leftFrontDrive.getCurrentPosition() + (int)(leftFrontInches * COUNTS_PER_INCH);
+        newLeftBackTarget = leftBackDrive.getCurrentPosition() + (int)(leftBackInches * COUNTS_PER_INCH);
+        newRightFrontTarget = rightFrontDrive.getCurrentPosition() + (int)(rightFrontInches * COUNTS_PER_INCH);
+        newRightBackTarget = rightBackDrive.getCurrentPosition() + (int)(rightBackInches * COUNTS_PER_INCH);
         leftFrontDrive.setTargetPosition(newLeftFrontTarget);
         leftBackDrive.setTargetPosition(newLeftBackTarget);
         rightFrontDrive.setTargetPosition(newRightFrontTarget);
@@ -156,7 +156,7 @@ public class DriveTrain {
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        Wait(timeoutS);   // optional pause after each move.
+        Wait(0.5);   // optional pause after each move.
     }
 
     public void stopr() { // Makes the robot stop whenever this function is called
