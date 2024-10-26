@@ -87,8 +87,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: DeepGyroDrive", group="Robot")
-@Disabled
+@Autonomous(name="Robot: DeepGyroDrive (working)", group="Robot")
+//@Disabled
 public class RobotAutoDriveByGyro_LinearTest extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -109,7 +109,8 @@ public class RobotAutoDriveByGyro_LinearTest extends LinearOpMode {
     private double  rightSpeed    = 0;
     private int     leftTarget    = 0;
     private int     rightTarget   = 0;
-
+    private int     SecondleftTarget    = 0; //Only used for strafing
+    private int     SecondrightTarget   = 0; //
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
@@ -124,9 +125,9 @@ public class RobotAutoDriveByGyro_LinearTest extends LinearOpMode {
 
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
-    static final double     DRIVE_SPEED             = 0.4;     // Max driving speed for better distance accuracy.
-    static final double     TURN_SPEED              = 0.2;     // Max turn speed to limit turn rate.
-    static final double     HEADING_THRESHOLD       = 1.0 ;    // How close must the heading get to the target before moving to next step.
+    static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
+    static final double     TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
+    static final double     HEADING_THRESHOLD       = 5.0 ;    // How close must the heading get to the target before moving to next step.
                                                                // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
     // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
@@ -149,14 +150,14 @@ public class RobotAutoDriveByGyro_LinearTest extends LinearOpMode {
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         /* The next two lines define Hub orientation.
          * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
          *
          * To Do:  EDIT these two lines to match YOUR mounting configuration.
          */
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
@@ -188,6 +189,12 @@ public class RobotAutoDriveByGyro_LinearTest extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
+       // driveStraight(DRIVE_SPEED, 6, 0);
+       // turnToHeading(TURN_SPEED, 90);
+       // driveStraight(DRIVE_SPEED, 50, 90);
+       // driveStraight(DRIVE_SPEED, -50, 90);
+        StrafeRobot(DRIVE_SPEED, 10);
+        StrafeRobot(DRIVE_SPEED, -10);
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
@@ -205,7 +212,6 @@ public class RobotAutoDriveByGyro_LinearTest extends LinearOpMode {
      */
 
     // **********  HIGH Level driving functions.  ********************
-
     /**
     *  Drive in a straight line, on a fixed compass heading (angle), based on encoder counts.
     *  Move will stop if either of these conditions occur:
@@ -281,16 +287,22 @@ public class RobotAutoDriveByGyro_LinearTest extends LinearOpMode {
     }
 public void StrafeRobot(double maxDriveSpeed, double distance) {
     // Determine new target position, and pass to motor controller
-    int moveCounts = (int)(distance * COUNTS_PER_INCH);
-    leftTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
-    leftTarget = leftBackDrive.getCurrentPosition() + moveCounts;
-    rightTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
-    rightTarget = rightBackDrive.getCurrentPosition() + moveCounts;
-
+    int moveCounts = (int)(Math.abs(distance) * COUNTS_PER_INCH);
+   if (distance > 0) {
+       SecondleftTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
+       leftTarget = leftBackDrive.getCurrentPosition() - moveCounts;
+       SecondrightTarget = rightFrontDrive.getCurrentPosition() - moveCounts;
+       rightTarget = rightBackDrive.getCurrentPosition() + moveCounts;
+   } else {
+       SecondleftTarget = leftFrontDrive.getCurrentPosition() - moveCounts;
+       leftTarget = leftBackDrive.getCurrentPosition() + moveCounts;
+       SecondrightTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
+       rightTarget = rightBackDrive.getCurrentPosition() - moveCounts;
+   }
     // Set Target FIRST, then turn on RUN_TO_POSITION
     // If Strafing then reverse motor directions
-    leftFrontDrive.setTargetPosition(leftTarget);
-    rightFrontDrive.setTargetPosition(rightTarget);
+    leftFrontDrive.setTargetPosition(SecondleftTarget);
+    rightFrontDrive.setTargetPosition(SecondrightTarget);
     leftBackDrive.setTargetPosition(leftTarget);
     rightBackDrive.setTargetPosition(rightTarget);
 
@@ -298,6 +310,24 @@ public void StrafeRobot(double maxDriveSpeed, double distance) {
     rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+    maxDriveSpeed = Math.abs(maxDriveSpeed);
+    if (maxDriveSpeed > 1) {
+maxDriveSpeed = 1;
+    }
+    leftFrontDrive.setPower(maxDriveSpeed);
+    rightFrontDrive.setPower(maxDriveSpeed);
+    leftBackDrive.setPower(maxDriveSpeed);
+    rightBackDrive.setPower(maxDriveSpeed);
+
+    while (opModeIsActive() &&
+            (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+telemetry.addData("LeftTarget", leftTarget);
+telemetry.addData("SLeftTarget", SecondleftTarget);
+telemetry.addData("RightTarget", rightTarget);
+telemetry.addData("SRightTarget", SecondrightTarget);
+telemetry.update();
+    }
 
 }
     /**
@@ -331,8 +361,9 @@ public void StrafeRobot(double maxDriveSpeed, double distance) {
             // Pivot in place by applying the turning correction
             moveRobot(0, turnSpeed);
 
-            // Display drive status for the driver.
-            sendTelemetry(false);
+            telemetry.addData("HeadingErr", headingError);
+            telemetry.addData("HeadinggetThresh",HEADING_THRESHOLD);
+            telemetry.update();
         }
 
         // Stop all motion;
@@ -455,3 +486,4 @@ public void StrafeRobot(double maxDriveSpeed, double distance) {
         return orientation.getYaw(AngleUnit.DEGREES);
     }
 }
+

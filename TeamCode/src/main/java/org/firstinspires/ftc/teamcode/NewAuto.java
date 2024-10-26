@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 //@Disabled
-@Autonomous(name = "DeepAuto", group = "Concept")
+@Autonomous(name = "DeepAuto (broken) ", group = "Concept")
 public class NewAuto extends LinearOpMode {
 
     Robot robot = null;
@@ -27,9 +27,8 @@ public class NewAuto extends LinearOpMode {
 
         waitForStart(); {
             if (opModeIsActive()) {
-robot.driveTrain.driveStraight(DriveTrain.DRIVE_SPEED, 10, 0);
-robot.driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 180);
-robot.driveTrain.driveStraight(DriveTrain.DRIVE_SPEED, 10, 180);
+robot.driveTrain.driveStraight(DriveTrain.DRIVE_SPEED, 30, 0);
+robot.driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 90);
             }
         }  // end waitForStart
     }   // end runOpMode()

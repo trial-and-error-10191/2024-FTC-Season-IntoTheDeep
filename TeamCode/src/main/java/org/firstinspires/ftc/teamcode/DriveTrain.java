@@ -3,18 +3,16 @@
 
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-/** @noinspection ALL*/
+
 public class DriveTrain {
 
     DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
@@ -31,7 +29,7 @@ public class DriveTrain {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double DRIVE_SPEED = 1;
     static final double TURN_SPEED = 0.5;
-    static final double HEADING_THRESHOLD = 1.0;
+    static final double HEADING_THRESHOLD = 5.0;
     static final double P_TURN_GAIN = 0.02;     // Larger is more responsive, but also less stable.
     static final double P_DRIVE_GAIN = 0.03;
     private double targetHeading = 0;
@@ -41,7 +39,7 @@ public class DriveTrain {
     private double rightSpeed = 0;
     private int leftTarget = 0;
     private int rightTarget = 0;
-    private double headingError  = 0;
+    private double headingError = 0;
 
     // All subsystems should have a hardware function that labels all of the hardware required of it.
     public DriveTrain(HardwareMap hwMap, Telemetry telemetry) {
@@ -53,8 +51,8 @@ public class DriveTrain {
         rightBackDrive = hwMap.get(DcMotor.class, "rightBack");
 
         // Initializes motor directions:
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
@@ -75,7 +73,6 @@ public class DriveTrain {
         this.telemetry = telemetry;
         imu.resetYaw();
     }
-
     // This function needs an axial, lateral, and yaw input. It uses this input to drive the drive train motors.
     // The last two variables are for direction switching.
     public void drive(double axial, double lateral, double yaw) {
@@ -163,26 +160,27 @@ public class DriveTrain {
         }
 
     }
+
     public void moveRobot(double drive, double turn) {
         driveSpeed = drive;     // save this value as a class member so it can be used by telemetry.
-        turnSpeed  = turn;      // save this value as a class member so it can be used by telemetry.
+        turnSpeed = turn;      // save this value as a class member so it can be used by telemetry.
 
-        leftSpeed  = drive - turn;
+        leftSpeed = drive - turn;
         rightSpeed = drive + turn;
 
         // Scale speeds down if either one exceeds +/- 1.0;
         double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-        if (max > 1.0)
-        {
+        if (max > 1.0) {
             leftSpeed /= max;
             rightSpeed /= max;
         }
-
+telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSpeed);
         leftFrontDrive.setPower(leftSpeed);
         rightFrontDrive.setPower(rightSpeed);
         leftBackDrive.setPower(leftSpeed);
         rightBackDrive.setPower(rightSpeed);
     }
+
     public double getSteeringCorrection(double desiredHeading, double proportionalGain) {
         targetHeading = desiredHeading;  // Save for telemetry
 
@@ -190,33 +188,31 @@ public class DriveTrain {
         headingError = targetHeading - getHeading();
 
         // Normalize the error to be within +/- 180 degrees
-        while (headingError > 180)  headingError -= 360;
+        while (headingError > 180) headingError -= 360;
         while (headingError <= -180) headingError += 360;
 
         // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
         return Range.clip(headingError * proportionalGain, -1, 1);
     }
-    public double getHeading() {
-        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        return orientation.getYaw(AngleUnit.DEGREES);
-    }
+
 
     private void sendTelemetry(boolean straight) {
 
         if (straight) {
             telemetry.addData("Motion", "Drive Straight");
-            telemetry.addData("Target Pos L:R",  "%7d:%7d",      leftTarget,  rightTarget);
-            telemetry.addData("Actual Pos L:R",  "%7d:%7d:%7d:%7d",      leftFrontDrive.getCurrentPosition(),
-                    rightFrontDrive.getCurrentPosition(),leftBackDrive.getCurrentPosition(),rightBackDrive.getCurrentPosition());
+            telemetry.addData("Target Pos L:R", "%7d:%7d", leftTarget, rightTarget);
+            telemetry.addData("Actual Pos L:R", "%7d:%7d:%7d:%7d", leftFrontDrive.getCurrentPosition(),
+                    rightFrontDrive.getCurrentPosition(), leftBackDrive.getCurrentPosition(), rightBackDrive.getCurrentPosition());
         } else {
             telemetry.addData("Motion", "Turning");
         }
 
         telemetry.addData("Heading- Target : Current", "%5.2f : %5.0f", targetHeading, getHeading());
-        telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
+        telemetry.addData("Error  : Steer Pwr", "%5.1f : %5.1f", headingError, turnSpeed);
         telemetry.addData("Wheel Speeds L : R", "%5.2f : %5.2f", leftSpeed, rightSpeed);
         telemetry.update();
     }
+
     public void turnToHeading(double maxTurnSpeed, double heading) {
 
         // Run getSteeringCorrection() once to pre-calculate the current error
@@ -235,12 +231,16 @@ public class DriveTrain {
             moveRobot(0, turnSpeed);
 
             // Display drive status for the driver.
-            sendTelemetry(false);
+            telemetry.addData("HeadingErr", headingError);
+            telemetry.addData("HeadingThresh",HEADING_THRESHOLD);
+            telemetry.addData("TurnSpeed",turnSpeed);
+            telemetry.update();
         }
 
         // Stop all motion;
         moveRobot(0, 0);
     }
+
     public void holdHeading(double maxTurnSpeed, double heading, double holdTime) {
 
         ElapsedTime holdTimer = new ElapsedTime();
@@ -264,5 +264,11 @@ public class DriveTrain {
         // Stop all motion;
         moveRobot(0, 0);
     }
-}
 
+    public double getHeading() {
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        return orientation.getYaw(AngleUnit.DEGREES);
+    }
+
+
+}
