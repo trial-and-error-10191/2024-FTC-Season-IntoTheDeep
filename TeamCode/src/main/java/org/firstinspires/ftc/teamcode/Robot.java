@@ -13,7 +13,7 @@ public class Robot {
     // Nonsense change to test 'git push' through Android Studio
     public Robot(HardwareMap hwMap, Telemetry telemetry) {
         driveTrain = new DriveTrain(hwMap, telemetry);
-        ascentMechanism = new AscentMechanism();
+        ascentMechanism = new AscentMechanism(hwMap);
         this.telemetry = telemetry;
     }
 }
