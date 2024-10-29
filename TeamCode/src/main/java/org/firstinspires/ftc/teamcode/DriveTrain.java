@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /** @noinspection ALL*/
 public class DriveTrain {
 
-    DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
+    private DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
 
     // All subsystems should have a hardware function that labels all of the hardware required of it.
     public DriveTrain(HardwareMap hwMap) {
@@ -27,11 +27,15 @@ public class DriveTrain {
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
     }
+  
+    public void stop() { // Makes the robot stop whenever this function is called
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+    }
 
-    // This function needs an axial, lateral, and yaw input. It uses this input to drive the drive train motors.
-    // The last two variables are for direction switching.
-    public void drive(double axial, double lateral, double yaw) {
-
+    public void driveByPower(double axial, double lateral, double yaw) {
         // initializes deadzone
         double deadzone = 0.05;
         // initializes sensitivity
@@ -42,12 +46,12 @@ public class DriveTrain {
         double leftBackPower = 0;
         double rightBackPower = 0;
 
-       if (Math.abs(axial) > deadzone || Math.abs(lateral) > deadzone || Math.abs(yaw) > deadzone) {
-           leftFrontPower = axial + lateral + yaw;
-           rightFrontPower = axial - lateral - yaw;
-           leftBackPower = axial - lateral + yaw;
-           rightBackPower = axial + lateral - yaw;
-       }
+        if (Math.abs(axial) > deadzone || Math.abs(lateral) > deadzone || Math.abs(yaw) > deadzone) {
+            leftFrontPower = axial + lateral + yaw;
+            rightFrontPower = axial - lateral - yaw;
+            leftBackPower = axial - lateral + yaw;
+            rightBackPower = axial + lateral - yaw;
+        }
         double max;
 
         // All code below this comment normalizes the values so no wheel power exceeds 100%.
@@ -69,16 +73,22 @@ public class DriveTrain {
         rightBackPower *= sensitivity;
 
         // The next four lines gives the calculated power to each motor.
-            leftFrontDrive.setPower(leftFrontPower);
-            rightFrontDrive.setPower(rightFrontPower);
-            leftBackDrive.setPower(leftBackPower);
-            rightBackDrive.setPower(rightBackPower);
+        leftFrontDrive.setPower(leftFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
+        leftBackDrive.setPower(leftBackPower);
+        rightBackDrive.setPower(rightBackPower);
     }
-  
-    public void stop() { // Makes the robot stop whenever this function is called
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
+
+    public double getLeftFrontMotorPower() {
+        return leftFrontDrive.getPower();
+    }
+    public double getRightFrontMotorPower() {
+        return rightFrontDrive.getPower();
+    }
+    public double getLeftBackMotorPower() {
+        return leftBackDrive.getPower();
+    }
+    public double getRightBackMotorPower() {
+        return rightBackDrive.getPower();
     }
 }

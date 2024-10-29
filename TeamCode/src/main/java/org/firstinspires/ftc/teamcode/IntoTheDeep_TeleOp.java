@@ -26,15 +26,15 @@ public class IntoTheDeep_TeleOp extends LinearOpMode {
             // This controls the drive train using three double input methods.
             // The fourth input is a boolean for the direction toggle.
             // The last input is the time the function uses to space out inputs for the direction switch.
-            robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            robot.driveByPower(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
             // Provides telemetry for all motors, servos, and sensors.
             telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",
-                    robot.driveTrain.leftFrontDrive.getPower(),
-                    robot.driveTrain.rightFrontDrive.getPower());
+                    robot.getLeftFrontMotorPower(),
+                    robot.getRightFrontMotorPower());
             telemetry.addData("Back Driving Motors (Left, Right)", "%4.2f, %4.2f",
-                    robot.driveTrain.leftBackDrive.getPower(),
-                    robot.driveTrain.rightBackDrive.getPower());
+                    robot.getLeftBackMotorPower(),
+                    robot.getRightBackMotorPower());
             telemetry.update();
         }
     }
