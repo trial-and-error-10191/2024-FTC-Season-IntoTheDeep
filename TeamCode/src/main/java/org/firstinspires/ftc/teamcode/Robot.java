@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Robot {
     private DriveTrain driveTrain;
+    private final double MAX_DRIVE_SPEED = 0.5;
 
     // This combines all the subsystems.
     public Robot(HardwareMap hwMap) {
@@ -27,4 +28,22 @@ public class Robot {
     public double getRightBackMotorPower() {
         return driveTrain.getRightBackMotorPower();
     }
+
+    public void resetEncoders() {
+        driveTrain.resetEncoders();
+    }
+
+    public void driveUsingEncoders() {
+        driveTrain.runUsingEncoders();
+    }
+
+    public void resetImu() {
+        driveTrain.resetImu();
+    }
+
+    public void moveForward(double distance) {
+        double currentHeading = driveTrain.getHeading();
+        driveTrain.driveStraight(MAX_DRIVE_SPEED, distance, currentHeading);
+    };
+
 }
