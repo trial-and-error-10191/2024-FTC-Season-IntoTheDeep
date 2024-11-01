@@ -15,7 +15,7 @@ public class IntoTheDeep_TeleOp extends LinearOpMode {
 
 
         // Initiates the robots system and subsystems!
-        Robot robot = new Robot(hardwareMap);
+        Robot robot = new Robot(hardwareMap, telemetry);
 
         telemetry.addData("Status", "Waiting for Start");
         telemetry.update();
