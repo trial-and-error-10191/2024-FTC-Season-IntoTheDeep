@@ -19,5 +19,6 @@ public class IntoTheDeep_Autonomous extends LinearOpMode {
         robot.driveUsingEncoders();
         robot.resetImu();
         robot.moveForward(24); // should move robot one tile.
+        robot.turnToHeading(90);
     }
 }
