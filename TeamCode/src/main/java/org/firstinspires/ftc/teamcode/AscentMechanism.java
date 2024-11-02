@@ -1,6 +1,3 @@
-// This is the ascent mechanism subsystem file.
-// All ascent mechanism stuff should be found here.
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -8,31 +5,37 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class AscentMechanism {
 
-    static final double INCREMENT = 0.01;     // amount to slew servo each CYCLE_MS cycle
-    static final double MAX_POS = 1.0;     // Maximum rotational position
-    static final double MIN_POS = 0.0;     // Minimum rotational position
+    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    static final double MAX_POS     =  1.0;     // Maximum rotational position
+    static final double MIN_POS     =  0.0;     // Minimum rotational position
 
-    Servo servo;
-    double position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
-    boolean rampUp = true;
+    // Define class members
+    Servo   servo;
+
+    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
 
     public AscentMechanism(HardwareMap hwMap) {
 
-        //initiates servo name
+        // initiates servo name
         servo = hwMap.get(Servo.class, "left_hand");
+    }
 
-        if (rampUp) {
+    public void rise(boolean rise, boolean lower) {
+        if (rise) { // Makes the robot's arm rise
             // Keep stepping up until we hit the max value.
             position += INCREMENT;
             if (position >= MAX_POS) {
                 position = MAX_POS;
-            } else {
-                // Keep stepping down until we hit the min value.
-                position -= INCREMENT;
-                if (position <= MIN_POS) {
-                    position = MIN_POS;
-                }
             }
         }
+        else if (lower) { // Makes the robot's arm lower
+            // Keep stepping down until we hit the min value.
+            position -= INCREMENT;
+            if (position <= MIN_POS ) {
+                position = MIN_POS;
+            }
+        }
+        // Set the servo to the new position and pause;
+        servo.setPosition(position);
     }
 }
