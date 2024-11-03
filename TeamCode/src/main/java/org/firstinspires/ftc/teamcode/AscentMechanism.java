@@ -12,7 +12,7 @@ public class AscentMechanism {
     // Define class members
     Servo   servo;
 
-    double  position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
+    double position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
 
     public AscentMechanism(HardwareMap hwMap) {
 
@@ -36,6 +36,24 @@ public class AscentMechanism {
             }
         }
         // Set the servo to the new position and pause;
+        servo.setPosition(position);
+    }
+
+    public void armPosition(double armPosition) {
+        if (position < armPosition) { // Tells arm to rise
+            position += INCREMENT;
+            if (position >= MAX_POS) {
+                position = MAX_POS;
+            }
+        }
+        else if (position > armPosition) { // Makes the robot's arm lower
+            // Keep stepping down until we hit the min value.
+            position -= INCREMENT;
+            if (position <= MIN_POS ) {
+                position = MIN_POS;
+            }
+        }
+        // Set the servo to the new arm position and pause;
         servo.setPosition(position);
     }
 }
