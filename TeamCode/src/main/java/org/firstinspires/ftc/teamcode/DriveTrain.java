@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
@@ -20,6 +21,7 @@ public class DriveTrain {
     private DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
     private IMU imu = null;
     private double          headingError  = 0;
+    Telemetry telemetry;
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
@@ -44,7 +46,7 @@ public class DriveTrain {
     static final double P_DRIVE_GAIN = 0.03;     // Larger is more responsive, but also less stable.
 
     // All subsystems should have a hardware function that labels all of the hardware required of it.
-    public DriveTrain(HardwareMap hwMap) {
+    public DriveTrain(HardwareMap hwMap, Telemetry telemetry) {
 
         // Initializes motor names:
         leftFrontDrive = hwMap.get(DcMotor.class, "leftFront");
@@ -72,18 +74,21 @@ public class DriveTrain {
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
+        this.telemetry = telemetry;
+
         // Ensure the robot is stationary.  Reset the encoders and set the motors to BRAKE mode
-        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // Currently, RunMode needs to be determined by the OpMode, not the constructor
+//        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void stop() { // Makes the robot stop whenever this function is called
+    public void stop() {
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
         leftBackDrive.setPower(0);
@@ -91,10 +96,7 @@ public class DriveTrain {
     }
 
     public void driveByPower(double axial, double lateral, double yaw) {
-        // initializes deadzone
         double deadzone = 0.05;
-        // initializes sensitivity
-        double sensitivity = 0.5;
 
         double leftFrontPower = 0;
         double rightFrontPower = 0;
@@ -107,27 +109,24 @@ public class DriveTrain {
             leftBackPower = axial - lateral + yaw;
             rightBackPower = axial + lateral - yaw;
         }
-        double max;
 
-        // All code below this comment normalizes the values so no wheel power exceeds 100%.
-        max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        // Normalizes the values so no wheel power exceeds 100%.
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
-
         if (max > 1.0) {
-            leftFrontPower /= max; // leftFrontPower = leftFrontPower / max;
+            leftFrontPower /= max;
             rightFrontPower /= max;
             leftBackPower /= max;
             rightBackPower /= max;
         }
 
-        // Calculates power using sensitivity variable.
+        double sensitivity = 0.5;
         leftFrontPower *= sensitivity;
         leftBackPower *= sensitivity;
         rightFrontPower *= sensitivity;
         rightBackPower *= sensitivity;
 
-        // The next four lines gives the calculated power to each motor.
         leftFrontDrive.setPower(leftFrontPower);
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
@@ -142,7 +141,7 @@ public class DriveTrain {
         double leftBackPower = axial - lateral + yaw;
         double rightBackPower = axial + lateral - yaw;
 
-        // All code below this comment normalizes the values so no wheel power exceeds 100%.
+        // Normalizes the values so no wheel power exceeds 100%.
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
@@ -213,10 +212,11 @@ public class DriveTrain {
 
         // Determine the heading current error
         headingError = targetHeading - getHeading();
-
         // Normalize the error to be within +/- 180 degrees
         while (headingError > 180) headingError -= 360;
         while (headingError <= -180) headingError += 360;
+        telemetry.addData("Heading Error: ", headingError);
+        telemetry.update();
 
         // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
         return Range.clip(headingError * proportionalGain, -1, 1);

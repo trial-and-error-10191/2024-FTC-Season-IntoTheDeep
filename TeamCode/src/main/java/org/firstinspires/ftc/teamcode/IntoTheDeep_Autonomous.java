@@ -8,7 +8,7 @@ public class IntoTheDeep_Autonomous extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Robot robot = new Robot(hardwareMap);
+        Robot robot = new Robot(hardwareMap, telemetry);
         telemetry.addData("Status", "Waiting for Start");
         telemetry.update();
         waitForStart();

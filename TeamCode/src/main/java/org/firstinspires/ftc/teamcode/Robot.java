@@ -3,14 +3,18 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Robot {
     private DriveTrain driveTrain;
+    private Telemetry telemetry;
     private final double MAX_DRIVE_SPEED = 0.5;
     private final double MAX_TURN_SPEED = 0.3;
 
     // This combines all the subsystems.
-    public Robot(HardwareMap hwMap) {
-        driveTrain = new DriveTrain(hwMap);
+    public Robot(HardwareMap hwMap, Telemetry telemetry) {
+        driveTrain = new DriveTrain(hwMap, telemetry);
+        this.telemetry = telemetry;
     }
 
     public void driveByPower(double axial, double lateral, double yaw) {
@@ -42,9 +46,9 @@ public class Robot {
         driveTrain.resetImu();
     }
 
-    public void moveForward(double distance) {
+    public void moveForward(double distanceInInches) {
         double currentHeading = driveTrain.getHeading();
-        driveTrain.driveStraight(MAX_DRIVE_SPEED, distance, currentHeading);
+        driveTrain.driveStraight(MAX_DRIVE_SPEED, distanceInInches, currentHeading);
     }
 
     public void turnToHeading(double angle) {
