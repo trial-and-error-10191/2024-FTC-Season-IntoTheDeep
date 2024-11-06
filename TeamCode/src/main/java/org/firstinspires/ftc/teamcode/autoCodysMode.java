@@ -90,7 +90,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous(name="Robot: autoNearNetBlue", group="Robot")
 //@Disabled
-public class autoNearNetBlue extends LinearOpMode {
+public class autoCodysMode extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftFrontDrive   = null;
@@ -190,14 +190,9 @@ public class autoNearNetBlue extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-
-        StrafeRobot(DRIVE_SPEED, 5);
-        driveStraight(DRIVE_SPEED, 32, 0);
-        driveStraight(DRIVE_SPEED, -28, 0);
-        turnToHeading(TURN_SPEED, -90);
-        driveStraight(DRIVE_SPEED, 55, -90);
-        turnToHeading(TURN_SPEED, 180);
-        driveStraight(DRIVE_SPEED, 30, 90);
+StrafeRobot(TURN_SPEED, -10);
+driveStraight(DRIVE_SPEED, 40, 0);
+turnToHeading(TURN_SPEED, 90);
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
