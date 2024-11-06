@@ -3,12 +3,16 @@ package org.firstinspires.ftc.teamcode;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.linearOpMode;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp (name = "telemetry test", group = "LinearOpMode")
-public class ControllerTestTelemetry {
-    public void testTeleOp() {
-        while (linearOpMode.opModeIsActive()){
+@TeleOp (name = "telemetry test", group = "Linear OpMode")
+public class ControllerTestTelemetry extends LinearOpMode {
+    @Override
+    public void runOpMode() {
+        while (opModeIsActive()){
+            waitForStart();
             telemetry.addData("Status", "Waiting for Start");
             telemetry.update();
 
