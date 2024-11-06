@@ -196,8 +196,17 @@ public class autoNearNetBlue extends LinearOpMode {
         driveStraight(DRIVE_SPEED, -28, 0);
         turnToHeading(TURN_SPEED, -90);
         driveStraight(DRIVE_SPEED, 55, -90);
-        turnToHeading(TURN_SPEED, 180);
-        driveStraight(DRIVE_SPEED, 30, 90);
+        turnToHeading(TURN_SPEED, 0);
+        driveStraight(DRIVE_SPEED, 8, 0);
+        turnToHeading(TURN_SPEED, 90);
+        driveStraight(DRIVE_SPEED, 40, 90);
+        driveStraight(DRIVE_SPEED, -40, 90);
+        StrafeRobot(TURN_SPEED, 5,);
+        driveStraight(DRIVE_SPEED, 40, 90);
+        driveStraight(DRIVE_SPEED, -40, 90);
+        StrafeRobot(TURN_SPEED, 5,);
+        driveStraight(DRIVE_SPEED, 40, 90);
+        driveStraight(DRIVE_SPEED, -40, 90);
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
