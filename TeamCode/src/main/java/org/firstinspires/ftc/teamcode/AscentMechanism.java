@@ -1,3 +1,6 @@
+// This is the ascent mechanism subsystem file.
+// All ascent mechanism stuff should be found here.
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,38 +19,23 @@ public class AscentMechanism {
     double position = (MAX_POS - MIN_POS) / 2; // Start at halfway position
     boolean rampUp = true;
 
-    public void rise(float rise) {
+    public AscentMechanism(HardwareMap hwMap) {
+
+        //initiates servo name
+        servo = hwMap.get(Servo.class, "left_hand");
+
         if (rampUp) {
             // Keep stepping up until we hit the max value.
-            position += INCREMENT ;
-            if (position >= MAX_POS ) {
+            position += INCREMENT;
+            if (position >= MAX_POS) {
                 position = MAX_POS;
-                rampUp = !rampUp;   // Switch ramp direction
-            }
-        }
-        else {
-            // Keep stepping down until we hit the min value.
-            position -= INCREMENT ;
-            if (position <= MIN_POS ) {
-                position = MIN_POS;
-                rampUp = !rampUp;  // Switch ramp direction
+            } else {
+                // Keep stepping down until we hit the min value.
+                position -= INCREMENT;
+                if (position <= MIN_POS) {
+                    position = MIN_POS;
+                }
             }
         }
     }
 }
-//    public AscentMechanism(HardwareMap hwMap) {
-//
-//        // Initializes motor names:
-//        leftFrontDrive = hwMap.get(DcMotor.class, "leftFront");
-//        leftBackDrive = hwMap.get(DcMotor.class, "leftBack");
-//        rightFrontDrive = hwMap.get(DcMotor.class, "rightFront");
-//        rightBackDrive = hwMap.get(DcMotor.class, "rightBack");
-//
-//        // Initializes motor directions:
-//        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-//        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-//        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-//        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-//    }
-
-
