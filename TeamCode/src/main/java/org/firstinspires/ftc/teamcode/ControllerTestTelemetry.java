@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class ControllerTestTelemetry extends LinearOpMode {
     @Override
     public void runOpMode() {
+        waitForStart();
         while (opModeIsActive()){
-            waitForStart();
             telemetry.addData("Status", "Waiting for Start");
             telemetry.update();
 
