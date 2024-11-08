@@ -126,7 +126,7 @@ public class autoNearNetBlue extends LinearOpMode {
 
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
-    static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
+    static final double     DRIVE_SPEED             = 0.5;     // Max driving speed for better distance accuracy.
     static final double     TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
     static final double     HEADING_THRESHOLD       = 5.0 ;    // How close must the heading get to the target before moving to next step.
                                                                // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
@@ -192,21 +192,19 @@ public class autoNearNetBlue extends LinearOpMode {
 
 
         StrafeRobot(DRIVE_SPEED, 5);
-        driveStraight(DRIVE_SPEED, 32, 0);
-        driveStraight(DRIVE_SPEED, -28, 0);
+
+        driveStraight(DRIVE_SPEED, 29, 0);
+        driveStraight(DRIVE_SPEED, -27, 0);
         turnToHeading(TURN_SPEED, -90);
         driveStraight(DRIVE_SPEED, 55, -90);
         turnToHeading(TURN_SPEED, 0);
         driveStraight(DRIVE_SPEED, 8, 0);
         turnToHeading(TURN_SPEED, 90);
-        driveStraight(DRIVE_SPEED, 40, 90);
-        driveStraight(DRIVE_SPEED, -40, 90);
-        StrafeRobot(TURN_SPEED, 5,);
-        driveStraight(DRIVE_SPEED, 40, 90);
-        driveStraight(DRIVE_SPEED, -40, 90);
-        StrafeRobot(TURN_SPEED, 5,);
-        driveStraight(DRIVE_SPEED, 40, 90);
-        driveStraight(DRIVE_SPEED, -40, 90);
+        driveStraight(DRIVE_SPEED, 50, 90);
+        driveStraight(DRIVE_SPEED, -50, 90);
+        StrafeRobot(TURN_SPEED, 15);
+        driveStraight(DRIVE_SPEED, 70, 90);
+        driveStraight(DRIVE_SPEED, -70, 90);
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
