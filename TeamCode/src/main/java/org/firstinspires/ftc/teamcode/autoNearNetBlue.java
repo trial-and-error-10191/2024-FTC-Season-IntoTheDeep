@@ -202,6 +202,8 @@ public class autoNearNetBlue extends LinearOpMode {
         driveStraight(DRIVE_SPEED, 30, 90);
         if (opModeIsActive()) {
             robot.ascentMechanism.armPosition(0.7); // Makes it able to touch the bar
+            telemetry.addData("Arm Position", robot.ascentMechanism.servo.getPosition());
+            telemetry.update();
         }
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
