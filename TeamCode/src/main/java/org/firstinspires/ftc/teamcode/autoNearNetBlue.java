@@ -200,8 +200,9 @@ public class autoNearNetBlue extends LinearOpMode {
         driveStraight(DRIVE_SPEED, 55, -90);
         turnToHeading(TURN_SPEED, 180);
         driveStraight(DRIVE_SPEED, 30, 90);
-        robot.ascentMechanism.armPosition(0.7); // Makes it able to touch the bar
-
+        if (opModeIsActive()) {
+            robot.ascentMechanism.armPosition(0.7); // Makes it able to touch the bar
+        }
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
