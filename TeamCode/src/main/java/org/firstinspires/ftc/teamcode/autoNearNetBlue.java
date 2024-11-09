@@ -192,19 +192,23 @@ public class autoNearNetBlue extends LinearOpMode {
 
 
         StrafeRobot(DRIVE_SPEED, 5);
-
+        Wait(0.5);
         driveStraight(DRIVE_SPEED, 29, 0);
+        Wait(0.5);
         driveStraight(DRIVE_SPEED, -27, 0);
+        Wait(0.5);
         turnToHeading(TURN_SPEED, -90);
+        Wait(0.5);
         driveStraight(DRIVE_SPEED, 55, -90);
-        turnToHeading(TURN_SPEED, 0);
-        driveStraight(DRIVE_SPEED, 8, 0);
-        turnToHeading(TURN_SPEED, 90);
-        driveStraight(DRIVE_SPEED, 50, 90);
-        driveStraight(DRIVE_SPEED, -50, 90);
-        StrafeRobot(TURN_SPEED, 15);
-        driveStraight(DRIVE_SPEED, 70, 90);
-        driveStraight(DRIVE_SPEED, -70, 90);
+        Wait(0.5);
+//        turnToHeading(TURN_SPEED, 0);
+//        driveStraight(DRIVE_SPEED, 8, 0);
+//        turnToHeading(TURN_SPEED, 90);
+//        driveStraight(DRIVE_SPEED, 50, 90);
+//        driveStraight(DRIVE_SPEED, -50, 90);
+//        StrafeRobot(TURN_SPEED, 15);
+//        driveStraight(DRIVE_SPEED, 70, 90);
+//        driveStraight(DRIVE_SPEED, -70, 90);
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
@@ -494,6 +498,13 @@ telemetry.update();
     public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
+    }
+    private final ElapsedTime runtime = new ElapsedTime();
+    public void Wait(double seconds) {
+        runtime.reset();
+        while (runtime.time() < seconds) {
+            // this statement is supposed to be empty.
+        }
     }
 }
 
