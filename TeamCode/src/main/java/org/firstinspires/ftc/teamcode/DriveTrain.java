@@ -51,10 +51,10 @@ public class DriveTrain {
         rightBackDrive = hwMap.get(DcMotor.class, "rightBack");
 
         // Initializes motor directions:
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
 //        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -73,6 +73,7 @@ public class DriveTrain {
         this.telemetry = telemetry;
         imu.resetYaw();
     }
+
     // This function needs an axial, lateral, and yaw input. It uses this input to drive the drive train motors.
     // The last two variables are for direction switching.
     public void drive(double axial, double lateral, double yaw) {
@@ -285,5 +286,12 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
         rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void stop() { // Makes the robot stop whenever this function is called
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
     }
 }
