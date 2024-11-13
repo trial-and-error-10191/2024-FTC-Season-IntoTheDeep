@@ -203,7 +203,7 @@ public class autoNearNetBlue extends LinearOpMode {
 //        turnToHeading(TURN_SPEED, 180);
 //        driveStraight(DRIVE_SPEED, 30, 90);
         if (opModeIsActive()) {
-            robot.ascentMechanism.servo.setPosition(0.3); // Makes it able to touch the bar
+            robot.ascentMechanism.servo.setPosition(0.7); // Makes it able to touch the bar
             telemetry.addData("Arm Position", robot.ascentMechanism.servo.getPosition());
             telemetry.update();
         }
