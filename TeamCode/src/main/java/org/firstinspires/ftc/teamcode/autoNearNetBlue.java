@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware.MID_SERVO;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -192,16 +194,16 @@ public class autoNearNetBlue extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-        StrafeRobot(DRIVE_SPEED, 5);
-        robot.ascentMechanism.armPosition(0.5); // Raise arm at the start of match, when we actually can
-        driveStraight(DRIVE_SPEED, 32, 0);
-        driveStraight(DRIVE_SPEED, -28, 0);
-        turnToHeading(TURN_SPEED, -90);
-        driveStraight(DRIVE_SPEED, 55, -90);
-        turnToHeading(TURN_SPEED, 180);
-        driveStraight(DRIVE_SPEED, 30, 90);
+//        StrafeRobot(DRIVE_SPEED, 5);
+//        robot.ascentMechanism.armPosition(0.5); // Raise arm at the start of match, when we actually can
+//        driveStraight(DRIVE_SPEED, 32, 0);
+//        driveStraight(DRIVE_SPEED, -28, 0);
+//        turnToHeading(TURN_SPEED, -90);
+//        driveStraight(DRIVE_SPEED, 55, -90);
+//        turnToHeading(TURN_SPEED, 180);
+//        driveStraight(DRIVE_SPEED, 30, 90);
         if (opModeIsActive()) {
-            robot.ascentMechanism.armPosition(0.7); // Makes it able to touch the bar
+            robot.ascentMechanism.servo.setPosition(0.3); // Makes it able to touch the bar
             telemetry.addData("Arm Position", robot.ascentMechanism.servo.getPosition());
             telemetry.update();
         }
@@ -209,9 +211,9 @@ public class autoNearNetBlue extends LinearOpMode {
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);  // Pause to display last telemetry message.
+//        telemetry.addData("Path", "Complete");
+//        telemetry.update();
+        sleep(10000); // Pause to display last telemetry message.
     }
 
     /*
