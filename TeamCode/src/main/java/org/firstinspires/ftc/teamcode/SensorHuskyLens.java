@@ -70,6 +70,8 @@ public class SensorHuskyLens extends LinearOpMode {
 
     private HuskyLens huskyLens;
 
+    private AprilTagProcessor aprilTag;
+    
     @Override
     public void runOpMode()
     {
