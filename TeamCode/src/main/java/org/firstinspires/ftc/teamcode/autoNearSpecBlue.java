@@ -197,21 +197,21 @@ public class autoNearSpecBlue extends LinearOpMode {
 //        driveStraight(DRIVE_SPEED, 10, 0);
 //        driveStraight(DRIVE_SPEED, -28, 0);
         // Makes the robot grab a second sample
-        turnToHeading(TURN_SPEED, -90);
-        StrafeRobot(DRIVE_SPEED, 5);
-        driveStraight(DRIVE_SPEED, 12, 0);
-        StrafeRobot(DRIVE_SPEED, -5);
-        turnToHeading(TURN_SPEED, -180);
-        driveStraight(DRIVE_SPEED, 12, 0);
-//        turnToHeading(TURN_SPEED, -90);
+        turnToHeading(0.3, -90);
+        StrafeRobot(0.3, 5);
+        driveStraight(0.3, 12, 0);
+        StrafeRobot(0.3, -5);
+        turnToHeading(0.3, -180);
+        driveStraight(0.3, 12, 0);
+//        turnToHeading(TURN_SPEED, -90); aaaaa
 //        driveStraight(DRIVE_SPEED, 55, -90);
 //        turnToHeading(TURN_SPEED, 180);
 //        driveStraight(DRIVE_SPEED, 30, 90);
-        if (opModeIsActive()) {
-            robot.ascentMechanism.servo.setPosition(-1); // Makes it able to touch the bar
-            telemetry.addData("Arm Position", robot.ascentMechanism.servo.getPosition());
-            telemetry.update();
-        }
+//        if (opModeIsActive()) {
+//            robot.ascentMechanism.servo.setPosition(-1); // Makes it able to touch the bar
+//            telemetry.addData("Arm Position", robot.ascentMechanism.servo.getPosition());
+//            telemetry.update();
+//        }
 
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
