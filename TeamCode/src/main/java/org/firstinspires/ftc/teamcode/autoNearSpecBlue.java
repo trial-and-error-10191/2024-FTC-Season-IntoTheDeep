@@ -199,7 +199,8 @@ public class autoNearSpecBlue extends LinearOpMode {
         // Makes the robot grab a second sample
         if (opModeIsActive()) {
             turnToHeading(0.3, -90);
-            telemetry.addData("Turn", turnToHeading.setposition());
+            telemetry.addData("Turn", "%5.2f : %5.0f", targetHeading, getHeading());
+            telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
             telemetry.update();
         }
         StrafeRobot(0.3, 5);
