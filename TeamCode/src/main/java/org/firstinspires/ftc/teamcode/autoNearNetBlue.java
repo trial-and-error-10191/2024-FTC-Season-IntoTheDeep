@@ -190,17 +190,17 @@ public class autoNearNetBlue extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-
+double flexibleWait = 3.5;
         StrafeRobot(DRIVE_SPEED, 5);
-        Wait(0.5);
+        Wait(flexibleWait);
         driveStraight(DRIVE_SPEED, 29, 0);
-        Wait(0.5);
+        Wait(flexibleWait);
         driveStraight(DRIVE_SPEED, -27, 0);
-        Wait(0.5);
+        Wait(flexibleWait);
         turnToHeading(TURN_SPEED, -90);
-        Wait(0.5);
-        driveStraight(DRIVE_SPEED, 55, -90);
-        Wait(0.5);
+        Wait(flexibleWait);
+        //driveStraight(DRIVE_SPEED, 55, -90);
+       // Wait(flexibleWait);
 //        turnToHeading(TURN_SPEED, 0);
 //        driveStraight(DRIVE_SPEED, 8, 0);
 //        turnToHeading(TURN_SPEED, 90);
@@ -297,6 +297,7 @@ public class autoNearNetBlue extends LinearOpMode {
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         }
     }
 public void StrafeRobot(double maxDriveSpeed, double distance) {
@@ -502,9 +503,10 @@ telemetry.update();
     private final ElapsedTime runtime = new ElapsedTime();
     public void Wait(double seconds) {
         runtime.reset();
-        while (runtime.time() < seconds) {
+        while (runtime.time() < seconds) {}
+            // whatever I want to do in th4e while loop
             // this statement is supposed to be empty.
-        }
+
     }
 }
 
