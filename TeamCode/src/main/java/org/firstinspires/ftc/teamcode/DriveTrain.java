@@ -10,12 +10,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 
 public class DriveTrain {
 
     DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
+    TouchSensor touchSensor;
+    public DistanceSensor sensorDistance;
     private IMU imu = null;
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -56,6 +61,9 @@ public class DriveTrain {
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
+        touchSensor = hwMap.get(TouchSensor.class, "sensor_touch");
+        sensorDistance = hwMap.get(DistanceSensor.class, "sensor_distance");
+
 //        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -87,6 +95,7 @@ public class DriveTrain {
         double rightFrontPower = 0;
         double leftBackPower = 0;
         double rightBackPower = 0;
+        double minDist = 1.5;
 
        if (Math.abs(axial) > deadzone || Math.abs(lateral) > deadzone || Math.abs(yaw) > deadzone) {
            leftFrontPower = axial + lateral + yaw;
@@ -115,10 +124,27 @@ public class DriveTrain {
         rightBackPower *= sensitivity;
 
         // The next four lines gives the calculated power to each motor.
-        leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
-        leftBackDrive.setPower(leftBackPower);
-        rightBackDrive.setPower(rightBackPower);
+
+        if (sensorDistance.getDistance(DistanceUnit.INCH)< minDist) {
+            telemetry.addData("Robot", "Is too close to object");
+            stop();
+//                timer.reset();
+//                while (timer.seconds() < .5) {
+//                    // Do nothing
+//                }
+            leftFrontDrive.setPower(-.5);
+            rightFrontDrive.setPower(-.5);
+            leftBackDrive.setPower(-.5);
+            rightBackDrive.setPower(-.5);
+
+        } else {
+            telemetry.addData("Robot", "Is not too close to object");
+
+            leftFrontDrive.setPower(leftFrontPower);
+            rightFrontDrive.setPower(rightFrontPower);
+            leftBackDrive.setPower(leftBackPower);
+            rightBackDrive.setPower(rightBackPower);
+        }
     }
 
     public void driveStraight(double maxDriveSpeed,
