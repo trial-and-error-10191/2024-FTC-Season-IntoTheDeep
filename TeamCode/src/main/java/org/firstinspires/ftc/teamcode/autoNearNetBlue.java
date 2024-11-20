@@ -97,8 +97,7 @@ public class autoNearNetBlue extends LinearOpMode {
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     private DcMotor leftBackDrive = null;
-    private IMU             imu         = null;      // Control/Expansion Hub IMU
-
+    private IMU             imu         = null;      // Control/Expansion Hub I
     private double          headingError  = 0;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -190,15 +189,15 @@ public class autoNearNetBlue extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-double flexibleWait = 3.5;
-        StrafeRobot(DRIVE_SPEED, 5);
+double flexibleWait = 0.5;
+        StrafeRobot(DRIVE_SPEED, 5, 0);
         Wait(flexibleWait);
-        driveStraight(DRIVE_SPEED, 29, 0);
-        Wait(flexibleWait);
-        driveStraight(DRIVE_SPEED, -27, 0);
-        Wait(flexibleWait);
-        turnToHeading(TURN_SPEED, -90);
-        Wait(flexibleWait);
+      //  driveStraight(DRIVE_SPEED, 29, 0);
+     //   Wait(flexibleWait);
+     //   driveStraight(DRIVE_SPEED, -27, 0);
+     //   Wait(flexibleWait);
+       // turnToHeading(TURN_SPEED, -90);
+      //  Wait(flexibleWait);
         //driveStraight(DRIVE_SPEED, 55, -90);
        // Wait(flexibleWait);
 //        turnToHeading(TURN_SPEED, 0);
@@ -300,7 +299,7 @@ double flexibleWait = 3.5;
 
         }
     }
-public void StrafeRobot(double maxDriveSpeed, double distance) {
+public void StrafeRobot(double maxDriveSpeed, double distance, int Heading) {
     // Determine new target position, and pass to motor controller
     int moveCounts = (int)(Math.abs(distance) * COUNTS_PER_INCH);
    if (distance > 0) {
@@ -342,6 +341,11 @@ telemetry.addData("SLeftTarget", SecondleftTarget);
 telemetry.addData("RightTarget", rightTarget);
 telemetry.addData("SRightTarget", SecondrightTarget);
 telemetry.update();
+        // Determine required steering to keep on heading
+        turnSpeed = getSteeringCorrection(Heading, P_DRIVE_GAIN);
+
+        // Apply the turning correction to the current driving speed.
+        moveRobot(driveSpeed, turnSpeed);
     }
 
 }
