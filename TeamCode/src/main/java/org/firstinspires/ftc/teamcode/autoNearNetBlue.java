@@ -212,9 +212,9 @@ double flexibleWait = 0.5;
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);  // Pause to display last telemetry message.
+//        telemetry.addData("Path", "Complete");
+//        telemetry.update();
+        sleep(1000000);  // Pause to display last telemetry message.
     }
 
     /*
@@ -326,8 +326,8 @@ public void StrafeRobot(double maxDriveSpeed, double distance, int Heading) {
     rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
     maxDriveSpeed = Math.abs(maxDriveSpeed);
-    if (maxDriveSpeed > 1) {
-maxDriveSpeed = 1;
+    if (maxDriveSpeed > 0.9) {
+maxDriveSpeed = 0.9;
     }
     leftFrontDrive.setPower(maxDriveSpeed);
     rightFrontDrive.setPower(maxDriveSpeed);
@@ -336,16 +336,17 @@ maxDriveSpeed = 1;
 
     while (opModeIsActive() &&
             (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
-telemetry.addData("LeftTarget", leftTarget);
-telemetry.addData("SLeftTarget", SecondleftTarget);
-telemetry.addData("RightTarget", rightTarget);
-telemetry.addData("SRightTarget", SecondrightTarget);
-telemetry.update();
+
         // Determine required steering to keep on heading
         turnSpeed = getSteeringCorrection(Heading, P_DRIVE_GAIN);
+        turnSpeed = turnSpeed / 10;
+telemetry.addData("Test", getSteeringCorrection(Heading, P_DRIVE_GAIN));
+telemetry.update();
+        leftFrontDrive.setPower(maxDriveSpeed + turnSpeed);
+        rightFrontDrive.setPower(maxDriveSpeed - turnSpeed);
+        leftBackDrive.setPower(maxDriveSpeed + turnSpeed);
+        rightBackDrive.setPower(maxDriveSpeed - turnSpeed);
 
-        // Apply the turning correction to the current driving speed.
-        moveRobot(driveSpeed, turnSpeed);
     }
 
 }
