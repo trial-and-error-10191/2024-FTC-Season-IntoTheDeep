@@ -9,13 +9,13 @@ public class Robot {
     public DriveTrain driveTrain;
     public AscentMechanism ascentMechanism;
 
-    ScoopArm grabbyArm;
+    ScoopArm scoopyArm;
     // This combines all the subsystems.
     public Robot(HardwareMap hwMap, Telemetry telemetry) {
 
         driveTrain = new DriveTrain(hwMap, telemetry);
         ascentMechanism = new AscentMechanism(hwMap);
-        grabbyArm = new ScoopArm(hwMap);
+        scoopyArm = new ScoopArm(hwMap);
     }
 
 }
