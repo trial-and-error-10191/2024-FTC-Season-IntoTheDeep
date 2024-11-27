@@ -28,7 +28,7 @@ public class IntoTheDeep_TeleOp extends LinearOpMode {
             robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
             robot.ascentMechanism.rise(gamepad2.y, gamepad2.x);
             // Moves the arm that moves the specimen up and down
-            robot.grabbyArm.scoopArmPosition(gamepad2.left_trigger, gamepad2.right_trigger);
+            robot.scoopyArm.scoopArmPosition(gamepad2.left_trigger, gamepad2.right_trigger);
 
             // Provides telemetry for all motors, servos, and sensors.
             telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",
@@ -37,6 +37,8 @@ public class IntoTheDeep_TeleOp extends LinearOpMode {
             telemetry.addData("Back Driving Motors (Left, Right)", "%4.2f, %4.2f",
                     robot.driveTrain.leftBackDrive.getPower(),
                     robot.driveTrain.rightBackDrive.getPower());
+            telemetry.addData("Scooper Arm (Up, Down))", "%4.2f",
+                    robot.scoopyArm.CRservo.getPower());
             telemetry.update();
         }
     }
