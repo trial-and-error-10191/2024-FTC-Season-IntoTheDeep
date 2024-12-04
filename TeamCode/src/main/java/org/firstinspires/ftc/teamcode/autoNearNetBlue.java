@@ -93,6 +93,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class autoNearNetBlue extends LinearOpMode {
 
     /* Declare OpMode members. */
+    private AscentMechanism AscentArm;
     private DcMotor leftFrontDrive   = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
@@ -190,31 +191,22 @@ public class autoNearNetBlue extends LinearOpMode {
         imu.resetYaw();
 
 double flexibleWait = 0.5;
-        StrafeRobot(DRIVE_SPEED, 5, 0);
+        StrafeRobot(0.1, 5, 0);
         Wait(flexibleWait);
-      //  driveStraight(DRIVE_SPEED, 29, 0);
-     //   Wait(flexibleWait);
-     //   driveStraight(DRIVE_SPEED, -27, 0);
-     //   Wait(flexibleWait);
-       // turnToHeading(TURN_SPEED, -90);
-      //  Wait(flexibleWait);
-        //driveStraight(DRIVE_SPEED, 55, -90);
-       // Wait(flexibleWait);
-//        turnToHeading(TURN_SPEED, 0);
-//        driveStraight(DRIVE_SPEED, 8, 0);
-//        turnToHeading(TURN_SPEED, 90);
-//        driveStraight(DRIVE_SPEED, 50, 90);
-//        driveStraight(DRIVE_SPEED, -50, 90);
-//        StrafeRobot(TURN_SPEED, 15);
-//        driveStraight(DRIVE_SPEED, 70, 90);
-//        driveStraight(DRIVE_SPEED, -70, 90);
+        turnToHeading(TURN_SPEED, 90);
+        Wait(flexibleWait);
+        driveStraight(DRIVE_SPEED, 40, 90);
+        Wait(flexibleWait);
+        turnToHeading(TURN_SPEED, 0);
+        Wait(flexibleWait);
+        driveStraight(DRIVE_SPEED, 40, 90);
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
 //        telemetry.addData("Path", "Complete");
 //        telemetry.update();
-        sleep(1000000);  // Pause to display last telemetry message.
+        sleep(100);  // Pause to display last telemetry message.
     }
 
     /*
@@ -333,21 +325,21 @@ maxDriveSpeed = 0.9;
     rightFrontDrive.setPower(maxDriveSpeed);
     leftBackDrive.setPower(maxDriveSpeed);
     rightBackDrive.setPower(maxDriveSpeed);
-
-    while (opModeIsActive() &&
-            (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
-
-        // Determine required steering to keep on heading
-        turnSpeed = getSteeringCorrection(Heading, P_DRIVE_GAIN);
-        turnSpeed = turnSpeed / 10;
-telemetry.addData("Test", getSteeringCorrection(Heading, P_DRIVE_GAIN));
-telemetry.update();
-        leftFrontDrive.setPower(maxDriveSpeed + turnSpeed);
-        rightFrontDrive.setPower(maxDriveSpeed - turnSpeed);
-        leftBackDrive.setPower(maxDriveSpeed + turnSpeed);
-        rightBackDrive.setPower(maxDriveSpeed - turnSpeed);
-
-    }
+//
+//    while (opModeIsActive() &&
+//            (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+//
+//        // Determine required steering to keep on heading
+//        turnSpeed = getSteeringCorrection(Heading, P_DRIVE_GAIN);
+//        turnSpeed = turnSpeed / 10;
+//telemetry.addData("Test", getSteeringCorrection(Heading, P_DRIVE_GAIN));
+//telemetry.update();
+//        leftFrontDrive.setPower(maxDriveSpeed + turnSpeed);
+//        rightFrontDrive.setPower(maxDriveSpeed - turnSpeed);
+//        leftBackDrive.setPower(maxDriveSpeed + turnSpeed);
+//        rightBackDrive.setPower(maxDriveSpeed - turnSpeed);
+//
+//    }
 
 }
     /**
