@@ -90,7 +90,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous(name="Robot: autoNearNetBlue", group="Robot")
 //@Disabled
-public class autoNearNetBlue extends LinearOpMode {
+public class autoNearObs extends LinearOpMode {
 
     /* Declare OpMode members. */
     private AscentMechanism AscentArm;
@@ -192,14 +192,9 @@ public class autoNearNetBlue extends LinearOpMode {
         imu.resetYaw();
 
 double flexibleWait = 0.5;
-driveStraight(DRIVE_SPEED, 61, 0);
+driveStraight(DRIVE_SPEED, -30, 0);
 Wait(flexibleWait);
-turnToHeading(TURN_SPEED, 90);
-Wait(flexibleWait);
-driveStraight(DRIVE_SPEED, -20, 90);
-Wait(flexibleWait);
-AscentArm.SetPosistion(0.38);
-Wait(flexibleWait);
+
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
