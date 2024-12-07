@@ -29,8 +29,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware.MID_SERVO;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -90,9 +88,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: autoNearNetBlue", group="Robot")
+@Autonomous(name="Robot: 23e", group="Robot")
 //@Disabled
-public class autoNearNetBlue extends LinearOpMode {
+public class autoCodysMode extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftFrontDrive   = null;
@@ -143,8 +141,6 @@ public class autoNearNetBlue extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        Robot robot = new Robot(hardwareMap, telemetry);
-
         // Initialize the drive system variables.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
@@ -194,26 +190,16 @@ public class autoNearNetBlue extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-//        StrafeRobot(DRIVE_SPEED, 5);
-//        robot.ascentMechanism.armPosition(0.5); // Raise arm at the start of match, when we actually can
-//        driveStraight(DRIVE_SPEED, 32, 0);
-//        driveStraight(DRIVE_SPEED, -28, 0);
-//        turnToHeading(TURN_SPEED, -90);
-//        driveStraight(DRIVE_SPEED, 55, -90);
-//        turnToHeading(TURN_SPEED, 180);
-//        driveStraight(DRIVE_SPEED, 30, 90);
-        if (opModeIsActive()) {
-            robot.ascentMechanism.servo.setPosition(0.7); // Makes it able to touch the bar
-            telemetry.addData("Arm Position", robot.ascentMechanism.servo.getPosition());
-            telemetry.update();
-        }
+StrafeRobot(TURN_SPEED, -10);
+driveStraight(DRIVE_SPEED, 40, 0);
+turnToHeading(TURN_SPEED, 90);
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
-//        telemetry.addData("Path", "Complete");
-//        telemetry.update();
-        sleep(10000); // Pause to display last telemetry message.
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+        sleep(1000);  // Pause to display last telemetry message.
     }
 
     /*

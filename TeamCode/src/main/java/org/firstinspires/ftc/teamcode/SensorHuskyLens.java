@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
  * detect a number of predefined objects and AprilTags in the 36h11 family, can
  * recognize colors, and can be trained to detect custom objects. See this website for
  * documentation: https://wiki.dfrobot.com/HUSKYLENS_V1.0_SKU_SEN0305_SEN0336
- *
+ * 
  * For detailed instructions on how a HuskyLens is used in FTC, please see this tutorial:
  * https://ftc-docs.firstinspires.org/en/latest/devices/huskylens/huskylens.html
  * 

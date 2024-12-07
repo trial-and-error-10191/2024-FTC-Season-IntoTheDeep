@@ -190,7 +190,31 @@ public class autoNearSpecBlueAlternative extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-        driveStraight(DRIVE_SPEED, -30, 0);
+        //        StrafeRobot(DRIVE_SPEED, 5);
+//        robot.ascentMechanism.armPosition(0.5); // Raise arm at the start of match, when we actually can
+//        driveStraight(DRIVE_SPEED, 20, 0);
+//        driveStraight(DRIVE_SPEED, -28, 0);
+        // Makes the robot grab a second sample
+        if (opModeIsActive()) {
+            turnToHeading(0.3, -90);
+            telemetry.addData("Turn", "%5.2f : %5.0f", targetHeading, getHeading());
+            telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
+            telemetry.update();
+        }
+        StrafeRobot(0.3, 5);
+        driveStraight(0.3, 12, 0);
+        StrafeRobot(0.3, -5);
+        turnToHeading(0.3, -180);
+        driveStraight(0.3, 12, 0);
+//        turnToHeading(TURN_SPEED, -90);
+//        driveStraight(DRIVE_SPEED, 55, -90);
+//        turnToHeading(TURN_SPEED, 180);
+//        driveStraight(DRIVE_SPEED, 30, 90);
+//        if (opModeIsActive()) {
+//            robot.ascentMechanism.servo.setPosition(-1); // Makes it able to touch the bar
+//            telemetry.addData("Arm Position", robot.ascentMechanism.servo.getPosition());
+//            telemetry.update();
+//        }
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize

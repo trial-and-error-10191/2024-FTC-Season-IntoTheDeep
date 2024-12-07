@@ -127,7 +127,7 @@ public class autoNearSpecBlue extends LinearOpMode {
     // They can/should be tweaked to suit the specific robot drive train.
     static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
     static final double     TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
-    static final double     HEADING_THRESHOLD       = 5.0 ;    // How close must the heading get to the target before moving to next step.
+    static final double     HEADING_THRESHOLD       = 10.0 ;    // How close must the heading get to the target before moving to next step.
                                                                // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
     // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
@@ -139,6 +139,8 @@ public class autoNearSpecBlue extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+        Robot robot = new Robot(hardwareMap, telemetry);
 
         // Initialize the drive system variables.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
@@ -189,10 +191,33 @@ public class autoNearSpecBlue extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-        StrafeRobot(DRIVE_SPEED, 5);
-        driveStraight(DRIVE_SPEED, 85, 0);
-        driveStraight(DRIVE_SPEED, -115, 0);
-        StrafeRobot(DRIVE_SPEED, -7);
+
+//        StrafeRobot(DRIVE_SPEED, 5);
+//        robot.ascentMechanism.armPosition(0.5); // Raise arm at the start of match, when we actually can
+//        driveStraight(DRIVE_SPEED, 10, 0);
+//        driveStraight(DRIVE_SPEED, -28, 0);
+        // Makes the robot grab a second sample
+        if (opModeIsActive()) {
+            turnToHeading(0.3, -90);
+            telemetry.addData("Turn", "%5.2f : %5.0f", targetHeading, getHeading());
+            telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
+            telemetry.update();
+        }
+        StrafeRobot(0.3, 5);
+        driveStraight(0.3, 12, 0);
+        StrafeRobot(0.3, -5);
+        turnToHeading(0.3, -180);
+        driveStraight(0.3, 12, 0);
+//        turnToHeading(TURN_SPEED, -90);
+//        driveStraight(DRIVE_SPEED, 55, -90);
+//        turnToHeading(TURN_SPEED, 180);
+//        driveStraight(DRIVE_SPEED, 30, 90);
+//        if (opModeIsActive()) {
+//            robot.ascentMechanism.servo.setPosition(-1); // Makes it able to touch the bar
+//            telemetry.addData("Arm Position", robot.ascentMechanism.servo.getPosition());
+//            telemetry.update();
+//        }
+
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
