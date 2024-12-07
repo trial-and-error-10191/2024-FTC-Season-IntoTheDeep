@@ -41,6 +41,10 @@ public class IntoTheDeep_TeleOp extends LinearOpMode {
                     robot.driveTrain.rightBackDrive.getPower());
             telemetry.addData("Scooper Arm", "%4.2f",
                     robot.scoopyArm.getPower());
+            telemetry.addData("Max Limit Switch Status", "%b",
+                    robot.scoopyArm.getLimitMax());
+            telemetry.addData("Lower Limit Switch Status", "%b",
+                    robot.scoopyArm.getLimitLower());
             telemetry.update();
         }
     }
