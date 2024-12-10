@@ -88,11 +88,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: autoNearNetBlue", group="Robot")
+@Autonomous(name="Robot: autoNearNearObs", group="Robot")
 //@Disabled
 public class autoNearObs extends LinearOpMode {
 
     /* Declare OpMode members. */
+    private ScoopArm Scooparm;
     private AscentMechanism AscentArm;
     private DcMotor leftFrontDrive   = null;
     private DcMotor rightFrontDrive = null;

@@ -88,9 +88,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: autoNearNetBlue", group="Robot")
+@Autonomous(name="Robot: autoNearObsAlt ", group="Robot")
 //@Disabled
-public class autoNearNetBlue extends LinearOpMode {
+public class autoNearObsLiftAlt extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ScoopArm Scooparm;
@@ -148,6 +148,7 @@ public class autoNearNetBlue extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
         AscentArm = new AscentMechanism(hardwareMap);
+        Scooparm = new ScoopArm(hardwareMap);
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -193,14 +194,19 @@ public class autoNearNetBlue extends LinearOpMode {
         imu.resetYaw();
 
 double flexibleWait = 0.5;
-driveStraight(DRIVE_SPEED, 61, 0);
+driveStraight(DRIVE_SPEED, 15, 0);
 Wait(flexibleWait);
-turnToHeading(TURN_SPEED, 90);
+turnToHeading(TURN_SPEED, -90);
 Wait(flexibleWait);
-driveStraight(DRIVE_SPEED, -20, 90);
+driveStraight(DRIVE_SPEED, 30, -90);
 Wait(flexibleWait);
-AscentArm.SetPosistion(0.38);
+turnToHeading(TURN_SPEED, 0);
 Wait(flexibleWait);
+driveStraight(DRIVE_SPEED, 15, -90);
+Wait(flexibleWait);
+Scooparm.AutoScoopArm(4, 1);
+Wait(flexibleWait);
+
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
