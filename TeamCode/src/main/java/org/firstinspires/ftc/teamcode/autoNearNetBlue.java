@@ -29,6 +29,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware.MID_SERVO;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -127,7 +129,7 @@ public class autoNearNetBlue extends LinearOpMode {
 
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
-    static final double     DRIVE_SPEED             = 0.5;     // Max driving speed for better distance accuracy.
+    static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
     static final double     TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
     static final double     HEADING_THRESHOLD       = 5.0 ;    // How close must the heading get to the target before moving to next step.
                                                                // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
@@ -141,6 +143,8 @@ public class autoNearNetBlue extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+        Robot robot = new Robot(hardwareMap, telemetry);
 
         // Initialize the drive system variables.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
@@ -201,6 +205,7 @@ driveStraight(DRIVE_SPEED, -20, 90);
 Wait(flexibleWait);
 AscentArm.SetPosistion(0.38);
 Wait(flexibleWait);
+
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
@@ -289,7 +294,6 @@ Wait(flexibleWait);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         }
     }
 public void StrafeRobot(double maxDriveSpeed, double distance, int Heading) {
@@ -498,12 +502,13 @@ maxDriveSpeed = 0.9;
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
+
     private final ElapsedTime runtime = new ElapsedTime();
     public void Wait(double seconds) {
         runtime.reset();
         while (runtime.time() < seconds) {}
-            // whatever I want to do in th4e while loop
-            // this statement is supposed to be empty.
+        // whatever I want to do in th4e while loop
+        // this statement is supposed to be empty.
 
     }
 }

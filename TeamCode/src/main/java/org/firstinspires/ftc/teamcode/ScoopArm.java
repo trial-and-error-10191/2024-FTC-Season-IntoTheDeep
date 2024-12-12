@@ -10,6 +10,7 @@ public class ScoopArm {
     DigitalChannel limitMax;
     DigitalChannel limitLower;
     ElapsedTime runtimeTimer = new ElapsedTime();
+
     public ScoopArm(HardwareMap hwMap) {
         // initiates servo name
         CRservo = hwMap.get(CRServo.class, "specimen_scoop");
@@ -24,9 +25,6 @@ public class ScoopArm {
         }
         CRservo.setPower(0);
     }
-
-
-
 
     public void scoopArmPosition(float robot_position_rise, float robot_position_lower) {
         if (robot_position_rise > 0) { // Makes the robot's grabbing arm rise

@@ -74,20 +74,27 @@ public class DriveTrain {
         this.telemetry = telemetry;
         imu.resetYaw();
     }
+
     // This function needs an axial, lateral, and yaw input. It uses this input to drive the drive train motors.
     // The last two variables are for direction switching.
     public void drive(double axial, double lateral, double yaw) {
-        double sensitivity = 0.6;
+
+        // initializes deadzone
+        double deadzone = 0.05;
+        // initializes sensitivity
+        double sensitivity = 0.5;
+
         double leftFrontPower = 0;
         double rightFrontPower = 0;
         double leftBackPower = 0;
         double rightBackPower = 0;
 
-        leftFrontPower = axial + lateral + yaw;
-        rightFrontPower = axial - lateral - yaw;
-        leftBackPower = axial - lateral + yaw;
-        rightBackPower = axial + lateral - yaw;
-
+       if (Math.abs(axial) > deadzone || Math.abs(lateral) > deadzone || Math.abs(yaw) > deadzone) {
+           leftFrontPower = axial + lateral + yaw;
+           rightFrontPower = axial - lateral - yaw;
+           leftBackPower = axial - lateral + yaw;
+           rightBackPower = axial + lateral - yaw;
+       }
         double max;
 
         // All code below this comment normalizes the values so no wheel power exceeds 100%.
@@ -271,5 +278,21 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
         return orientation.getYaw(AngleUnit.DEGREES);
     }
 
+    public void setMotorModes() {
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
 
+    public void stop() { // Makes the robot stop whenever this function is called
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+    }
 }
