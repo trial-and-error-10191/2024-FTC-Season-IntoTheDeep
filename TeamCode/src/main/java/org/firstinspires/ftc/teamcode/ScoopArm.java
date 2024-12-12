@@ -1,27 +1,50 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class ScoopArm {
 
     CRServo CRservo;
+    DigitalChannel limitMax;
+    DigitalChannel limitLower;
 
     public ScoopArm(HardwareMap hwMap) {
         // initiates servo name
         CRservo = hwMap.get(CRServo.class, "specimen_scoop");
+        limitMax = hwMap.get(DigitalChannel.class, "limitSwitchMax");
+        limitLower = hwMap.get(DigitalChannel.class, "limitSwitchLower");
     }
 
     public void scoopArmPosition(float robot_position_rise, float robot_position_lower) {
         if (robot_position_rise > 0) { // Makes the robot's grabbing arm rise
-            CRservo.setPower(robot_position_rise);
-            telemetry.addData("Scoop arm rising: ", robot_position_rise);
+            if (!limitMax.getState()) { // Max limit
+                CRservo.setPower(0);
+            }
+            else if (limitMax.getState()) {
+                CRservo.setPower(robot_position_rise);
+            }
         }
         else if (robot_position_lower > 0) { // Makes the robot's grabbing arm lower
-            CRservo.setPower(-robot_position_lower);
-            telemetry.addData("Scoop arm lowering: ", -robot_position_lower);
+            if (!limitLower.getState()) { // Lower limit
+                CRservo.setPower(0);
+            }
+            else if (limitLower.getState()){
+                CRservo.setPower(-robot_position_lower);
+            }
         }
+        else { // Makes the robot stop if the powers are 0
+            CRservo.setPower(0);
+        }
+    }
+    public double getPower() {
+        return CRservo.getPower();
+    }
+    public boolean getLimitMax() {
+        return limitMax.getState();
+    }
+    public boolean getLimitLower() {
+        return limitLower.getState();
     }
 }

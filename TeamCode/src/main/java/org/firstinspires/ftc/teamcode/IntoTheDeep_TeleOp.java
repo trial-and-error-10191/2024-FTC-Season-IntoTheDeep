@@ -1,5 +1,7 @@
    package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -37,8 +39,12 @@ public class IntoTheDeep_TeleOp extends LinearOpMode {
             telemetry.addData("Back Driving Motors (Left, Right)", "%4.2f, %4.2f",
                     robot.driveTrain.leftBackDrive.getPower(),
                     robot.driveTrain.rightBackDrive.getPower());
-            telemetry.addData("Scooper Arm (Up, Down))", "%4.2f",
-                    robot.scoopyArm.CRservo.getPower());
+            telemetry.addData("Scooper Arm", "%4.2f",
+                    robot.scoopyArm.getPower());
+            telemetry.addData("Max Limit Switch Status", "%b",
+                    robot.scoopyArm.getLimitMax());
+            telemetry.addData("Lower Limit Switch Status", "%b",
+                    robot.scoopyArm.getLimitLower());
             telemetry.update();
         }
     }
