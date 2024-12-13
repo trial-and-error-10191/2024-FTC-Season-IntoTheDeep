@@ -18,6 +18,7 @@ public class AscentMechanism {
 
         // initiates servo name
         servo = hwMap.get(Servo.class, "left_hand");
+        servo.setPosition(position);
     }
 
     public void rise(boolean rise, boolean lower) {

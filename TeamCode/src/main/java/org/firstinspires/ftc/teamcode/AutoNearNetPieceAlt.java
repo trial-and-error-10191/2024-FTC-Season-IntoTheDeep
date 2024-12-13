@@ -192,7 +192,6 @@ public class AutoNearNetPieceAlt extends LinearOpMode {
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
-
 double flexibleWait = 0.5;
 driveStraight(DRIVE_SPEED, 5, 0);
 Wait(flexibleWait);
@@ -221,6 +220,7 @@ Wait(flexibleWait);
 driveStraight(DRIVE_SPEED, -33, 90);
 Wait(flexibleWait);
 AscentArm.SetPosistion(0.38);
+// old value = 0.38
 
 
         // Step through each leg of the path,
