@@ -28,14 +28,15 @@
  */
 
 package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
@@ -87,17 +88,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: autoNearSpecBlue", group="Robot")
+@Autonomous(name="Robot: autoNearObsAlt ", group="Robot")
 //@Disabled
-public class autoNearSpecBlue extends LinearOpMode {
+public class autoNearObsLiftAlt extends LinearOpMode {
 
     /* Declare OpMode members. */
+    private ScoopArm Scooparm;
+    private AscentMechanism AscentArm;
     private DcMotor leftFrontDrive   = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     private DcMotor leftBackDrive = null;
-    private IMU             imu         = null;      // Control/Expansion Hub IMU
-
+    private IMU             imu         = null;      // Control/Expansion Hub I
     private double          headingError  = 0;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -125,7 +127,7 @@ public class autoNearSpecBlue extends LinearOpMode {
 
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
-    static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
+    static final double     DRIVE_SPEED             = 0.5;     // Max driving speed for better distance accuracy.
     static final double     TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
     static final double     HEADING_THRESHOLD       = 10.0 ;    // How close must the heading get to the target before moving to next step.
                                                                // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
@@ -147,6 +149,8 @@ public class autoNearSpecBlue extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
+        AscentArm = new AscentMechanism(hardwareMap);
+        Scooparm = new ScoopArm(hardwareMap);
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -191,40 +195,27 @@ public class autoNearSpecBlue extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-
-//        StrafeRobot(DRIVE_SPEED, 5);
-//        robot.ascentMechanism.armPosition(0.5); // Raise arm at the start of match, when we actually can
-//        driveStraight(DRIVE_SPEED, 10, 0);
-//        driveStraight(DRIVE_SPEED, -28, 0);
-        // Makes the robot grab a second sample
-        if (opModeIsActive()) {
-            turnToHeading(0.3, -90);
-            telemetry.addData("Turn", "%5.2f : %5.0f", targetHeading, getHeading());
-            telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
-            telemetry.update();
-        }
-        StrafeRobot(0.3, 5);
-        driveStraight(0.3, 12, 0);
-        StrafeRobot(0.3, -5);
-        turnToHeading(0.3, -180);
-        driveStraight(0.3, 12, 0);
-//        turnToHeading(TURN_SPEED, -90);
-//        driveStraight(DRIVE_SPEED, 55, -90);
-//        turnToHeading(TURN_SPEED, 180);
-//        driveStraight(DRIVE_SPEED, 30, 90);
-//        if (opModeIsActive()) {
-//            robot.ascentMechanism.servo.setPosition(-1); // Makes it able to touch the bar
-//            telemetry.addData("Arm Position", robot.ascentMechanism.servo.getPosition());
-//            telemetry.update();
-//        }
+double flexibleWait = 0.5;
+driveStraight(DRIVE_SPEED, 15, 0);
+Wait(flexibleWait);
+turnToHeading(TURN_SPEED, -90);
+Wait(flexibleWait);
+driveStraight(DRIVE_SPEED, 30, -90);
+Wait(flexibleWait);
+turnToHeading(TURN_SPEED, 0);
+Wait(flexibleWait);
+driveStraight(DRIVE_SPEED, 15, -90);
+Wait(flexibleWait);
+Scooparm.AutoScoopArm(4, 1);
+Wait(flexibleWait);
 
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);  // Pause to display last telemetry message.
+//        telemetry.addData("Path", "Complete");
+//        telemetry.update();
+        sleep(100);  // Pause to display last telemetry message.
     }
 
     /*
@@ -306,9 +297,10 @@ public class autoNearSpecBlue extends LinearOpMode {
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         }
     }
-public void StrafeRobot(double maxDriveSpeed, double distance) {
+public void StrafeRobot(double maxDriveSpeed, double distance, int Heading) {
     // Determine new target position, and pass to motor controller
     int moveCounts = (int)(Math.abs(distance) * COUNTS_PER_INCH);
    if (distance > 0) {
@@ -335,22 +327,28 @@ public void StrafeRobot(double maxDriveSpeed, double distance) {
     rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
     maxDriveSpeed = Math.abs(maxDriveSpeed);
-    if (maxDriveSpeed > 1) {
-maxDriveSpeed = 1;
+    if (maxDriveSpeed > 0.9) {
+maxDriveSpeed = 0.9;
     }
     leftFrontDrive.setPower(maxDriveSpeed);
     rightFrontDrive.setPower(maxDriveSpeed);
     leftBackDrive.setPower(maxDriveSpeed);
     rightBackDrive.setPower(maxDriveSpeed);
-
-    while (opModeIsActive() &&
-            (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
-telemetry.addData("LeftTarget", leftTarget);
-telemetry.addData("SLeftTarget", SecondleftTarget);
-telemetry.addData("RightTarget", rightTarget);
-telemetry.addData("SRightTarget", SecondrightTarget);
-telemetry.update();
-    }
+//
+//    while (opModeIsActive() &&
+//            (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+//
+//        // Determine required steering to keep on heading
+//        turnSpeed = getSteeringCorrection(Heading, P_DRIVE_GAIN);
+//        turnSpeed = turnSpeed / 10;
+//telemetry.addData("Test", getSteeringCorrection(Heading, P_DRIVE_GAIN));
+//telemetry.update();
+//        leftFrontDrive.setPower(maxDriveSpeed + turnSpeed);
+//        rightFrontDrive.setPower(maxDriveSpeed - turnSpeed);
+//        leftBackDrive.setPower(maxDriveSpeed + turnSpeed);
+//        rightBackDrive.setPower(maxDriveSpeed - turnSpeed);
+//
+//    }
 
 }
     /**
@@ -507,6 +505,14 @@ telemetry.update();
     public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
+    }
+    private final ElapsedTime runtime = new ElapsedTime();
+    public void Wait(double seconds) {
+        runtime.reset();
+        while (runtime.time() < seconds) {}
+            // whatever I want to do in th4e while loop
+            // this statement is supposed to be empty.
+
     }
 }
 

@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class ArmLong {
     // motor instantiating
     DcMotor MainMoto = null;
-    DcMotor RotationMoto = null;
+    CRServo RotationServo;
     // Variable Instantiating
 double EncoderUpperLimit = 3000;
 double EncoderBottomLimit = 0;
@@ -29,14 +30,12 @@ double Deadzone = 0.05;
     //Hardware map stuff
     public ArmLong(HardwareMap hwMap, Telemetry telemetry) {
         MainMoto = hwMap.get(DcMotor.class, "Extender");
-        RotationMoto = hwMap.get(DcMotor.class, "Rotator");
+        RotationServo = hwMap.get(CRServo.class, "Rotator");
         MainMoto.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RotationMoto.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         MainMoto.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        RotationMoto.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     //Tele-operation Function
-    public void TeleOpExtend(double straightPower, double RotationPower) {
+    public void TeleOpExtend(double straightPower) {
        // for the straight motor
         if (Math.abs(straightPower) > Deadzone) {
             if (MainMoto.getCurrentPosition() < EncoderUpperLimit && MainMoto.getCurrentPosition() > EncoderBottomLimit) {
@@ -47,16 +46,9 @@ double Deadzone = 0.05;
                 MainMoto.setPower(-1);
             }
         }
-        // for the rotation motor
-        if (Math.abs(RotationPower) > Deadzone) {
-            if (RotationMoto.getCurrentPosition() < EncoderRotationForwardLimit && RotationMoto.getCurrentPosition() > EncoderRotationBackwardLimit) {
-                RotationMoto.setPower(straightPower);
-            } else if (RotationMoto.getCurrentPosition() < EncoderRotationBackwardLimit) {
-                RotationMoto.setPower(1);
-            } else if (RotationMoto.getCurrentPosition() > EncoderRotationForwardLimit) {
-                RotationMoto.setPower(-1);
-            }
-        }
+    }
+    public void ServoSpool(double RotationPower) {
+        RotationServo.setPower(RotationPower);
     }
     // Autonomous function
     public void AutoExtend(double Length) {

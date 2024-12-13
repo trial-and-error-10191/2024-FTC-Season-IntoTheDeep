@@ -95,12 +95,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class autoNearNetBlue extends LinearOpMode {
 
     /* Declare OpMode members. */
+    private ScoopArm Scooparm;
+    private AscentMechanism AscentArm;
     private DcMotor leftFrontDrive   = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     private DcMotor leftBackDrive = null;
-    private IMU             imu         = null;      // Control/Expansion Hub IMU
-
+    private IMU             imu         = null;      // Control/Expansion Hub I
     private double          headingError  = 0;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -150,6 +151,7 @@ public class autoNearNetBlue extends LinearOpMode {
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
+        AscentArm = new AscentMechanism(hardwareMap);
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
@@ -194,26 +196,23 @@ public class autoNearNetBlue extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-//        StrafeRobot(DRIVE_SPEED, 5);
-//        robot.ascentMechanism.armPosition(0.5); // Raise arm at the start of match, when we actually can
-//        driveStraight(DRIVE_SPEED, 32, 0);
-//        driveStraight(DRIVE_SPEED, -28, 0);
-//        turnToHeading(TURN_SPEED, -90);
-//        driveStraight(DRIVE_SPEED, 55, -90);
-//        turnToHeading(TURN_SPEED, 180);
-//        driveStraight(DRIVE_SPEED, 30, 90);
-        if (opModeIsActive()) {
-            robot.ascentMechanism.servo.setPosition(0.7); // Makes it able to touch the bar
-            telemetry.addData("Arm Position", robot.ascentMechanism.servo.getPosition());
-            telemetry.update();
-        }
+double flexibleWait = 0.5;
+driveStraight(DRIVE_SPEED, 61, 0);
+Wait(flexibleWait);
+turnToHeading(TURN_SPEED, 90);
+Wait(flexibleWait);
+driveStraight(DRIVE_SPEED, -20, 90);
+Wait(flexibleWait);
+AscentArm.SetPosistion(0.38);
+Wait(flexibleWait);
+
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
 //        telemetry.addData("Path", "Complete");
 //        telemetry.update();
-        sleep(10000); // Pause to display last telemetry message.
+        sleep(100);  // Pause to display last telemetry message.
     }
 
     /*
@@ -297,7 +296,7 @@ public class autoNearNetBlue extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-public void StrafeRobot(double maxDriveSpeed, double distance) {
+public void StrafeRobot(double maxDriveSpeed, double distance, int Heading) {
     // Determine new target position, and pass to motor controller
     int moveCounts = (int)(Math.abs(distance) * COUNTS_PER_INCH);
    if (distance > 0) {
@@ -324,22 +323,28 @@ public void StrafeRobot(double maxDriveSpeed, double distance) {
     rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
     maxDriveSpeed = Math.abs(maxDriveSpeed);
-    if (maxDriveSpeed > 1) {
-maxDriveSpeed = 1;
+    if (maxDriveSpeed > 0.9) {
+maxDriveSpeed = 0.9;
     }
     leftFrontDrive.setPower(maxDriveSpeed);
     rightFrontDrive.setPower(maxDriveSpeed);
     leftBackDrive.setPower(maxDriveSpeed);
     rightBackDrive.setPower(maxDriveSpeed);
-
-    while (opModeIsActive() &&
-            (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
-telemetry.addData("LeftTarget", leftTarget);
-telemetry.addData("SLeftTarget", SecondleftTarget);
-telemetry.addData("RightTarget", rightTarget);
-telemetry.addData("SRightTarget", SecondrightTarget);
-telemetry.update();
-    }
+//
+//    while (opModeIsActive() &&
+//            (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+//
+//        // Determine required steering to keep on heading
+//        turnSpeed = getSteeringCorrection(Heading, P_DRIVE_GAIN);
+//        turnSpeed = turnSpeed / 10;
+//telemetry.addData("Test", getSteeringCorrection(Heading, P_DRIVE_GAIN));
+//telemetry.update();
+//        leftFrontDrive.setPower(maxDriveSpeed + turnSpeed);
+//        rightFrontDrive.setPower(maxDriveSpeed - turnSpeed);
+//        leftBackDrive.setPower(maxDriveSpeed + turnSpeed);
+//        rightBackDrive.setPower(maxDriveSpeed - turnSpeed);
+//
+//    }
 
 }
     /**
@@ -496,6 +501,15 @@ telemetry.update();
     public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
+    }
+
+    private final ElapsedTime runtime = new ElapsedTime();
+    public void Wait(double seconds) {
+        runtime.reset();
+        while (runtime.time() < seconds) {}
+        // whatever I want to do in th4e while loop
+        // this statement is supposed to be empty.
+
     }
 }
 

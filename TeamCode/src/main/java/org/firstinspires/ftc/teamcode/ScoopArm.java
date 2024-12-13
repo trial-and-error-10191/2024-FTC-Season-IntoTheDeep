@@ -3,18 +3,27 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class ScoopArm {
-
     CRServo CRservo;
     DigitalChannel limitMax;
     DigitalChannel limitLower;
+    ElapsedTime runtimeTimer = new ElapsedTime();
 
     public ScoopArm(HardwareMap hwMap) {
         // initiates servo name
         CRservo = hwMap.get(CRServo.class, "specimen_scoop");
         limitMax = hwMap.get(DigitalChannel.class, "limitSwitchMax");
         limitLower = hwMap.get(DigitalChannel.class, "limitSwitchLower");
+    }
+
+    public void AutoScoopArm(double power, double time) {
+        runtimeTimer.reset();
+        while (runtimeTimer.time() < time && limitMax.getState() && limitLower.getState()) {
+            CRservo.setPower(power);
+        }
+        CRservo.setPower(0);
     }
 
     public void scoopArmPosition(float robot_position_rise, float robot_position_lower) {
