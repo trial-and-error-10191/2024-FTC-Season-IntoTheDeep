@@ -192,9 +192,36 @@ public class autoNearObs extends LinearOpMode {
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-double flexibleWait = 0.5;
-driveStraight(DRIVE_SPEED, -30, 0);
-Wait(flexibleWait);
+        double flexibleWait = 0.5;
+        driveStraight(DRIVE_SPEED, 30, 0);
+        Wait(flexibleWait);
+        driveStraight(DRIVE_SPEED, -10, 0);
+        Wait(flexibleWait);
+        turnToHeading(TURN_SPEED, -90);
+        Wait(flexibleWait);
+        driveStraight(DRIVE_SPEED, 30, 0);
+        Wait(flexibleWait);
+        turnToHeading(TURN_SPEED, 90);
+        Wait(flexibleWait);
+        driveStraight(DRIVE_SPEED, 10, 0);
+        Wait(flexibleWait);
+        turnToHeading(TURN_SPEED, 90);
+        Wait(flexibleWait);
+        driveStraight(DRIVE_SPEED, 30, 0);
+        Wait(flexibleWait);
+        turnToHeading(TURN_SPEED, 180);
+        Wait(flexibleWait);
+        driveStraight(DRIVE_SPEED, 30, 0);
+        Wait(flexibleWait);
+        turnToHeading(TURN_SPEED, 90);
+        Wait(flexibleWait);
+        driveStraight(DRIVE_SPEED, 10, 0);
+        Wait(flexibleWait);
+        turnToHeading(TURN_SPEED, 90);
+        Wait(flexibleWait);
+        driveStraight(DRIVE_SPEED, 30, 0);
+        Wait(flexibleWait);
+
 
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)

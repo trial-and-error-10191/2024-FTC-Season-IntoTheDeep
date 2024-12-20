@@ -91,7 +91,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 @Autonomous(name="Robot: AutoNearNetPieceAlt ", group="Robot")
 //@Disabled
 public class AutoNearNetPieceAlt extends LinearOpMode {
-
     /* Declare OpMode members. */
     private ScoopArm Scooparm;
     private AscentMechanism AscentArm;
