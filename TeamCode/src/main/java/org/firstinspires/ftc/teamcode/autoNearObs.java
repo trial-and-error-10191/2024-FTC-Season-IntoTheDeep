@@ -222,7 +222,6 @@ public class autoNearObs extends LinearOpMode {
         driveStraight(DRIVE_SPEED, 30, 0);
         Wait(flexibleWait);
 
-
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
