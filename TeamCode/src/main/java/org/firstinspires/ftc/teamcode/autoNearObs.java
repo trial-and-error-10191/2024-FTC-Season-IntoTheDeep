@@ -209,6 +209,8 @@ public class autoNearObs extends LinearOpMode {
         Wait(flexibleWait);
         driveStraight(DRIVE_SPEED, 30, 0);
         Wait(flexibleWait);
+        driveStraight(DRIVE_SPEED, -10, 0);
+        Wait(flexibleWait);
         turnToHeading(TURN_SPEED, 180);
         Wait(flexibleWait);
         driveStraight(DRIVE_SPEED, 30, 0);
