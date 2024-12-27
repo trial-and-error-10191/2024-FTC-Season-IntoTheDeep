@@ -21,10 +21,8 @@ public class AutoAICameraTagPositioning extends LinearOpMode {
     int verticalLine = 230;
 
     final double SPEED_GAIN  =  0.1; //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
-    final double STRAFE_GAIN =  0.1; //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
     final double TURN_GAIN   =  0.1; //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
     final double MAX_AUTO_SPEED = 0.5; //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_STRAFE= 0.5; //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_TURN  = 0.3; //  Clip the turn speed to this max value (adjust for your robot)
 
     ElapsedTime runtimeTimer = null;
@@ -39,31 +37,27 @@ public class AutoAICameraTagPositioning extends LinearOpMode {
     } // end runOpMode()
 
 private void identifyTagLocation() {
-    List<Recognition> currentRecognitions = tfod.getRecognitions();
-    for (Recognition recognition : currentRecognitions) {
-        double xValue = (recognition.getLeft() + recognition.getRight()) / 2;
-        double yValue = (recognition.getRight() + recognition.getLeft()) / 2;
-        // To figure out this part, you will have to use the ConceptTensorFlowObjectDetection file
-        // The first two x values represent the minimum and maximum value x has to be for the team prop to be considered center.
-        // The second two y values represent the minimum and maximum value x has to be for the team prop to be considered center.
-        if (xValue < horizontalLine) {
+        // The xValue (greater or lesser) is against the horizontalLine so we can get the results we need before we autonomously move to the tag.
+        // The yValue (greater or lesser) is against the verticalLine so we can get the results we need before we autonomously move to the tag.
+
+        HuskyLens.Block[] blocks = huskyLens.blocks();
+
+        if (blocks[1].x < horizontalLine) {
 
         }
 
-        if (yValue < verticalLine) {
+        if (blocks[1].x > horizontalLine) {
 
         }
 
-        if (xValue > horizontalLine) {
+        if (blocks[1].y < verticalLine) {
 
         }
 
-        if (yValue > verticalLine) {
+        if (blocks[1].y > verticalLine) {
 
-        }
+       }
 
-    }
-
-}
+} // end of identifyTagLocation
 
 } // end of class
