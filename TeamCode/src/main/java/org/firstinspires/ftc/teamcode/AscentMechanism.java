@@ -54,7 +54,6 @@ public class AscentMechanism {
         // Set the servo to the new arm position and pause;
         servo.setPosition(position);
     }
-
     public void SetPosistion(double Posistion) {
         servo.setPosition(Posistion);
     }

@@ -29,6 +29,12 @@
                robot.ascentMechanism.rise(gamepad2.y, gamepad2.x);
                // Moves the arm that moves the specimen up and down
                robot.scoopyArm.scoopArmPosition(gamepad2.left_trigger, gamepad2.right_trigger);
+               // Makes the claw open/close
+               robot.sampleClaw.clawClamp(gamepad2.a);
+               // Makes the claw extend/contract
+               robot.sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper);
+               // Makes the claw rotate
+               robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger);
 
                // Provides telemetry for all motors, servos, and sensors.
                telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",

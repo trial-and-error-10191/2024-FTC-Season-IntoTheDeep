@@ -8,14 +8,16 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Robot {
     public DriveTrain driveTrain;
     public AscentMechanism ascentMechanism;
+    public SampleClaw sampleClaw;
 
-    ScoopArm scoopyArm;
+    public ScoopArm scoopyArm;
     // This combines all the subsystems.
     public Robot(HardwareMap hwMap, Telemetry telemetry) {
 
         driveTrain = new DriveTrain(hwMap, telemetry);
         ascentMechanism = new AscentMechanism(hwMap);
         scoopyArm = new ScoopArm(hwMap);
+        sampleClaw = new SampleClaw(hwMap);
     }
 
 }
