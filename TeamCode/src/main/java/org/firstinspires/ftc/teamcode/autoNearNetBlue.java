@@ -330,22 +330,6 @@ maxDriveSpeed = 0.9;
     rightFrontDrive.setPower(maxDriveSpeed);
     leftBackDrive.setPower(maxDriveSpeed);
     rightBackDrive.setPower(maxDriveSpeed);
-//
-//    while (opModeIsActive() &&
-//            (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
-//
-//        // Determine required steering to keep on heading
-//        turnSpeed = getSteeringCorrection(Heading, P_DRIVE_GAIN);
-//        turnSpeed = turnSpeed / 10;
-//telemetry.addData("Test", getSteeringCorrection(Heading, P_DRIVE_GAIN));
-//telemetry.update();
-//        leftFrontDrive.setPower(maxDriveSpeed + turnSpeed);
-//        rightFrontDrive.setPower(maxDriveSpeed - turnSpeed);
-//        leftBackDrive.setPower(maxDriveSpeed + turnSpeed);
-//        rightBackDrive.setPower(maxDriveSpeed - turnSpeed);
-//
-//    }
-
 }
     /**
      *  Spin on the central axis to point in a new direction.
