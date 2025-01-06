@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class SampleClaw {
-    boolean ClawOpen;
+    boolean ClawOpen = false;
 
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final double MAX_POS     =  1.0;     // Maximum rotational position
@@ -33,7 +32,7 @@ public class SampleClaw {
             servoClamp.setPosition(1);
         }
         else { // Makes the claw close
-            ClawOpen = false;
+            ClawOpen = true;
             servoClamp.setPosition(2);
         }
     }
@@ -54,8 +53,20 @@ public class SampleClaw {
         servoExtend.setPosition(position);
     }
     public void clawRotate(float left, float right) {
-        if (left > 0) {
-
+        if (Math.abs(left) > 0) {
+            position += INCREMENT;
+            if (position >= MAX_POS) {
+                position = MAX_POS;
+            }
+        }
+        else if (Math.abs(right) > 0) {
+            position -= INCREMENT;
+            if (position <= MIN_POS ) { // Makes the claw go back from extending
+                position = MIN_POS;
+            }
+        }
+        else {
+            position = 0;
         }
         servoRotation.setPosition(position);
     }
