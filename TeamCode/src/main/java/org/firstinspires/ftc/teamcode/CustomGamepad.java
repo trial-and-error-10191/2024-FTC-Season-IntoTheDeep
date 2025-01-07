@@ -3,11 +3,45 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.Range;
 
-public class CombinedResponsibilityGamepad extends Gamepad {
-    CombinedResponsibilityGamepad() {}
+public class CustomGamepad extends Gamepad {
+    public CustomGamepad() {}
+
+    public void CombineSplitResponsibilities(Gamepad player1, Gamepad player2) {
+        if (player1 != null && player2 != null) {
+            // Controls from player 1
+            this.left_stick_y = player1.left_stick_y;
+            this.left_stick_x = player1.left_stick_x;
+            this.left_stick_button = player1.left_stick_button;
+            this.right_stick_y = player1.right_stick_y;
+            this.right_stick_x = player1.right_stick_x;
+            this.right_stick_button = player1.right_stick_button;
+
+            this.left_bumper = player1.left_bumper;
+            this.right_bumper = player1.right_bumper;
+            this.left_trigger = player1.left_trigger;
+            this.right_trigger = player1.right_trigger;
+
+            // Controls from player 2
+            this.a = player2.a;
+            this.b = player2.b;
+            this.x = player2.x;
+            this.y = player2.y;
+
+            this.dpad_down = player2.dpad_down;
+            this.dpad_left = player2.dpad_left;
+            this.dpad_up = player2.dpad_up;
+            this.dpad_right = player2.dpad_right;
+        } else if (player1 == null && player2 == null) {
+            SetDefaultValues();
+        }else if (player1 == null) {
+            CopyGamepad(player2);
+        } else { // player2 == null
+            CopyGamepad(player1);
+        }
+    }
 
 
-    public void MergeGamepads(Gamepad player1, Gamepad player2) {
+    public void CombineOverlappingResponsibilities(Gamepad player1, Gamepad player2) {
         if (player1 != null && player2 != null) {
             // Controls from player 1
             this.left_stick_y = Range.clip(player1.left_stick_y + player2.left_stick_x, -1.0f, 1.0f);
