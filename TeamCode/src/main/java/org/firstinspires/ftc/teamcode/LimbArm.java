@@ -22,12 +22,28 @@ public class LimbArm {
                 position = MAX_POS;
             }
         }
-        if (contract) {
+        else if (contract) {
             position -= INCREMENT;
             if (position <= MIN_POS) {
                 position = MIN_POS;
             }
         }
+        limbExtend.setPower(position);
+    }
+    public void armExtendAuto(double limbExtendAuto) {
+        if (position < limbExtendAuto) {
+            position += INCREMENT;
+            if (position >= MAX_POS) {
+                position = MAX_POS;
+            }
+        }
+        else if (position > limbExtendAuto) {
+            position -= INCREMENT;
+            if (position <= MIN_POS) {
+                position = MIN_POS;
+            }
+        }
+        limbExtend.setPower(position);
     }
     public void armRotate(boolean left, boolean right) {
         if (left) {
@@ -36,11 +52,27 @@ public class LimbArm {
                 position = MAX_POS;
             }
         }
-        if (right) {
+        else if (right) {
             position -= INCREMENT;
             if (position <= MIN_POS) {
                 position = MIN_POS;
             }
         }
+        limbRotate.setPower(position);
+    }
+    public void armRotateAuto(double limbRotateAuto) {
+        if (position < limbRotateAuto) {
+            position += INCREMENT;
+            if (position >= MAX_POS) {
+                position = MAX_POS;
+            }
+        }
+        else if (position > limbRotateAuto) {
+            position -= INCREMENT;
+            if (position <= MIN_POS) {
+                position = MIN_POS;
+            }
+        }
+        limbRotate.setPower(position);
     }
 }

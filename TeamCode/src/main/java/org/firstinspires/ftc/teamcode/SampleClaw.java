@@ -36,6 +36,18 @@ public class SampleClaw {
             servoClamp.setPosition(2);
         }
     }
+    public void clawClampAuto(boolean clawArmClamp) { // claw clamping for autonomous
+        if (clawArmClamp) {
+            ClawOpen = true;
+            servoClamp.setPosition(1);
+        }
+        else { // Makes the claw close
+            ClawOpen = true;
+            servoClamp.setPosition(2);
+        }
+        // Set the servo to the new position and pause;
+        servoClamp.setPosition(position);
+    }
     public void clawExtend(boolean extend, boolean contracting) {
         if (extend) { // Makes the claw extend
             position += INCREMENT;
@@ -50,6 +62,22 @@ public class SampleClaw {
             }
         }
         // Set the servo to the new position and pause;
+        servoExtend.setPosition(position);
+    }
+    public void clawExtendAuto(double clawArmPosition) { // claw extending for autonomous
+        if (position < clawArmPosition) { // Tells arm to rise
+            position += INCREMENT;
+            if (position >= MAX_POS) {
+                position = MAX_POS;
+            }
+        }
+        else if (position > clawArmPosition) { // Makes the robot's arm lower
+            position -= INCREMENT;
+            if (position <= MIN_POS ) {
+                position = MIN_POS;
+            }
+        }
+        // Set the servo to the new arm position and pause;
         servoExtend.setPosition(position);
     }
     public void clawRotate(float left, float right) {
@@ -68,6 +96,22 @@ public class SampleClaw {
         else {
             position = 0;
         }
+        servoRotation.setPosition(position);
+    }
+    public void clawRotateAuto(double clawArmRotate) { // claw rotation for autonomous
+        if (position < clawArmRotate) { // Tells arm to rise
+            position += INCREMENT;
+            if (position >= MAX_POS) {
+                position = MAX_POS;
+            }
+        }
+        else if (position > clawArmRotate) { // Makes the robot's arm lower
+            position -= INCREMENT;
+            if (position <= MIN_POS ) {
+                position = MIN_POS;
+            }
+        }
+        // Set the servo to the new arm position and pause;
         servoRotation.setPosition(position);
     }
 }
