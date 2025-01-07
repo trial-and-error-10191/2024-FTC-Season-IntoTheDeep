@@ -29,10 +29,12 @@ public class SplitResponsibilityGamepad extends Gamepad {
             this.dpad_left = player2.dpad_left;
             this.dpad_up = player2.dpad_up;
             this.dpad_right = player2.dpad_right;
-        } else if (player1 == null) {
-            this.CopyGamepad(player2);
+        } else if (player1 == null && player2 == null) {
+            SetDefaultValues();
+        }else if (player1 == null) {
+            CopyGamepad(player2);
         } else { // player2 == null
-            this.CopyGamepad(player1);
+            CopyGamepad(player1);
         }
     }
 
@@ -59,5 +61,30 @@ public class SplitResponsibilityGamepad extends Gamepad {
         this.right_stick_button = gamepad.right_stick_button;
         this.right_stick_x = gamepad.right_stick_x;
         this.right_stick_y = gamepad.right_stick_y;
+    }
+
+
+    private void SetDefaultValues() {
+        this.a = false;
+        this.b = false;
+        this.x = false;
+        this.y = false;
+
+        this.dpad_right = false;
+        this.dpad_up = false;
+        this.dpad_left = false;
+        this.dpad_down = false;
+
+        this.left_bumper = false;
+        this.right_bumper = false;
+        this.left_trigger = 0.0f;
+        this.right_trigger = 0.0f;
+
+        this.left_stick_button = false;
+        this.left_stick_x = 0.0f;
+        this.left_stick_y = 0.0f;
+        this.right_stick_button = false;
+        this.right_stick_x = 0.0f;
+        this.right_stick_y = 0.0f;
     }
 }
