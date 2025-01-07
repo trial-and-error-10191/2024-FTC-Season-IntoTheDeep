@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.Range;
 
 public class CombinedResponsibilityGamepad extends Gamepad {
     CombinedResponsibilityGamepad() {}
@@ -9,17 +10,17 @@ public class CombinedResponsibilityGamepad extends Gamepad {
     public void MergeGamepads(Gamepad player1, Gamepad player2) {
         if (player1 != null && player2 != null) {
             // Controls from player 1
-            this.left_stick_y = (player1.left_stick_y + player2.left_stick_x) / 2.0f;
-            this.left_stick_x = (player1.left_stick_x + player2.left_stick_x) / 2.0f;
+            this.left_stick_y = Range.clip(player1.left_stick_y + player2.left_stick_x, -1.0f, 1.0f);
+            this.left_stick_x = Range.clip(player1.left_stick_x + player2.left_stick_x, -1.0f, 1.0f);
             this.left_stick_button = player1.left_stick_button || player2.left_stick_button;
-            this.right_stick_y = (player1.right_stick_y + player2.right_stick_y) / 2.0f;
-            this.right_stick_x = (player1.right_stick_x + player2.right_stick_x) / 2.0f;
+            this.right_stick_y = Range.clip(player1.right_stick_y + player2.right_stick_y, -1.0f, 1.0f);
+            this.right_stick_x = Range.clip(player1.right_stick_x + player2.right_stick_x, -1.0f, 1.0f);
             this.right_stick_button = player1.right_stick_button || player2.right_stick_button;
 
             this.left_bumper = player1.left_bumper || player2.left_bumper;
             this.right_bumper = player1.right_bumper || player2.right_bumper;
-            this.left_trigger = (player1.left_trigger + player2.left_trigger) / 2.0f;
-            this.right_trigger = (player1.right_trigger + player2.right_trigger) / 2.0f;
+            this.left_trigger = Range.clip(player1.left_trigger + player2.left_trigger, -1.0f, 1.0f);
+            this.right_trigger = Range.clip(player1.right_trigger + player2.right_trigger, -1.0f, 1.0f);
 
             // Controls from player 2
             this.a = player1.a || player2.a;
