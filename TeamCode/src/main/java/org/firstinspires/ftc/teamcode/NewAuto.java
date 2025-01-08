@@ -27,7 +27,8 @@ public class NewAuto extends LinearOpMode {
 
         waitForStart(); {
             if (opModeIsActive()) {
-
+robot.driveTrain.driveStraight(DriveTrain.DRIVE_SPEED, 30, 0);
+robot.driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 90);
             }
         }  // end waitForStart
     }   // end runOpMode()

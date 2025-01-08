@@ -18,17 +18,18 @@ public class AscentMechanism {
 
         // initiates servo name
         servo = hwMap.get(Servo.class, "left_hand");
-        //servo.setPosition(position);
     }
 
     public void rise(boolean rise, boolean lower) {
         if (rise) { // Makes the robot's arm rise
+            // Keep stepping up until we hit the max value.
             position += INCREMENT;
             if (position >= MAX_POS) {
                 position = MAX_POS;
             }
         }
         else if (lower) { // Makes the robot's arm lower
+            // Keep stepping down until we hit the min value.
             position -= INCREMENT;
             if (position <= MIN_POS ) {
                 position = MIN_POS;
