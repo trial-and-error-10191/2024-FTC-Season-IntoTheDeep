@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class LimbArm {
@@ -10,10 +11,14 @@ public class LimbArm {
     double power = 0;
     double MAX_POS = 1;
     double MIN_POS = 0;
+    DigitalChannel limitMax;
+    DigitalChannel limitLower;
 
     public LimbArm(HardwareMap hwMap) {
         limbExtend = hwMap.get(DcMotor.class, "limbExtend");
         limbRotate = hwMap.get(DcMotor.class, "limbRotate");
+        limitMax = hwMap.get(DigitalChannel.class, "limitMax");
+        limitLower = hwMap.get(DigitalChannel.class, "limitLower");
     }
     public void armExtend(boolean extend, boolean contract) {
         if (extend) {
