@@ -23,13 +23,13 @@ public class LimbArm {
     public void armExtend(boolean extend, boolean contract) {
         if (extend) {
             power += INCREMENT;
-            if (power >= MAX_POS) {
+            if (!limitMax.getState()) {
                 power = MAX_POS;
             }
         }
         else if (contract) {
             power -= INCREMENT;
-            if (power <= MIN_POS) {
+            if (!limitLower.getState()) {
                 power = MIN_POS;
             }
         }
@@ -38,13 +38,13 @@ public class LimbArm {
     public void armExtendAuto(double limbExtendAuto) {
         if (power < limbExtendAuto) {
             power += INCREMENT;
-            if (power >= MAX_POS) {
+            if (!limitMax.getState()) {
                 power = MAX_POS;
             }
         }
         else if (power > limbExtendAuto) {
             power -= INCREMENT;
-            if (power <= MIN_POS) {
+            if (!limitLower.getState()) {
                 power = MIN_POS;
             }
         }
@@ -53,13 +53,13 @@ public class LimbArm {
     public void armRotate(boolean left, boolean right) {
         if (left) {
             power += INCREMENT;
-            if (power >= MAX_POS) {
+            if (!limitMax.getState()) {
                 power = MAX_POS;
             }
         }
         else if (right) {
             power -= INCREMENT;
-            if (power <= MIN_POS) {
+            if (!limitLower.getState()) {
                 power = MIN_POS;
             }
         }
@@ -68,13 +68,13 @@ public class LimbArm {
     public void armRotateAuto(double limbRotateAuto) {
         if (power < limbRotateAuto) {
             power += INCREMENT;
-            if (power >= MAX_POS) {
+            if (!limitMax.getState()) {
                 power = MAX_POS;
             }
         }
         else if (power > limbRotateAuto) {
             power -= INCREMENT;
-            if (power <= MIN_POS) {
+            if (!limitLower.getState()) {
                 power = MIN_POS;
             }
         }
