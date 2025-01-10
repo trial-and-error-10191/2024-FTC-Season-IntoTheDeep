@@ -24,8 +24,11 @@ public class LimbArm {
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
     }
     public void armExtend(float extend) {
-        if (extend > extendPower && limbExtend.getCurrentPosition() < maxExtendPos) { // Makes the arm extend
+        if (extend > extendPower) { // Makes the arm extend
             extendPower += INCREMENT;
+            if (limbExtend.getCurrentPosition() >= maxExtendPos) {
+                extendPower = 0;
+            }
         }
         else if (extend < extendPower) { // Makes the arm contract
             extendPower -= INCREMENT;
