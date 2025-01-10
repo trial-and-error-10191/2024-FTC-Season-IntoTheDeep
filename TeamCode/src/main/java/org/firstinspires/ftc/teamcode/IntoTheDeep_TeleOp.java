@@ -33,9 +33,9 @@
                // Makes the claw rotate
                robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger);
                // Makes the limb arm extend/contract
-               robot.limbArm.armExtend(gamepad2.dpad_up, gamepad2.dpad_down);
+               robot.limbArm.armExtend(gamepad2.left_stick_y);
                // Makes the limb arm rotate
-               robot.limbArm.armRotate(gamepad2.dpad_left, gamepad2.dpad_right);
+               robot.limbArm.armRotate(gamepad2.right_stick_x);
 
                // Provides telemetry for all motors, servos, and sensors.
                telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",
@@ -44,12 +44,9 @@
                telemetry.addData("Back Driving Motors (Left, Right)", "%4.2f, %4.2f",
                        robot.driveTrain.leftBackDrive.getPower(),
                        robot.driveTrain.rightBackDrive.getPower());
-//               telemetry.addData("Scooper Arm", "%4.2f",
-//                       robot.scoopyArm.getPower());
-//               telemetry.addData("Max Limit Switch Status", "%b",
-//                       robot.scoopyArm.getLimitMax());
-//               telemetry.addData("Lower Limit Switch Status", "%b",
-//                       robot.scoopyArm.getLimitLower());
+               telemetry.addData("Extending and Rotating limb (Extend, Rotate)", "%4.2f, %4.2f",
+                       robot.limbArm.limbExtend.getPower(),
+                       robot.limbArm.limbRotate.getPower());
                telemetry.update();
            }
        }
