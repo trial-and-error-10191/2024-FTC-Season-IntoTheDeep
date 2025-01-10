@@ -23,7 +23,6 @@ public class SampleClaw {
         servoClamp = hwMap.get(Servo.class, "claw_Clamp");
         servoExtend = hwMap.get(Servo.class, "claw_Extend");
         servoRotation = hwMap.get(Servo.class, "claw_Rotation");
-        //servo.setPosition(position);
     }
 
     public void clawClamp(boolean open) {
@@ -35,6 +34,7 @@ public class SampleClaw {
             ClawOpen = true;
             servoClamp.setPosition(2);
         }
+        servoClamp.setPosition(position);
     }
     public void clawClampAuto(boolean clawArmClamp) { // claw clamping for autonomous
         if (clawArmClamp) {
@@ -61,7 +61,9 @@ public class SampleClaw {
                 position = MIN_POS;
             }
         }
-        // Set the servo to the new position and pause;
+        else {
+            position = 0;
+        }
         servoExtend.setPosition(position);
     }
     public void clawExtendAuto(double clawArmPosition) { // claw extending for autonomous
@@ -77,17 +79,16 @@ public class SampleClaw {
                 position = MIN_POS;
             }
         }
-        // Set the servo to the new arm position and pause;
         servoExtend.setPosition(position);
     }
     public void clawRotate(float left, float right) {
-        if (Math.abs(left) > 0) {
+        if (left > 0) {
             position += INCREMENT;
             if (position >= MAX_POS) {
                 position = MAX_POS;
             }
         }
-        else if (Math.abs(right) > 0) {
+        else if (right > 0) {
             position -= INCREMENT;
             if (position <= MIN_POS ) { // Makes the claw go back from extending
                 position = MIN_POS;
@@ -111,7 +112,6 @@ public class SampleClaw {
                 position = MIN_POS;
             }
         }
-        // Set the servo to the new arm position and pause;
         servoRotation.setPosition(position);
     }
 }
