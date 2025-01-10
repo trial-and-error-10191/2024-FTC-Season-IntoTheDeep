@@ -129,7 +129,7 @@ public class liftNearNet extends LinearOpMode {
     // They can/should be tweaked to suit the specific robot drive train.
     static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
     static final double     TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
-    static final double     HEADING_THRESHOLD       = 5.0 ;    // How close must the heading get to the target before moving to next step.
+    static final double     HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
                                                                // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
     // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
@@ -226,7 +226,8 @@ public class liftNearNet extends LinearOpMode {
 
         // Set the encoders for closed loop speed control, and reset the heading.
                            // BEGIN AUTO CODE //
-        StrafeRobot(TURN_SPEED, -15, 0);
+        StrafeRobot(TURN_SPEED, -20, 0);
+        driveStraight(TURN_SPEED, 20, 0);
 //        driveStraight(DRIVE_SPEED, 4, getHeading());
 //        turnToHeading(TURN_SPEED, -90);
 //        //extend arm and drop
@@ -329,7 +330,7 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
     Orientations();
     flip("L", "F");
     flip("R", "B");
-    telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
+//    telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
         if (opModeIsActive()) {
 
         // Determine new target position, and pass to motor controller
@@ -377,12 +378,12 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
             // Display drive status for the driver.
            // sendTelemetry(true);
         }
-        telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
-        telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
-        telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
-        telemetry.addData(" RB end encoder counter", rightBackDrive.getCurrentPosition() );
-        telemetry.update();
-        sleep(100000);
+//        telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
+//        telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
+//        telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
+//        telemetry.addData(" RB end encoder counter", rightBackDrive.getCurrentPosition() );
+       telemetry.update();
+//        sleep(100000);
 
         // Stop all motion & Turn off RUN_TO_POSITION
             turnToHeading(maxDriveSpeed,heading);
@@ -530,6 +531,7 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
     private void sendTelemetry(boolean straight) {
 
         if (straight) {
+            telemetry.addData("Heading", getHeading());
             telemetry.addData("Motion", "Drive Straight");
             telemetry.addData("Target Pos L:R",  "%7d:%7d",      leftTarget,  rightTarget);
             telemetry.addData("Actual Pos L:R",  "%7d:%7d:%7d:%7d",      leftFrontDrive.getCurrentPosition(),
