@@ -11,6 +11,7 @@ public class LimbArm {
     double extendPower = 0;
     double rotatePower = 0;
     double maxExtendPos = 10;
+    double maxRotatePos = 10;
     double MAX_POS = 1;
     double MIN_POS = -1;
     DigitalChannel limitExtend;
@@ -40,11 +41,10 @@ public class LimbArm {
         limbExtend.setPower(extendPower);
     }
     public void armExtendAuto(double limbExtendAuto) {
-        if (extendPower < limbExtendAuto) { // Makes the arm extend for autonomous
+        if (limbExtendAuto > extendPower) { // Makes the arm extend
             extendPower += INCREMENT;
-            if (limitExtend.getState()) {
-                limbExtend.getCurrentPosition();
-                limbExtend.setPower(MAX_POS);
+            if (limbExtend.getCurrentPosition() >= maxExtendPos) {
+                extendPower = 0;
             }
         }
         else if (extendPower > limbExtendAuto) { // Makes the arm contract for autonomous
@@ -57,11 +57,10 @@ public class LimbArm {
         limbExtend.setPower(extendPower);
     }
     public void armRotate(float turn) {
-        if (turn > rotatePower) { // Makes the arm rotate to the left
+        if (turn > rotatePower) { // Makes the arm extend
             rotatePower += INCREMENT;
-            if (limitRotate.getState()) {
-                limbExtend.getCurrentPosition();
-                limbExtend.setPower(MAX_POS);
+            if (limbRotate.getCurrentPosition() >= maxRotatePos) {
+                rotatePower = 0;
             }
         }
         else if (turn < rotatePower) { // Makes the arm rotate to the right
@@ -74,11 +73,10 @@ public class LimbArm {
         limbRotate.setPower(rotatePower);
     }
     public void armRotateAuto(double limbRotateAuto) {
-        if (rotatePower < limbRotateAuto) { // Makes the arm rotate to the left in autonomous
+        if (limbRotateAuto > rotatePower) { // Makes the arm extend
             rotatePower += INCREMENT;
-            if (limitRotate.getState()) {
-                limbExtend.getCurrentPosition();
-                limbExtend.setPower(MAX_POS);
+            if (limbRotate.getCurrentPosition() >= maxRotatePos) {
+                rotatePower = 0;
             }
         }
         else if (rotatePower > limbRotateAuto) { // Makes the arm rotate to the right in autonomous
