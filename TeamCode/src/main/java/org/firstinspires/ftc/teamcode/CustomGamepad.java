@@ -7,8 +7,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class CustomGamepad extends Gamepad {
 
-    CustomGamepad  cg;
-
    public void mergeGamepads(Gamepad gamepad1, Gamepad gamepad2) {
 
        // all of the booleans mentioned in this segment are NOT any other kind of controller but the one we are using now.
