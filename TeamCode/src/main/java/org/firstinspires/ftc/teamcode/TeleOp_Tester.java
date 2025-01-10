@@ -21,7 +21,7 @@ public class TeleOp_Tester extends LinearOpMode {
 
             //
             customGamepad.mergeGamepads(gamepad1, gamepad2);
-            telemetry.addData("Gamepad1.a Merge Data", "%b",
+            telemetry.addData("Gamepad1.a Data", "%b",
                     robot.scoopyArm.getLimitLower());
 
 
