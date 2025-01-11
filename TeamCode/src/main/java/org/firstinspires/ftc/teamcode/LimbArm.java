@@ -7,14 +7,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class LimbArm {
 
-    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
     double extendPower = 0;                     // motor power for lift extension
     double rotatePower = 0;                     // motor power for lift rotation
     double maxExtendPos = 10000;                   // encoder counter max for lift extension
     double maxRotatePos = 10000;                   // encoder counter for lift rotation
-    double MAX_POS = 1;
-    double MIN_POS = -1;
     DigitalChannel limitExtend;                 // limit switch for bottom lift position
     DigitalChannel limitRotate;                 // limit switch to prevent lift rotation
 

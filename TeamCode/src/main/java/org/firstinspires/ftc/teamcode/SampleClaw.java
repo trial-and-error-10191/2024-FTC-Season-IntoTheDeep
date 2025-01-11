@@ -11,8 +11,8 @@ public class SampleClaw {
     static final double MIN_POS     =  0.0;     // Minimum rotational position
     static final double openPos     =  10.0;    // servo position for open claw
     static final double closePos    =  0.0;     // servo position for closed claw
-    double rotatePosition = (MAX_POS - MIN_POS) / 2; // Start at halfway position
-    double extendPosition = (MAX_POS - MIN_POS) / 2; // Start at halfway position
+    double rotatePosition = 0;                  // Start at halfway position
+    double extendPosition = 0;                  // Start at halfway position
 
 
     // Define class members
@@ -62,9 +62,6 @@ public class SampleClaw {
                 extendPosition = MIN_POS;
             }
         }
-        else {
-            extendPosition = 0;
-        }
         servoExtend.setPosition(extendPosition);
     }
 
@@ -96,9 +93,6 @@ public class SampleClaw {
             if (rotatePosition <= MIN_POS ) {
                 rotatePosition = MIN_POS;
             }
-        }
-        else {
-            rotatePosition = 0;
         }
         servoRotation.setPosition(rotatePosition);
     }
