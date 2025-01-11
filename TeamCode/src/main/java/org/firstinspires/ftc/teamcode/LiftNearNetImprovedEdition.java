@@ -88,16 +88,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: Lift test", group="Robot")
+@Autonomous(name="Robot:Basket auto Cool Edition", group="Robot")
 //@Disabled
-public class liftNearNet extends LinearOpMode {
+public class LiftNearNetImprovedEdition extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftFrontDrive   = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     private DcMotor leftBackDrive = null;
-    private IMU             imu         = null;      // Control/Expansion Hub IMU
+    private IMU             imu         = null;
+    private ElapsedTime Time = new ElapsedTime();
+    // Control/Expansion Hub IMU
 
     private double          headingError  = 0;
 
@@ -229,13 +231,18 @@ public class liftNearNet extends LinearOpMode {
 
         // Set the encoders for closed loop speed control, and reset the heading.
                            // BEGIN AUTO CODE //
-        driveStraight(DRIVE_SPEED, 4, getHeading());
-        turnToHeading(TURN_SPEED, 90);
-//        //extend arm and then drop sample and pull it back down.
-        turnToHeading(TURN_SPEED,0 );
-        driveStraight(DRIVE_SPEED, 50, getHeading());
-        turnToHeading(TURN_SPEED, -90);
-        driveStraight(DRIVE_SPEED, 15, getHeading());
+        StrafeRobot(TURN_SPEED, 4,0 );
+        //extend arm and then drop sample and pull it back down.
+        StrafeRobot(TURN_SPEED, 30, 0);
+        Wait(2);
+        // grab sample off the grounds
+        StrafeRobot(TURN_SPEED, -30, 0);
+        Wait(2);
+        //extend arm and then drop sample and pull it back down.
+        StrafeRobot(TURN_SPEED, 50, 0);
+        Wait(2);
+        driveStraight(TURN_SPEED, 15, 0);
+        Wait(2);
         //extend arm and drop onto bar
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
@@ -554,6 +561,11 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
     public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
+    }
+    public void Wait(double seconds) {
+        while (Time.milliseconds()  < seconds / 1000) {
+            // doesnt need anything
+        }
     }
 }
 
