@@ -3,8 +3,6 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-
-
 public class CustomGamepad extends Gamepad {
 
    public void mergeGamepads(Gamepad gamepad1, Gamepad gamepad2) {
