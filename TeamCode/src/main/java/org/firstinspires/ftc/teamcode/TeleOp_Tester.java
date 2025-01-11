@@ -22,11 +22,13 @@ public class TeleOp_Tester extends LinearOpMode {
             //
             customGamepad.mergeGamepads(gamepad1, gamepad2);
             telemetry.addData("Gamepad1.a Data", "%b",
-                    robot.scoopyArm.getLimitLower());
+                    gamepad1());
 
 
-        }
 
-    }
 
-}
+        } // end of while (opModeIsActive())
+
+    } // end of public void runOpMode
+
+} // end of class TeleOp_Tester
