@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -10,31 +11,33 @@ public class LimbArm {
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
     double extendPower = 0;                     // motor power for lift extension
     double rotatePower = 0;                     // motor power for lift rotation
-    double maxExtendPos = 10;                   // encoder counter max for lift extension
-    double maxRotatePos = 10;                   // encoder counter for lift rotation
+    double maxExtendPos = 10000;                   // encoder counter max for lift extension
+    double maxRotatePos = 10000;                   // encoder counter for lift rotation
     double MAX_POS = 1;
     double MIN_POS = -1;
     DigitalChannel limitExtend;                 // limit switch for bottom lift position
     DigitalChannel limitRotate;                 // limit switch to prevent lift rotation
 
-
     public LimbArm(HardwareMap hwMap) {
         limbExtend = hwMap.get(DcMotor.class, "limbExtend");
+        limbExtend.setDirection(DcMotor.Direction.REVERSE);
         limbRotate = hwMap.get(DcMotor.class, "limbRotate");
         limitExtend = hwMap.get(DigitalChannel.class, "limitExtend");
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
     }
+
     public void armExtend(float extend) {
-        if (extend > extendPower) {                           // Makes the arm extend
+        if (extend > 0) {                           // Makes the arm extend
             extendPower = extend;
             if (limbExtend.getCurrentPosition() >= maxExtendPos) {
                 extendPower = 0;
             }
         }
-        else if (extend < extendPower) {                      // Makes the arm contract
+        else if (extend <= 0) {                      // Makes the arm contract
             extendPower = extend;
             if (!limitExtend.getState()) {      // Stop motor and reset encoder if limit switch is triggered
                 limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 extendPower = 0;
             }
         }
@@ -60,13 +63,13 @@ public class LimbArm {
 
     public void armRotate(float turn) {
         // note to self: test which way the arm rotates to program the limit switch correctly
-        if (turn > rotatePower) {                           // Makes the arm rotate down?
+        if (turn < 0) {                           // Makes the arm rotate down?
             rotatePower = turn;
             if (limbRotate.getCurrentPosition() >= maxRotatePos) {
                 rotatePower = 0;
             }
         }
-        else if (turn < rotatePower) {                      // Makes the arm rotate up?
+        else if (turn > 0) {                      // Makes the arm rotate up?
             rotatePower = turn;
             if (!limitRotate.getState()) {      // Stop motor and reset encoder if limit switch is triggered
                 limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
