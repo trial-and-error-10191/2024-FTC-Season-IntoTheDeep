@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.Range;
@@ -75,17 +76,6 @@ public class DriveTrain {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
         this.telemetry = telemetry;
-
-        // Ensure the robot is stationary.  Reset the encoders and set the motors to BRAKE mode
-        // Currently, RunMode needs to be determined by the OpMode, not the constructor
-//        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void stop() {
@@ -95,14 +85,18 @@ public class DriveTrain {
         rightBackDrive.setPower(0);
     }
 
-    public void driveByPower(double axial, double lateral, double yaw) {
-        double deadzone = 0.05;
+    public void driveByPower(Gamepad gamepad) {
+        double axial = -gamepad.left_stick_y;
+        double lateral = gamepad.left_stick_x;
+        double yaw = gamepad.right_stick_x;
 
         double leftFrontPower = 0;
         double rightFrontPower = 0;
         double leftBackPower = 0;
         double rightBackPower = 0;
 
+        // Creating deadzone in controls to avoid unintentional movement from, e.g., uncentered gamepad joysticks
+        double deadzone = 0.05;
         if (Math.abs(axial) > deadzone || Math.abs(lateral) > deadzone || Math.abs(yaw) > deadzone) {
             leftFrontPower = axial + lateral + yaw;
             rightFrontPower = axial - lateral - yaw;

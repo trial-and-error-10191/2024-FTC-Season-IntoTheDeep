@@ -1,6 +1,7 @@
 // This file is a system file.
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -17,8 +18,8 @@ public class Robot {
         this.telemetry = telemetry;
     }
 
-    public void driveByPower(double axial, double lateral, double yaw) {
-        driveTrain.driveByPower(axial, lateral, yaw);
+    public void driveByPower(Gamepad gamepad) {
+        driveTrain.driveByPower(gamepad);
     }
 
     public double getLeftFrontMotorPower() {

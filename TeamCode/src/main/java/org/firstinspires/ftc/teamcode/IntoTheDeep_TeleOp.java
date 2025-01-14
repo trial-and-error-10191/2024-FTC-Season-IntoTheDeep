@@ -34,7 +34,6 @@ public class IntoTheDeep_TeleOp extends LinearOpMode {
                 UseSplitResponsibilityGamepad = !UseSplitResponsibilityGamepad;
             }
             USRGSignalPast = USRGSignalCurrent;
-
             telemetry.addData("Splitting Responsibilities of the Gamepad: ", "%b", UseSplitResponsibilityGamepad);
 
             if (UseSplitResponsibilityGamepad) {
@@ -42,7 +41,8 @@ public class IntoTheDeep_TeleOp extends LinearOpMode {
             } else {
                 gamepad.CombineOverlappingResponsibilities(gamepad1, gamepad2);
             }
-            robot.driveByPower(-gamepad.left_stick_y, gamepad.left_stick_x, gamepad.right_stick_x);
+
+            robot.driveByPower(gamepad);
 
             // Provides telemetry for all motors, servos, and sensors.
             telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",
