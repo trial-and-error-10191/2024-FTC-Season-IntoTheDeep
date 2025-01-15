@@ -146,7 +146,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-
+        Wait(0.1);
     }
     public void flip(String FirstLocation, String SecondLocation) {
         // The input is expected to be L or R for the first value and F or B for the second value
@@ -180,6 +180,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
             }
 
         }
+        Wait(0.1);
     }
 
 
@@ -231,15 +232,15 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
 
         // Set the encoders for closed loop speed control, and reset the heading.
                            // BEGIN AUTO CODE //
-        StrafeRobot(TURN_SPEED, 4,0 );
+        StrafeRobot(TURN_SPEED, -4,0 );
         //extend arm and then drop sample and pull it back down.
-        StrafeRobot(TURN_SPEED, 30, 0);
-        Wait(2);
-        // grab sample off the grounds
         StrafeRobot(TURN_SPEED, -30, 0);
         Wait(2);
+        // grab sample off the grounds
+        StrafeRobot(TURN_SPEED, 30, 0);
+        Wait(2);
         //extend arm and then drop sample and pull it back down.
-        StrafeRobot(TURN_SPEED, 50, 0);
+        StrafeRobot(TURN_SPEED, -50, 0);
         Wait(2);
         driveStraight(TURN_SPEED, 15, 0);
         Wait(2);
@@ -396,12 +397,14 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
 //        sleep(100000);
 
         // Stop all motion & Turn off RUN_TO_POSITION
-           // turnToHeading(maxDriveSpeed,heading);
+
         moveRobot(0, 0);
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            Orientations();
+        turnToHeading(maxDriveSpeed,heading);
     }
 
 }
@@ -421,12 +424,12 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
      *              If a relative angle is required, add/subtract from current heading.
      */
     public void turnToHeading(double maxTurnSpeed, double heading) {
-
+     double TempThreshold = 1;
         // Run getSteeringCorrection() once to pre-calculate the current error
         getSteeringCorrection(heading, P_DRIVE_GAIN);
 
         // keep looping while we are still active, and not on heading.
-        while (opModeIsActive() && (Math.abs(headingError) > HEADING_THRESHOLD)) {
+        while (opModeIsActive() && (Math.abs(headingError) > TempThreshold)) {
 
             // Determine required steering to keep on heading
             turnSpeed = getSteeringCorrection(heading, P_TURN_GAIN);
@@ -438,7 +441,7 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
             moveRobot(0, turnSpeed);
 
             telemetry.addData("HeadingErr", headingError);
-            telemetry.addData("HeadinggetThresh",HEADING_THRESHOLD);
+            telemetry.addData("HeadinggetThresh",TempThreshold);
             telemetry.update();
         }
 
@@ -549,7 +552,7 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
         } else {
             telemetry.addData("Motion", "Turning");
         }
-
+        int a = Integer.valueOf("75");
         telemetry.addData("Heading- Target : Current", "%5.2f : %5.0f", targetHeading, getHeading());
         telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
         telemetry.addData("Wheel Speeds L : R", "%5.2f : %5.2f", leftSpeed, rightSpeed);
@@ -562,8 +565,10 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
+
     public void Wait(double seconds) {
-        while (Time.milliseconds()  < seconds / 1000) {
+        Time.reset();
+        while (Time.milliseconds()  < seconds * 1000) {
             // doesnt need anything
         }
     }
