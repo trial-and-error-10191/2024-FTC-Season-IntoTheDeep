@@ -8,16 +8,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class LimbArm {
 
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
-    double extendPower = 0;                     // motor power for lift extension
-    double rotatePower = 0;                     // motor power for lift rotation
-    double maxExtendPos = 10000;                   // encoder counter max for lift extension
-    double maxRotatePos = 10000;                   // encoder counter for lift rotation
-    DigitalChannel limitExtend;                 // limit switch for bottom lift position
-    DigitalChannel limitRotate;                 // limit switch to prevent lift rotation
+    double extendPower = 0;                     // Motor power for lift extension
+    double rotatePower = 0;                     // Motor power for lift rotation
+    double maxExtendPos = -3780;                // Encoder counter max for lift extension
+    double maxRotatePos = -2065;                // Encoder counter for lift rotation
+    DigitalChannel limitExtend;                 // Limit switch for bottom lift position
+    DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
 
     public LimbArm(HardwareMap hwMap) {
         limbExtend = hwMap.get(DcMotor.class, "limbExtend");
         limbExtend.setDirection(DcMotor.Direction.REVERSE);
+        limbExtend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         limbRotate = hwMap.get(DcMotor.class, "limbRotate");
         limitExtend = hwMap.get(DigitalChannel.class, "limitExtend");
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
@@ -26,7 +27,10 @@ public class LimbArm {
     public void armExtend(float extend) {
         if (extend > 0) {                           // Makes the arm extend
             extendPower = extend;
-            if (limbExtend.getCurrentPosition() >= maxExtendPos) {
+            if (limbExtend.getCurrentPosition() <= maxExtendPos) {
+                extendPower = 0;
+            }
+            else if (limbRotate.getCurrentPosition() <= -2380 && limbExtend.getCurrentPosition() <= -2785) {
                 extendPower = 0;
             }
         }
@@ -44,7 +48,7 @@ public class LimbArm {
     public void armExtendAuto(double limbExtendAuto) {
         if (limbExtendAuto > extendPower) {                  // Makes the arm extend
             extendPower = limbExtendAuto;
-            if (limbExtend.getCurrentPosition() >= maxExtendPos) {
+            if (limbExtend.getCurrentPosition() <= maxExtendPos) {
                 extendPower = 0;
             }
         }
@@ -59,10 +63,9 @@ public class LimbArm {
     }
 
     public void armRotate(float turn) {
-        // note to self: test which way the arm rotates to program the limit switch correctly
         if (turn < 0) {                           // Makes the arm rotate down?
             rotatePower = turn;
-            if (limbRotate.getCurrentPosition() >= maxRotatePos) {
+            if (limbRotate.getCurrentPosition() <= maxRotatePos) {
                 rotatePower = 0;
             }
         }
@@ -79,7 +82,7 @@ public class LimbArm {
         // note to self: test which way the arm rotates to program the limit switch correctly
         if (limbRotateAuto > rotatePower) {                 // Makes the arm rotate down?
             rotatePower = limbRotateAuto;
-            if (limbRotate.getCurrentPosition() >= maxRotatePos) {
+            if (limbRotate.getCurrentPosition() <= maxRotatePos) {
                 rotatePower = 0;
             }
         }
