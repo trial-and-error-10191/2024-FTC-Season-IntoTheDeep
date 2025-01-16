@@ -78,6 +78,10 @@ public class DriveTrain {
         this.telemetry = telemetry;
     }
 
+    public void update(Gamepad gamepad) {
+        driveByPower(gamepad);
+    }
+
     public void stop() {
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);

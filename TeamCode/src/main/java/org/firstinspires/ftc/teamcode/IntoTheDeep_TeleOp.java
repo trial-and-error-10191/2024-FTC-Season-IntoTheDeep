@@ -42,7 +42,8 @@ public class IntoTheDeep_TeleOp extends LinearOpMode {
                 gamepad.CombineOverlappingResponsibilities(gamepad1, gamepad2);
             }
 
-            robot.driveByPower(gamepad);
+            //robot.driveByPower(gamepad);
+            robot.update(gamepad);
 
             // Provides telemetry for all motors, servos, and sensors.
             telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",

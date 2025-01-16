@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot {
     private DriveTrain driveTrain;
+    private SampleAndSpecimenManipulator manipulator;
     private Telemetry telemetry;
     private final double MAX_DRIVE_SPEED = 0.5;
     private final double MAX_TURN_SPEED = 0.3;
@@ -16,6 +17,11 @@ public class Robot {
     public Robot(HardwareMap hwMap, Telemetry telemetry) {
         driveTrain = new DriveTrain(hwMap, telemetry);
         this.telemetry = telemetry;
+    }
+
+    public void update(Gamepad gamepad) {
+        driveTrain.update(gamepad);
+        manipulator.update(gamepad);
     }
 
     public void driveByPower(Gamepad gamepad) {
