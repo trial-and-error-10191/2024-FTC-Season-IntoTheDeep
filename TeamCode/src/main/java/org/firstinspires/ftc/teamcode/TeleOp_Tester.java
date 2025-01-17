@@ -99,6 +99,7 @@ public class TeleOp_Tester extends LinearOpMode {
                     gamepad1.right_trigger);
             telemetry.addData("Gamepad2.right_trigger Data", "%b",
                     gamepad2.right_trigger);
+            telemetry.update();
 
         } // end of while (opModeIsActive())
 
