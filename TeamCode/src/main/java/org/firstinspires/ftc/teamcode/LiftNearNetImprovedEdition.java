@@ -114,8 +114,6 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
     private int leftBackTarget = 0;
     private int rightBackTarget = 0;
     private int rightFrontTarget = 0;
-    private int     SecondleftTarget    = 0; //Only used for strafing
-    private int     SecondrightTarget   = 0; //
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
@@ -156,7 +154,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
                     leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
                 } else {
                     leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-                    }
+                }
             } else {
                 if (leftBackDrive.getDirection() == DcMotor.Direction.REVERSE) {
                     leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -195,7 +193,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flip
-       Orientations();
+        Orientations();
         /* The next two lines define Hub orientation.
          * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
          *
@@ -231,19 +229,21 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
         }
 
         // Set the encoders for closed loop speed control, and reset the heading.
-                           // BEGIN AUTO CODE //
-        StrafeRobot(TURN_SPEED, -4,0 );
+        // BEGIN AUTO CODE //
+
+        StrafeRobot(TURN_SPEED, -40,0 );
+        Wait(4);
         //extend arm and then drop sample and pull it back down.
-        StrafeRobot(TURN_SPEED, -30, 0);
-        Wait(2);
-        // grab sample off the grounds
-        StrafeRobot(TURN_SPEED, 30, 0);
-        Wait(2);
-        //extend arm and then drop sample and pull it back down.
-        StrafeRobot(TURN_SPEED, -50, 0);
-        Wait(2);
-        driveStraight(TURN_SPEED, 15, 0);
-        Wait(2);
+        StrafeRobot(TURN_SPEED, 40, 0);
+//        Wait(4);
+//        // grab sample off the grounds
+//        StrafeRobot(TURN_SPEED, 30, 0);
+//        Wait(4);
+//        //extend arm and then drop sample and pull it back down.
+//        StrafeRobot(TURN_SPEED, -50, 0);
+//        Wait(4);
+//        driveStraight(TURN_SPEED, 15, 0);
+//        Wait(4);
         //extend arm and drop onto bar
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
@@ -277,7 +277,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
     public void driveStraight(double maxDriveSpeed,
                               double distance,
                               double heading) {
-Orientations();
+        Orientations();
 
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
@@ -290,13 +290,13 @@ Orientations();
             rightBackTarget = rightBackDrive.getCurrentPosition() + moveCounts;
 
             // Set Target FIRST, then turn on RUN_TO_POSITION
-           // If Strafing then reverse motor directions
+            // If Strafing then reverse motor directions
 
 
-                leftFrontDrive.setTargetPosition(leftFrontTarget);
-                rightFrontDrive.setTargetPosition(rightFrontTarget);
-                leftBackDrive.setTargetPosition(leftBackTarget);
-                rightBackDrive.setTargetPosition(rightBackTarget);
+            leftFrontDrive.setTargetPosition(leftFrontTarget);
+            rightFrontDrive.setTargetPosition(rightFrontTarget);
+            leftBackDrive.setTargetPosition(leftBackTarget);
+            rightBackDrive.setTargetPosition(rightBackTarget);
 
 
 
@@ -312,7 +312,7 @@ Orientations();
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                   (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+                    (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
 
                 // Determine required steering to keep on heading
                 turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
@@ -338,14 +338,22 @@ Orientations();
     }
 public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
     Orientations();
-    flip("L", "F");
-    flip("R", "B");
-//    telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
+    if (distance > 0) {
+        flip("L", "B");
+        flip("R", "F");
+    } else {
+        flip("L", "F");
+        flip("R", "B");
+    }
+   telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
         if (opModeIsActive()) {
-
-        // Determine new target position, and pass to motor controller
+            leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             // Determine new target position, and pass to motor controller
-            int moveCounts = (int)(distance * COUNTS_PER_INCH);
+            // Determine new target position, and pass to motor controller
+            int moveCounts = (int)(Math.abs(distance) * COUNTS_PER_INCH);
             leftFrontTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
             leftBackTarget = leftBackDrive.getCurrentPosition() + moveCounts;
             rightFrontTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
@@ -362,52 +370,52 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
 
 
 
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // Set the required driving speed  (must be positive for RUN_TO_POSITION)
-        // Start driving straight, and then enter the control loop
-        maxDriveSpeed = Math.abs(maxDriveSpeed);
-        moveRobot(maxDriveSpeed, 0);
+            // Set the required driving speed  (must be positive for RUN_TO_POSITION)
+            // Start driving straight, and then enter the control loop
+            maxDriveSpeed = Math.abs(maxDriveSpeed);
+            moveRobot(maxDriveSpeed, 0);
 
-        // keep looping while we are still active, and BOTH motors are running.
-        while (opModeIsActive() &&
-                (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() &&
+                    (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
 
             // Determine required steering to keep on heading
             turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
 
-            // if driving in reverse, the motor correction also needs to be reversed
-            if (distance < 0)
-                turnSpeed *= -1.0;
+//            // if driving in reverse, the motor correction also needs to be reversed
+//            if (distance < 0)
+//                turnSpeed *= -1.0;
 
             // Apply the turning correction to the current driving speed.
             moveRobot(driveSpeed, turnSpeed);
 
-            // Display drive status for the driver.
-           // sendTelemetry(true);
-        }
-//        telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
-//        telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
-//        telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
-//        telemetry.addData(" RB end encoder counter", rightBackDrive.getCurrentPosition() );
+                // Display drive status for the driver.
+                // sendTelemetry(true);
+            }
+        telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
+        telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
+       telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
+        telemetry.addData(" RB end encoder counter", rightBackDrive.getCurrentPosition() );
        telemetry.update();
-//        sleep(100000);
 
-        // Stop all motion & Turn off RUN_TO_POSITION
 
-        moveRobot(0, 0);
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            // Stop all motion & Turn off RUN_TO_POSITION
+
+            moveRobot(0, 0);
+            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             Orientations();
-        turnToHeading(maxDriveSpeed,heading);
-    }
+            turnToHeading(maxDriveSpeed,heading);
+        }
 
-}
+    }
 
     /**
      *  Spin on the central axis to point in a new direction.
@@ -424,7 +432,8 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
      *              If a relative angle is required, add/subtract from current heading.
      */
     public void turnToHeading(double maxTurnSpeed, double heading) {
-     double TempThreshold = 1;
+       //  Orientations();
+        double TempThreshold = 1;
         // Run getSteeringCorrection() once to pre-calculate the current error
         getSteeringCorrection(heading, P_DRIVE_GAIN);
 
@@ -440,9 +449,9 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
             // Pivot in place by applying the turning correction
             moveRobot(0, turnSpeed);
 
-            telemetry.addData("HeadingErr", headingError);
-            telemetry.addData("HeadinggetThresh",TempThreshold);
-            telemetry.update();
+//            telemetry.addData("HeadingErr", headingError);
+//            telemetry.addData("HeadinggetThresh",TempThreshold);
+//            telemetry.update();
         }
 
         // Stop all motion;
@@ -552,7 +561,7 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
         } else {
             telemetry.addData("Motion", "Turning");
         }
-        int a = Integer.valueOf("75");
+
         telemetry.addData("Heading- Target : Current", "%5.2f : %5.0f", targetHeading, getHeading());
         telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
         telemetry.addData("Wheel Speeds L : R", "%5.2f : %5.2f", leftSpeed, rightSpeed);
