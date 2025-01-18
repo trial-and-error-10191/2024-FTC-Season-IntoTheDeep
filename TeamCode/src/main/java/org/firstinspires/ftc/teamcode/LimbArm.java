@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import java.util.stream.IntStream;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -10,8 +10,9 @@ public class LimbArm {
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
     double extendPower = 0;                     // Motor power for lift extension
     double rotatePower = 0;                     // Motor power for lift rotation
-    double maxExtendPos = -3780;                // Encoder counter max for lift extension
-    double maxRotatePos = -2065;                // Encoder counter for lift rotation
+    int extensionLimit = 0;
+    int maxExtendPos = -3780;                   // Encoder counter max for lift extension
+    int maxRotatePos = -2065;                   // Encoder counter for lift rotation
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
 
@@ -24,15 +25,35 @@ public class LimbArm {
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
     }
 
-    public void armExtend(float extend) {
+    public int extendLimit() {
+        int rotatePos = limbRotate.getCurrentPosition();
+        if (rotatePos <= 0 && rotatePos > -516.25) {                  // This angle is between 67.5 and ~90 degrees
+            extensionLimit = maxExtendPos;
+        }
+        else if (rotatePos <= -516.25 && rotatePos > -1032.5) {       // This angle is between 45 and 67.5 degrees
+            extensionLimit = -3180; // Make sure this is fixed
+        }
+        else if (rotatePos <= -1032.5 && rotatePos > -1548.75) {      // This angle is between 22.5 and 45 degrees
+            extensionLimit = -2980; // Make sure this is fixed
+        }
+        else if (rotatePos <= -1548.75 && rotatePos > maxRotatePos) { // This angle is between 0 and 22.5 degrees
+            extensionLimit = -2788;
+        }
+        return extensionLimit;
+    }
+    public void armExtend(float extend) { // :>
+        maxExtendPos = extendLimit();
         if (extend > 0) {                           // Makes the arm extend
             extendPower = extend;
             if (limbExtend.getCurrentPosition() <= maxExtendPos) {
                 extendPower = 0;
             }
-            else if (limbRotate.getCurrentPosition() <= -2380 && limbExtend.getCurrentPosition() <= -2785) {
-                extendPower = 0;
-            }
+//            else if (limbRotate.getCurrentPosition() <= -2380 && limbExtend.getCurrentPosition() <= -2785) {
+//                extendPower = -0.2;
+//            }
+//            else {
+//                extendPower = 0;
+//            }
         }
         else if (extend <= 0) {                      // Makes the arm contract
             extendPower = extend;

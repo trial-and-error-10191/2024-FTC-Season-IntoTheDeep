@@ -34,8 +34,14 @@
                // Makes the claw rotate
                robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger);
                // Makes the limb arm extend/contract
+               if (gamepad2.left_stick_y < 0.1 && gamepad2.left_stick_y > -0.1) {   // Makes sure there's no drifting
+                   gamepad2.left_stick_y = 0;
+               }
                robot.limbArm.armExtend(-gamepad2.left_stick_y);
                // Makes the limb arm rotate
+               if (gamepad2.right_stick_x < 0.1 && gamepad2.right_stick_x > -0.1) { // Makes sure there's no drifting
+                   gamepad2.right_stick_x = 0;
+               }
                robot.limbArm.armRotate(gamepad2.right_stick_x);
 
                // Provides telemetry for all motors, servos, and sensors.
