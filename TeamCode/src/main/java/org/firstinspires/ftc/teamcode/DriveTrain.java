@@ -47,7 +47,6 @@ public class DriveTrain {
     public DriveTrain(HardwareMap hwMap, Telemetry telemetry) {
 
         // Initializes motor names:
-        Robot robot = new Robot(hwMap, telemetry);
         //limbExtend = hwMap.get(DcMotor.class, "limbExtend");
         leftFrontDrive = hwMap.get(DcMotor.class, "leftFront");
         leftBackDrive = hwMap.get(DcMotor.class, "leftBack");
