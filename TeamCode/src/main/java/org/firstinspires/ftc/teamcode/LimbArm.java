@@ -10,9 +10,9 @@ public class LimbArm {
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
     double extendPower = 0;                     // Motor power for lift extension
     double rotatePower = 0;                     // Motor power for lift rotation
-    int extensionLimit = 0;
+    int extensionLimit = 0;                     // Limit for extension
     int maxExtendPos = -3780;                   // Encoder counter max for lift extension
-    int maxRotatePos = -2065;                   // Encoder counter for lift rotation
+    int maxRotatePos = -6065;                   // Encoder counter for lift rotation
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
 
@@ -41,13 +41,24 @@ public class LimbArm {
         }
         return extensionLimit;
     }
-    public void armExtend(float extend) { // :>
+    public void highNetSetUp(boolean net) { //Sets up the robot to put a sample in the high net
+        if (net) {
+            limbRotate.setTargetPosition(0);
+            limbExtend.setTargetPosition(maxExtendPos);
+        }
+    }
+    public void fromThePit(boolean pit) { //Sets up the robot to put a sample in the high net
+        if (pit) {
+            limbRotate.setTargetPosition(maxRotatePos);
+        }
+    }
+    public void armExtend(float extend) {
         maxExtendPos = extendLimit();
         if (extend > 0) {                           // Makes the arm extend
             extendPower = extend;
-            if (limbExtend.getCurrentPosition() <= maxExtendPos) {
-                extendPower = 0;
-            }
+//            if (limbExtend.getCurrentPosition() <= maxExtendPos) {
+//                extendPower = 0;
+//            }
 //            else if (limbRotate.getCurrentPosition() <= -2380 && limbExtend.getCurrentPosition() <= -2785) {
 //                extendPower = -0.2;
 //            }
@@ -93,9 +104,12 @@ public class LimbArm {
         else if (turn > 0) {                      // Makes the arm rotate up?
             rotatePower = turn;
             if (!limitRotate.getState()) {      // Stop motor and reset encoder if limit switch is triggered
-                limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rotatePower = 0;
             }
+        }
+        else {
+            rotatePower = 0;
         }
         limbRotate.setPower(rotatePower);
     }
@@ -110,7 +124,7 @@ public class LimbArm {
         else if (limbRotateAuto < rotatePower) {           // Makes the arm rotate up?
             rotatePower = limbRotateAuto;
             if (!limitRotate.getState()) {      // Stop motor and reset encoder if limit switch is triggered
-                limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 rotatePower = 0;
             }
         }

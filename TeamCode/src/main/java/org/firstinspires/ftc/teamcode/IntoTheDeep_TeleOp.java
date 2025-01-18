@@ -43,6 +43,10 @@
                    gamepad2.right_stick_x = 0;
                }
                robot.limbArm.armRotate(gamepad2.right_stick_x);
+               // Sets the robot up for putting a sample into the high part of the net zone
+               robot.limbArm.highNetSetUp(gamepad2.y);
+               // Sets the robot up for grabbing a sample from the submersible
+               robot.limbArm.fromThePit(gamepad2.x);
 
                // Provides telemetry for all motors, servos, and sensors.
                telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",

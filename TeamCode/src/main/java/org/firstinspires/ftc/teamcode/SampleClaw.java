@@ -28,13 +28,13 @@ public class SampleClaw {
     }
 
     public void clawClamp(boolean open) {
-        if (open) {                      // Makes the claw open
-            ClawOpen = true;
-            servoClamp.setPosition(openPos);
-        }
-        else {                           // Makes the claw close
+        if (open && ClawOpen) {
             ClawOpen = false;
             servoClamp.setPosition(closePos);
+        }
+        else if (open) {                      // Makes the claw open
+            ClawOpen = true;
+            servoClamp.setPosition(openPos);
         }
     }
 
