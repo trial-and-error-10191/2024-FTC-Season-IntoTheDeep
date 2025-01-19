@@ -12,7 +12,7 @@ public class LimbArm {
     double rotatePower = 0;                     // Motor power for lift rotation
     int extensionLimit = 0;                     // Limit for extension
     int maxExtendPos = -3780;                   // Encoder counter max for lift extension
-    int maxRotatePos = -6065;                   // Encoder counter for lift rotation
+    int maxRotatePos = -2356;                   // Encoder counter for lift rotation
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
 
@@ -27,17 +27,20 @@ public class LimbArm {
 
     public int extendLimit() {
         int rotatePos = limbRotate.getCurrentPosition();
-        if (rotatePos <= 0 && rotatePos > -516.25) {                  // This angle is between 67.5 and ~90 degrees
-            extensionLimit = maxExtendPos;
+        if (rotatePos <= 0 && rotatePos > -630) {                  // This angle is between 67.5 and ~90 degrees
+            extensionLimit = -1126;
         }
-        else if (rotatePos <= -516.25 && rotatePos > -1032.5) {       // This angle is between 45 and 67.5 degrees
-            extensionLimit = -3180; // Make sure this is fixed
+        else if (rotatePos <= -630 && rotatePos > -1099) {       // This angle is between 45 and 67.5 degrees
+            extensionLimit = 297;
         }
-        else if (rotatePos <= -1032.5 && rotatePos > -1548.75) {      // This angle is between 22.5 and 45 degrees
-            extensionLimit = -2980; // Make sure this is fixed
+        else if (rotatePos <= -1099 && rotatePos > -1600) {      // This angle is between 22.5 and 45 degrees
+            extensionLimit = 828;
         }
-        else if (rotatePos <= -1548.75 && rotatePos > maxRotatePos) { // This angle is between 0 and 22.5 degrees
-            extensionLimit = -2788;
+        else if (rotatePos <= -1600 && rotatePos > -1940) {      // This angle is between 22.5 and 45 degrees
+            extensionLimit = 940;
+        }
+        else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This angle is between 0 and 22.5 degrees
+            extensionLimit = 690;
         }
         return extensionLimit;
     }
