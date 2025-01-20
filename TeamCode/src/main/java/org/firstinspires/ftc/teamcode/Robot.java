@@ -16,6 +16,7 @@ public class Robot {
     // This combines all the subsystems.
     public Robot(HardwareMap hwMap, Telemetry telemetry) {
         driveTrain = new DriveTrain(hwMap, telemetry);
+        manipulator = new SampleAndSpecimenManipulator(hwMap, telemetry);
         this.telemetry = telemetry;
     }
 
