@@ -58,15 +58,9 @@ public class LimbArm {
         maxExtendPos = extendLimit();
         if (extend > 0) {                           // Makes the arm extend
             extendPower = extend;
-//            if (limbExtend.getCurrentPosition() <= maxExtendPos) {
-//                extendPower = 0;
-//            }
-//            else if (limbRotate.getCurrentPosition() <= -2380 && limbExtend.getCurrentPosition() <= -2785) {
-//                extendPower = -0.2;
-//            }
-//            else {
-//                extendPower = 0;
-//            }
+            if (limbExtend.getCurrentPosition() <= maxExtendPos) {
+                extendPower = 0;
+            }
         }
         else if (extend <= 0) {                      // Makes the arm contract
             extendPower = extend;
