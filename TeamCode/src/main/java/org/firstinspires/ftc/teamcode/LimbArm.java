@@ -101,6 +101,7 @@ public class LimbArm {
             rotatePower = turn;
             if (!limitRotate.getState()) {      // Stop motor and reset encoder if limit switch is triggered
                 limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rotatePower = 0;
             }
         }
@@ -121,6 +122,7 @@ public class LimbArm {
             rotatePower = limbRotateAuto;
             if (!limitRotate.getState()) {      // Stop motor and reset encoder if limit switch is triggered
                 limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rotatePower = 0;
             }
         }
