@@ -22,8 +22,8 @@ public class SampleClaw {
 
     public SampleClaw(HardwareMap hwMap) {
         // initiates servo name
-        servoClamp = hwMap.get(Servo.class, "claw_Clamp");
-        servoExtend = hwMap.get(Servo.class, "claw_Extend");
+        servoClamp    = hwMap.get(Servo.class, "claw_Clamp");
+        servoExtend   = hwMap.get(Servo.class, "claw_Extend");
         servoRotation = hwMap.get(Servo.class, "claw_Rotation");
     }
 

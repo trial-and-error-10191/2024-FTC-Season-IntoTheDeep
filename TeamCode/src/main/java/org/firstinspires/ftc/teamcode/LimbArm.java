@@ -27,19 +27,19 @@ public class LimbArm {
 
     public int extendLimit() {
         int rotatePos = limbRotate.getCurrentPosition();
-        if (rotatePos <= 0 && rotatePos > -630) {                  // This angle is between 67.5 and ~90 degrees
+        if (rotatePos <= 0 && rotatePos > -630) {                  // This one reaches to the corner of our reach
             extensionLimit = -1126;
         }
-        else if (rotatePos <= -630 && rotatePos > -1099) {       // This angle is between 45 and 67.5 degrees
+        else if (rotatePos <= -630 && rotatePos > -1099) {         // This one reaches up almost to the top
             extensionLimit = 297;
         }
-        else if (rotatePos <= -1099 && rotatePos > -1600) {      // This angle is between 22.5 and 45 degrees
+        else if (rotatePos <= -1099 && rotatePos > -1600) {        // This one rises up slightly
             extensionLimit = 828;
         }
-        else if (rotatePos <= -1600 && rotatePos > -1940) {      // This angle is between 22.5 and 45 degrees
+        else if (rotatePos <= -1600 && rotatePos > -1940) {        // This one goes straight forward
             extensionLimit = 940;
         }
-        else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This angle is between 0 and 22.5 degrees
+        else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This one touches the ground
             extensionLimit = 690;
         }
         return extensionLimit;
