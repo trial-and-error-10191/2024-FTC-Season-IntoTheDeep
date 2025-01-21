@@ -25,7 +25,7 @@
                // This controls the drive train using three double input methods.
                // The fourth input is a boolean for the direction toggle.
                // The last input is the time the function uses to space out inputs for the direction switch.
-               robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+               //robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
                // Makes the claw open/close
                robot.driveTrain.LiftHandle(robot.limbArm.limbExtend.getCurrentPosition());
                robot.sampleClaw.clawClamp(gamepad2.a);
@@ -47,6 +47,7 @@
                robot.limbArm.highNetSetUp(gamepad2.y);
                // Sets the robot up for grabbing a sample from the submersible
                robot.limbArm.fromThePit(gamepad2.x);
+               robot.limbArm.spoolServoFunction(gamepad1.left_stick_x);
 
                // Provides telemetry for all motors, servos, and sensors.
                telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",

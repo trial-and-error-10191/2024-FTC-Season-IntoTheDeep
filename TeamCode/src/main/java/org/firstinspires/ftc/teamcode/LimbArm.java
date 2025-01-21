@@ -1,16 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class LimbArm {
 
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
+    CRServo spoolServo;                         // Servo that hold wires for lift
     double extendPower = 0;                     // Motor power for lift extension
     double rotatePower = 0;                     // Motor power for lift rotation
     int extensionLimit = 0;                     // Limit for extension
-    int maxExtendPos = -3780;                   // Encoder counter max for lift extension
+    final int maxExtendPos = -3780;             // Encoder counter max for lift extension
     int maxRotatePos = -2356;                   // Encoder counter for lift rotation
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
@@ -22,9 +25,10 @@ public class LimbArm {
         limbRotate = hwMap.get(DcMotor.class, "limbRotate");
         limitExtend = hwMap.get(DigitalChannel.class, "limitExtend");
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
+        spoolServo = hwMap.get(CRServo.class, "spoolServo");
     }
 
-    public int extendLimit() {
+    public void extendLimit() {
         int rotatePos = limbRotate.getCurrentPosition();
         if (rotatePos <= 0 && rotatePos > -1099) {                  // This one reaches to the corner of our reach
             extensionLimit = maxExtendPos;
@@ -38,7 +42,6 @@ public class LimbArm {
         else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This one touches the ground
             extensionLimit = -2229;
         }
-        return extensionLimit;
     }
     public void highNetSetUp(boolean net) { //Sets up the robot to put a sample in the high net
         if (net) {
@@ -51,11 +54,14 @@ public class LimbArm {
             limbRotate.setTargetPosition(maxRotatePos);
         }
     }
+    public void spoolServoFunction(double spool) {
+        spoolServo.setPower(spool); // letting wires out = positive, putting wires back on the wheel = negative
+    }
     public void armExtend(float extend) {
-        maxExtendPos = extendLimit();
-        if (extend > 0) {                           // Makes the arm extend
+        extendLimit();
+        if (extend > 0) { // Makes the arm extend
             extendPower = extend;
-            if (limbExtend.getCurrentPosition() <= maxExtendPos) {
+            if (limbExtend.getCurrentPosition() <= extensionLimit) {
                 extendPower = 0;
             }
         }
@@ -68,6 +74,7 @@ public class LimbArm {
             }
         }
         limbExtend.setPower(extendPower);
+        spoolServo.setPower(extendPower);
     }
 
     public void armExtendAuto(double limbExtendAuto) {
@@ -88,6 +95,12 @@ public class LimbArm {
     }
 
     public void armRotate(float turn) {
+        if (extensionLimit > limbExtend.getCurrentPosition()) {
+//            limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            limbExtend.setTargetPosition(extensionLimit);
+//            limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            limbExtend.setPower(-0.2);
+        }
         if (turn < 0) {                           // Makes the arm rotate down?
             rotatePower = turn;
             if (limbRotate.getCurrentPosition() <= maxRotatePos) {
