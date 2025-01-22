@@ -22,6 +22,7 @@ public class ClawMechanism {
     private boolean clawIsOpen = false;
     private final double clawOpenPosition = 1.0;
     private final double clawClosedPosition = 0.0;
+    private boolean previousInput = false;
 
     private final double INCREMENT = 0.01;
     private Telemetry telemetry = null;
@@ -73,13 +74,17 @@ public class ClawMechanism {
 
     private void clamp(Gamepad gamepad) {
         // a button - open/close claw
-        boolean moveClaw = gamepad.a;
-        if (!clawIsOpen && moveClaw) {
-            clampServo.setPosition(clawOpenPosition);
-            clawIsOpen = true;
-        } else if (clawIsOpen && moveClaw) {
-            clampServo.setPosition(clawClosedPosition);
-            clawIsOpen = false;
+        // want to move the claw if previously button was not pressed and now it is pressed
+        boolean moveClaw = (!previousInput && gamepad.a);
+        if (moveClaw) {
+            if (clawIsOpen) { // close claw if it's open
+                clampServo.setPosition(clawClosedPosition);
+                clawIsOpen = false;
+            } else { // open claw if it's closed
+                clampServo.setPosition(clawOpenPosition);
+                clawIsOpen = true;
+            }
         }
+        previousInput = gamepad.a;
     }
 }
