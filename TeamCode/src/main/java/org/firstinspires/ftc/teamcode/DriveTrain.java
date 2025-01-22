@@ -82,13 +82,6 @@ public class DriveTrain {
         driveByPower(gamepad);
     }
 
-    public void stop() {
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
-    }
-
     public void driveByPower(Gamepad gamepad) {
         double axial = -gamepad.left_stick_y;
         double lateral = gamepad.left_stick_x;
@@ -129,95 +122,6 @@ public class DriveTrain {
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
-    }
-
-    private void driveByRawPower(double axial,
-                                 double lateral,
-                                 double yaw) {
-        double leftFrontPower = axial + lateral + yaw;
-        double rightFrontPower = axial - lateral - yaw;
-        double leftBackPower = axial - lateral + yaw;
-        double rightBackPower = axial + lateral - yaw;
-
-        // Normalizes the values so no wheel power exceeds 100%.
-        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-        max = Math.max(max, Math.abs(leftBackPower));
-        max = Math.max(max, Math.abs(rightBackPower));
-        if (max > 1.0) {
-            leftFrontPower /= max;
-            rightFrontPower /= max;
-            leftBackPower /= max;
-            rightBackPower /= max;
-        }
-
-        leftFrontDrive.setPower(leftFrontPower);
-        rightFrontDrive.setPower(rightFrontPower);
-        leftBackDrive.setPower(leftBackPower);
-        rightBackDrive.setPower(rightBackPower);
-    }
-
-    public double getLeftFrontMotorPower() {
-        return leftFrontDrive.getPower();
-    }
-
-    public double getRightFrontMotorPower() {
-        return rightFrontDrive.getPower();
-    }
-
-    public double getLeftBackMotorPower() {
-        return leftBackDrive.getPower();
-    }
-
-    public double getRightBackMotorPower() {
-        return rightBackDrive.getPower();
-    }
-
-    public void resetEncoders() {
-        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
-
-    public void runUsingEncoders() {
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void resetImu() {
-        imu.resetYaw();
-    }
-
-    /**
-     * read the Robot heading directly from the IMU (in degrees)
-     */
-    public double getHeading() {
-        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        return orientation.getYaw(AngleUnit.DEGREES);
-    }
-
-    /**
-     * Use a Proportional Controller to determine how much steering correction is required.
-     *
-     * @param desiredHeading   The desired absolute heading (relative to last heading reset)
-     * @param proportionalGain Gain factor applied to heading error to obtain turning power.
-     * @return Turning power needed to get to required heading.
-     */
-    public double getSteeringCorrection(double desiredHeading, double proportionalGain) {
-        double targetHeading = desiredHeading;  // Save for telemetry
-
-        // Determine the heading current error
-        headingError = targetHeading - getHeading();
-        // Normalize the error to be within +/- 180 degrees
-        while (headingError > 180) headingError -= 360;
-        while (headingError <= -180) headingError += 360;
-        telemetry.addData("Heading Error: ", headingError);
-        telemetry.update();
-
-        // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
-        return Range.clip(headingError * proportionalGain, -1, 1);
     }
 
     /**
@@ -281,11 +185,73 @@ public class DriveTrain {
         runUsingEncoders();
     }
 
-    private boolean motorsAreBusy() {
-        return (leftFrontDrive.isBusy()
-                && rightFrontDrive.isBusy()
-                && leftBackDrive.isBusy()
-                && rightBackDrive.isBusy());
+    private void driveByRawPower(double axial,
+                                 double lateral,
+                                 double yaw) {
+        double leftFrontPower = axial + lateral + yaw;
+        double rightFrontPower = axial - lateral - yaw;
+        double leftBackPower = axial - lateral + yaw;
+        double rightBackPower = axial + lateral - yaw;
+
+        // Normalizes the values so no wheel power exceeds 100%.
+        double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+        if (max > 1.0) {
+            leftFrontPower /= max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        leftFrontDrive.setPower(leftFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
+        leftBackDrive.setPower(leftBackPower);
+        rightBackDrive.setPower(rightBackPower);
+    }
+
+    /**
+     * Use a Proportional Controller to determine how much steering correction is required.
+     *
+     * @param desiredHeading   The desired absolute heading (relative to last heading reset)
+     * @param proportionalGain Gain factor applied to heading error to obtain turning power.
+     * @return Turning power needed to get to required heading.
+     */
+    public double getSteeringCorrection(double desiredHeading, double proportionalGain) {
+        double targetHeading = desiredHeading;  // Save for telemetry
+
+        // Determine the heading current error
+        headingError = targetHeading - getHeading();
+        // Normalize the error to be within +/- 180 degrees
+        while (headingError > 180) headingError -= 360;
+        while (headingError <= -180) headingError += 360;
+        telemetry.addData("Heading Error: ", headingError);
+        telemetry.update();
+
+        // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
+        return Range.clip(headingError * proportionalGain, -1, 1);
+    }
+
+    /**
+     * read the Robot heading directly from the IMU (in degrees)
+     */
+    public double getHeading() {
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        return orientation.getYaw(AngleUnit.DEGREES);
+    }
+
+    public void stop() {
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
+    }
+
+    public void runUsingEncoders() {
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void turnToHeading(double maxTurnSpeed, double heading) {
@@ -310,5 +276,39 @@ public class DriveTrain {
         // Stop all motion;
         //moveRobot(0, 0);
         stop();
+    }
+
+    public double getLeftFrontMotorPower() {
+        return leftFrontDrive.getPower();
+    }
+
+    public double getRightFrontMotorPower() {
+        return rightFrontDrive.getPower();
+    }
+
+    public double getLeftBackMotorPower() {
+        return leftBackDrive.getPower();
+    }
+
+    public double getRightBackMotorPower() {
+        return rightBackDrive.getPower();
+    }
+
+    public void resetEncoders() {
+        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void resetImu() {
+        imu.resetYaw();
+    }
+
+    private boolean motorsAreBusy() {
+        return (leftFrontDrive.isBusy()
+                && rightFrontDrive.isBusy()
+                && leftBackDrive.isBusy()
+                && rightBackDrive.isBusy());
     }
 }
