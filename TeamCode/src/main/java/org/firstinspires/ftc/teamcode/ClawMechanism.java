@@ -8,24 +8,24 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ClawMechanism {
-    private Servo elbowServo = null;
+    private final Servo elbowServo;
     private final double lowestBendPosition = 0.0;
     private final double highestBendPosition = 1.0;
     private double bendPosition = 0.0;
 
-    private Servo rotateServo = null;
+    private final Servo rotateServo;
     private final double clockwisePositionLimit = 1.0;
     private final double counterclockwisePositionLimit = 0.0;
     private double rotationPosition = 0.0;
 
-    private Servo clampServo = null;
+    private final Servo clampServo;
     private boolean clawIsOpen = false;
     private final double clawOpenPosition = 1.0;
     private final double clawClosedPosition = 0.0;
     private boolean previousInput = false;
 
     private final double INCREMENT = 0.01;
-    private Telemetry telemetry = null;
+    private final Telemetry telemetry;
 
     ClawMechanism(HardwareMap hwMap, Telemetry telemetry) {
         this.telemetry = telemetry;

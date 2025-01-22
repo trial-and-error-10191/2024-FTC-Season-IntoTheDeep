@@ -7,13 +7,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot {
-    private DriveTrain driveTrain;
-    private SampleAndSpecimenManipulator manipulator;
-    private Telemetry telemetry;
+    private final DriveTrain driveTrain;
+    private final SampleAndSpecimenManipulator manipulator;
+    private final Telemetry telemetry;
     private final double MAX_DRIVE_SPEED = 0.5;
     private final double MAX_TURN_SPEED = 0.3;
 
-    // This combines all the subsystems.
     public Robot(HardwareMap hwMap, Telemetry telemetry) {
         driveTrain = new DriveTrain(hwMap, telemetry);
         manipulator = new SampleAndSpecimenManipulator(hwMap, telemetry);

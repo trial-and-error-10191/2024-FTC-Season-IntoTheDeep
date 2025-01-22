@@ -19,10 +19,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  */
 public class DriveTrain {
 
-    private DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
-    private IMU imu = null;
-    private double          headingError  = 0;
-    Telemetry telemetry;
+    private final DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
+    private final IMU imu;
+    private double headingError  = 0;
+    private final Telemetry telemetry;
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV

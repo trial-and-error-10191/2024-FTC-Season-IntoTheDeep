@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class SampleAndSpecimenManipulator {
-    private ArmMechanism arm = null;
-    private ClawMechanism claw = null;
-    private Telemetry telemetry;
+    private final ArmMechanism arm;
+    private final ClawMechanism claw;
+    private final Telemetry telemetry;
 
     SampleAndSpecimenManipulator(HardwareMap hwMap, Telemetry telemetry) {
         this.telemetry = telemetry;
