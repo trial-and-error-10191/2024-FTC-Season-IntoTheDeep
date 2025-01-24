@@ -386,7 +386,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
 //                turnSpeed *= -1.0;
 
             // Apply the turning correction to the current driving speed.
-            moveRobot(driveSpeed, turnSpeed);
+            RotateRoboto(driveSpeed, turnSpeed, distance > 0);
 
                 // Display drive status for the driver.
                 // sendTelemetry(true);
@@ -536,7 +536,25 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
         leftBackDrive.setPower(leftSpeed);
         rightBackDrive.setPower(rightSpeed);
     }
+    public void RotateRoboto(double drive, double turn, Boolean isLeft ) {
+        driveSpeed = drive;     // save this value as a class member so it can be used by telemetry.
+        turnSpeed  = turn;      // save this value as a class member so it can be used by telemetry.
+        leftSpeed  = drive - turn;
+        rightSpeed = drive + turn;
 
+        // Scale speeds down if either one exceeds +/- 1.0;
+        double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+        if (max > 1.0)
+        {
+            leftSpeed /= max;
+            rightSpeed /= max;
+        }
+
+        leftFrontDrive.setPower((isLeft ? -1 : 1) * leftSpeed);
+        rightFrontDrive.setPower((isLeft ? 1 : -1) * rightSpeed);
+        leftBackDrive.setPower((isLeft ? 1 : -1) * leftSpeed);
+        rightBackDrive.setPower((isLeft ? -1 : 1) * rightSpeed);
+    }
     /**
      *  Display the various control parameters while driving
      *
