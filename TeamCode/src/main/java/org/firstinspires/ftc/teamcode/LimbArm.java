@@ -73,7 +73,7 @@ public class LimbArm {
                 extendPower = 0;
             }
         }
-        limbExtend.setPower(extendPower);
+        limbExtend.setPower(extendPower / 2);
         spoolServo.setPower(extendPower);
     }
 

@@ -32,7 +32,7 @@ public class SampleClaw {
             ClawOpen = false;
             servoClamp.setPosition(closePos);
         }
-        else if (open) {                      // Makes the claw open
+        else if (open && !ClawOpen) {                      // Makes the claw open
             ClawOpen = true;
             servoClamp.setPosition(openPos);
         }
