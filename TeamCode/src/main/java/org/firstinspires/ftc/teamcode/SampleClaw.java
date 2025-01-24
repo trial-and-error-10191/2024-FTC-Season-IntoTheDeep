@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class SampleClaw {
     boolean ClawOpen = false;
+    boolean lastInput = false;
 
     static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final double MAX_POS     =  1.0;     // Maximum rotational position
@@ -36,6 +37,7 @@ public class SampleClaw {
             ClawOpen = true;
             servoClamp.setPosition(openPos);
         }
+        lastInput = true;
     }
 
     public void clawClampAuto(boolean clawArmClamp) {        // claw clamping for autonomous
