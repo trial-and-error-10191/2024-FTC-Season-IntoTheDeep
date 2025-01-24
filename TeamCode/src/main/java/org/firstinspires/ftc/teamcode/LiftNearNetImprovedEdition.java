@@ -100,9 +100,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
     private IMU             imu         = null;
     private ElapsedTime Time = new ElapsedTime();
     // Control/Expansion Hub IMU
-
     private double          headingError  = 0;
-
     // These variable are declared here (as class members) so they can be updated in various methods,
     // but still be displayed by sendTelemetry()
     private double  targetHeading = 0;
@@ -111,8 +109,8 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
     private double  leftSpeed     = 0;
     private double  rightSpeed    = 0;
     private int     leftFrontTarget    = 0;
-    private int leftBackTarget = 0;
-    private int rightBackTarget = 0;
+    private int leftBackTarget   = 0;
+    private int rightBackTarget  = 0;
     private int rightFrontTarget = 0;
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
@@ -146,6 +144,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         Wait(0.1);
     }
+
     public void flip(String FirstLocation, String SecondLocation) {
         // The input is expected to be L or R for the first value and F or B for the second value
         if (FirstLocation.equals("L")) {
@@ -176,7 +175,6 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
                     rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
                 }
             }
-
         }
         Wait(0.1);
     }
@@ -184,12 +182,11 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
         // Initialize the drive system variables.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
+        rightBackDrive  = hardwareMap.get(DcMotor.class, "rightBack");
+        leftBackDrive   = hardwareMap.get(DcMotor.class, "leftBack");
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flip
@@ -230,7 +227,6 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
 
         // Set the encoders for closed loop speed control, and reset the heading.
         // BEGIN AUTO CODE //
-
         StrafeRobot(TURN_SPEED, -40,0 );
         Wait(4);
         //extend arm and then drop sample and pull it back down.
@@ -336,16 +332,18 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
-    Orientations();
-    if (distance > 0) {
+
+    public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
+      Orientations();
+      if (distance > 0) {
         flip("L", "B");
         flip("R", "F");
-    } else {
+      } else {
         flip("L", "F");
         flip("R", "B");
-    }
-   telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
+      }
+
+      telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
         if (opModeIsActive()) {
             leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -361,14 +359,10 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
 
             // Set Target FIRST, then turn on RUN_TO_POSITION
             // If Strafing then reverse motor directions
-
-
             leftFrontDrive.setTargetPosition(leftFrontTarget);
             rightFrontDrive.setTargetPosition(rightFrontTarget);
             leftBackDrive.setTargetPosition(leftBackTarget);
             rightBackDrive.setTargetPosition(rightBackTarget);
-
-
 
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -397,15 +391,13 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
                 // Display drive status for the driver.
                 // sendTelemetry(true);
             }
-        telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
-        telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
-       telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
-        telemetry.addData(" RB end encoder counter", rightBackDrive.getCurrentPosition() );
-       telemetry.update();
-
+            telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
+            telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
+            telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
+            telemetry.addData(" RB end encoder counter", rightBackDrive.getCurrentPosition() );
+            telemetry.update();
 
             // Stop all motion & Turn off RUN_TO_POSITION
-
             moveRobot(0, 0);
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -413,9 +405,9 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             Orientations();
             turnToHeading(maxDriveSpeed,heading);
-        }
+          }
 
-    }
+        }
 
     /**
      *  Spin on the central axis to point in a new direction.
