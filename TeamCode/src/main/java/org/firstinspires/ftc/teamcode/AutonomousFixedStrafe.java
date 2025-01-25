@@ -88,9 +88,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot:Basket auto Cool Edition", group="Robot")
+@Autonomous(name="ImuStrafeFix", group="Robot")
 //@Disabled
-public class LiftNearNetImprovedEdition extends LinearOpMode {
+public class AutonomousFixedStrafe extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftFrontDrive   = null;
@@ -228,19 +228,6 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
         // Set the encoders for closed loop speed control, and reset the heading.
         // BEGIN AUTO CODE //
 
-        StrafeRobot(TURN_SPEED, -40,0 );
-        Wait(4);
-        //extend arm and then drop sample and pull it back down.
-        StrafeRobot(TURN_SPEED, 40, 0);
-//        Wait(4);
-//        // grab sample off the grounds
-//        StrafeRobot(TURN_SPEED, 30, 0);
-//        Wait(4);
-//        //extend arm and then drop sample and pull it back down.
-//        StrafeRobot(TURN_SPEED, -50, 0);
-//        Wait(4);
-//        driveStraight(TURN_SPEED, 15, 0);
-//        Wait(4);
         //extend arm and drop onto bar
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
