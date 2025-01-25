@@ -227,6 +227,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
 
         // Set the encoders for closed loop speed control, and reset the heading.
         // BEGIN AUTO CODE //
+
         StrafeRobot(TURN_SPEED, -40,0 );
         Wait(4);
         //extend arm and then drop sample and pull it back down.
@@ -274,7 +275,6 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
                               double distance,
                               double heading) {
         Orientations();
-
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
@@ -381,12 +381,12 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
             // Determine required steering to keep on heading
             turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
 
-//            // if driving in reverse, the motor correction also needs to be reversed
-//            if (distance < 0)
+            // if driving in reverse, the motor correction also needs to be reversed
+//            if (distance < 0) {
 //                turnSpeed *= -1.0;
-
+//            }
             // Apply the turning correction to the current driving speed.
-            RotateRoboto(driveSpeed, turnSpeed, distance > 0);
+            RotateRoboto(driveSpeed, turnSpeed, distance < 0);
 
                 // Display drive status for the driver.
                 // sendTelemetry(true);
@@ -537,23 +537,29 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
         rightBackDrive.setPower(rightSpeed);
     }
     public void RotateRoboto(double drive, double turn, Boolean isLeft ) {
-        driveSpeed = drive;     // save this value as a class member so it can be used by telemetry.
-        turnSpeed  = turn;      // save this value as a class member so it can be used by telemetry.
-        leftSpeed  = drive - turn;
-        rightSpeed = drive + turn;
+//        driveSpeed = drive;     // save this value as a class member so it can be used by telemetry.
+//        turnSpeed  = turn;      // save this value as a class member so it can be used by telemetry.
+//        leftSpeed  = drive - turn;
+//        rightSpeed = drive + turn;
+        leftFrontDrive.setPower(drive + ((isLeft ? 1 : -1) * turn));
+        rightFrontDrive.setPower(drive + ((isLeft ? 1 : -1) * turn));
+        leftBackDrive.setPower(drive + ((isLeft ? -1 : 1) * turn));
+        rightBackDrive.setPower(drive + ((isLeft ? -1 : 1) * turn));
 
         // Scale speeds down if either one exceeds +/- 1.0;
-        double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-        if (max > 1.0)
-        {
-            leftSpeed /= max;
-            rightSpeed /= max;
-        }
+//        double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+//        if (max > 1.0)
+//        {
+//            leftSpeed /= max;
+//            rightSpeed /= max;
+//        }
 
-        leftFrontDrive.setPower((isLeft ? -1 : 1) * leftSpeed);
-        rightFrontDrive.setPower((isLeft ? 1 : -1) * rightSpeed);
-        leftBackDrive.setPower((isLeft ? 1 : -1) * leftSpeed);
-        rightBackDrive.setPower((isLeft ? -1 : 1) * rightSpeed);
+
+
+//        leftFrontDrive.setPower((isLeft ? -1 : 1) * leftSpeed);
+//        rightFrontDrive.setPower((isLeft ? 1 : -1) * rightSpeed);
+//        leftBackDrive.setPower((isLeft ? 1 : -1) * leftSpeed);
+//        rightBackDrive.setPower((isLeft ? -1 : 1) * rightSpeed);
     }
     /**
      *  Display the various control parameters while driving
