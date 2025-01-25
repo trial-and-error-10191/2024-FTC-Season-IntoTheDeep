@@ -1,20 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad2;
+
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class LimbArm {
 
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
     CRServo spoolServo;                         // Servo that hold wires for lift
-    double extendPower = 0;                     // Motor power for lift extension
+    double extendPower = 0;                      // Motor power for lift extension
     double rotatePower = 0;                     // Motor power for lift rotation
     int extensionLimit = 0;                     // Limit for extension
     final int maxExtendPos = -3780;             // Encoder counter max for lift extension
     int maxRotatePos = -2356;                   // Encoder counter for lift rotation
+    int targetPosition = 0;
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
 
@@ -22,10 +24,34 @@ public class LimbArm {
         limbExtend = hwMap.get(DcMotor.class, "limbExtend");
         limbExtend.setDirection(DcMotor.Direction.REVERSE);
         limbExtend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //limbExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        targetPosition = limbExtend.getCurrentPosition();
+        limbExtend.setTargetPosition(targetPosition);
+        limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        limbExtend.setPower(0.1);
         limbRotate = hwMap.get(DcMotor.class, "limbRotate");
         limitExtend = hwMap.get(DigitalChannel.class, "limitExtend");
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
         spoolServo = hwMap.get(CRServo.class, "spoolServo");
+    }
+
+    public void RunMotor(float extend) {
+        extendLimit();
+        if (extend > 0) { // If going up, move lift up while guard against overextending
+            targetPosition = limbExtend.getCurrentPosition() + (-10);
+            if (limbExtend.getCurrentPosition() <= extensionLimit) {
+                targetPosition = extensionLimit;
+            }
+        } else if (extend < 0) { // If going down, guard against retracting too far
+            targetPosition = limbExtend.getCurrentPosition() - (-10);
+            if (!limitExtend.getState()) {      // Stop motor and reset encoder if limit switch is triggered
+                limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                targetPosition = 0;
+                limbExtend.setTargetPosition(0);
+                limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+        }
+        limbExtend.setTargetPosition(targetPosition);
     }
 
     public void extendLimit() {
@@ -57,48 +83,56 @@ public class LimbArm {
     public void spoolServoFunction(double spool) {
         spoolServo.setPower(spool); // letting wires out = positive, putting wires back on the wheel = negative
     }
-    public void armExtend(float extend) {
+    public void armExtend(double extend) {
         extendLimit();
         if (extend > 0) { // Makes the arm extend
             extendPower = extend;
+            spoolServo.setPower(extend);
             if (limbExtend.getCurrentPosition() <= extensionLimit) {
                 extendPower = 0;
+                spoolServo.setPower(0);
             }
         }
         else if (extend <= 0) {                      // Makes the arm contract
             extendPower = extend;
+            spoolServo.setPower(extend);
             if (!limitExtend.getState()) {      // Stop motor and reset encoder if limit switch is triggered
                 limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 extendPower = 0;
+                spoolServo.setPower(0);
             }
         }
-        limbExtend.setPower(extendPower / 2);
-        spoolServo.setPower(extendPower);
+        limbExtend.setPower(extendPower * 0.55);
+        //spoolServo.setPower(extendPower * 0.92);
     }
 
     public void armExtendAuto(double limbExtendAuto) {
-        if (limbExtendAuto > extendPower) {                  // Makes the arm extend
+        extendLimit();
+        if (limbExtendAuto > 0) { // Makes the arm extend
             extendPower = limbExtendAuto;
-            if (limbExtend.getCurrentPosition() <= maxExtendPos) {
+            spoolServo.setPower(limbExtendAuto);
+            if (limbExtend.getCurrentPosition() <= extensionLimit) {
                 extendPower = 0;
+                spoolServo.setPower(0);
             }
         }
-        else if (extendPower > limbExtendAuto) {             // Makes the arm contract for autonomous
+        else if (limbExtendAuto <= 0) {                      // Makes the arm contract
             extendPower = limbExtendAuto;
+            spoolServo.setPower(limbExtendAuto);
             if (!limitExtend.getState()) {      // Stop motor and reset encoder if limit switch is triggered
                 limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 extendPower = 0;
+                spoolServo.setPower(0);
             }
         }
-        limbExtend.setPower(extendPower);
+        limbExtend.setPower(extendPower * 0.55);
+        spoolServo.setPower(extendPower * 0.92);
     }
 
     public void armRotate(float turn) {
         if (extensionLimit > limbExtend.getCurrentPosition()) {
-//            limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            limbExtend.setTargetPosition(extensionLimit);
-//            limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             limbExtend.setPower(-0.2);
         }
         if (turn < 0) {                           // Makes the arm rotate down?
@@ -122,7 +156,10 @@ public class LimbArm {
     }
     public void armRotateAuto(double limbRotateAuto) {
         // note to self: test which way the arm rotates to program the limit switch correctly
-        if (limbRotateAuto > rotatePower) {                 // Makes the arm rotate down?
+        if (extensionLimit > limbExtend.getCurrentPosition()) {
+            limbExtend.setPower(-0.2);
+        }
+        if (limbRotateAuto < 0) {                           // Makes the arm rotate down?
             rotatePower = limbRotateAuto;
             if (limbRotate.getCurrentPosition() <= maxRotatePos) {
                 rotatePower = 0;

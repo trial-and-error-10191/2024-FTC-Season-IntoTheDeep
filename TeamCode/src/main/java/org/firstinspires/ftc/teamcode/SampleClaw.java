@@ -37,7 +37,6 @@ public class SampleClaw {
             ClawOpen = true;
             servoClamp.setPosition(openPos);
         }
-        lastInput = true;
     }
 
     public void clawClampAuto(boolean clawArmClamp) {        // claw clamping for autonomous
