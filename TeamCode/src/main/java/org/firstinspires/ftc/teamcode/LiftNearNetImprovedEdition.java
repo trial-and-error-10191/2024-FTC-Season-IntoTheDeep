@@ -100,9 +100,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
     private IMU             imu         = null;
     private ElapsedTime Time = new ElapsedTime();
     // Control/Expansion Hub IMU
-
     private double          headingError  = 0;
-
     // These variable are declared here (as class members) so they can be updated in various methods,
     // but still be displayed by sendTelemetry()
     private double  targetHeading = 0;
@@ -111,8 +109,8 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
     private double  leftSpeed     = 0;
     private double  rightSpeed    = 0;
     private int     leftFrontTarget    = 0;
-    private int leftBackTarget = 0;
-    private int rightBackTarget = 0;
+    private int leftBackTarget   = 0;
+    private int rightBackTarget  = 0;
     private int rightFrontTarget = 0;
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
@@ -146,6 +144,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         Wait(0.1);
     }
+
     public void flip(String FirstLocation, String SecondLocation) {
         // The input is expected to be L or R for the first value and F or B for the second value
         if (FirstLocation.equals("L")) {
@@ -162,36 +161,32 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
                     leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
                 }
             }
-        }
-        else {
+        } else {
             if (SecondLocation.equals("F")) {
                 if (rightFrontDrive.getDirection() == DcMotor.Direction.REVERSE) {
                     rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-                } // end of if statement
-                else {
+                } else {
                     rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-                } // end of else statement
-            } // end of if statement
-            else {
+                }
+            } else {
                 if (rightBackDrive.getDirection() == DcMotor.Direction.REVERSE) {
                     rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-                } // end of if statement
-                else {
+                } else {
                     rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-                } // end of else Statement
-            } // end of else Statement
-        } // end of else statement
+                }
+            }
+        }
         Wait(0.1);
     }
 
+
     @Override
     public void runOpMode() {
-
         // Initialize the drive system variables.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
+        rightBackDrive  = hardwareMap.get(DcMotor.class, "rightBack");
+        leftBackDrive   = hardwareMap.get(DcMotor.class, "leftBack");
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flip
@@ -224,17 +219,14 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
-
         // Wait for the game to start (Display Gyro value while waiting)
-
         while (opModeInInit()) {
             telemetry.addData(">", "Robot Heading = %4.0f", getHeading());
             telemetry.update();
-        } // end of while loop
+        }
 
         // Set the encoders for closed loop speed control, and reset the heading.
         // BEGIN AUTO CODE //
-
         StrafeRobot(TURN_SPEED, -40,0 );
         Wait(4);
         //extend arm and then drop sample and pull it back down.
@@ -256,8 +248,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // Pause to display last telemetry message.
-
-    } // end of public void runOpMode
+    }
 
     /*
      * ====================================================================================================
@@ -279,8 +270,9 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
     *                   If a relative angle is required, add/subtract from the current robotHeading.
     */
-    public void driveStraight(double maxDriveSpeed, double distance, double heading) {
-
+    public void driveStraight(double maxDriveSpeed,
+                              double distance,
+                              double heading) {
         Orientations();
 
         // Ensure that the OpMode is still active
@@ -296,10 +288,13 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
             // Set Target FIRST, then turn on RUN_TO_POSITION
             // If Strafing then reverse motor directions
 
+
             leftFrontDrive.setTargetPosition(leftFrontTarget);
             rightFrontDrive.setTargetPosition(rightFrontTarget);
             leftBackDrive.setTargetPosition(leftBackTarget);
             rightBackDrive.setTargetPosition(rightBackTarget);
+
+
 
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -327,7 +322,7 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
 
                 // Display drive status for the driver.
                 sendTelemetry(true);
-            } // end of while loop
+            }
 
             // Stop all motion & Turn off RUN_TO_POSITION
             moveRobot(0, 0);
@@ -335,32 +330,27 @@ public class LiftNearNetImprovedEdition extends LinearOpMode {
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        } // end of if statement
-    } // end of public void driveStraight
-public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
+        }
+    }
 
-    Orientations();
-
-    if (distance > 0) {
+    public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
+      Orientations();
+      if (distance > 0) {
         flip("L", "B");
         flip("R", "F");
-    } // end of if statement
-
-    else {
+      } else {
         flip("L", "F");
         flip("R", "B");
-    } // end of else statement
+      }
 
-   telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
-
+      telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
         if (opModeIsActive()) {
             leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
             // Determine new target position, and pass to motor controller
-
+            // Determine new target position, and pass to motor controller
             int moveCounts = (int)(Math.abs(distance) * COUNTS_PER_INCH);
             leftFrontTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
             leftBackTarget = leftBackDrive.getCurrentPosition() + moveCounts;
@@ -369,7 +359,6 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
 
             // Set Target FIRST, then turn on RUN_TO_POSITION
             // If Strafing then reverse motor directions
-
             leftFrontDrive.setTargetPosition(leftFrontTarget);
             rightFrontDrive.setTargetPosition(rightFrontTarget);
             leftBackDrive.setTargetPosition(leftBackTarget);
@@ -386,21 +375,22 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
             moveRobot(maxDriveSpeed, 0);
 
             // keep looping while we are still active, and BOTH motors are running.
-            while (opModeIsActive() && (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+            while (opModeIsActive() &&
+                    (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
 
-                // Determine required steering to keep on heading
-                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
+            // Determine required steering to keep on heading
+            turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
 
 //            // if driving in reverse, the motor correction also needs to be reversed
 //            if (distance < 0)
 //                turnSpeed *= -1.0;
 
-                // Apply the turning correction to the current driving speed.
-                moveRobot(driveSpeed, turnSpeed);
+            // Apply the turning correction to the current driving speed.
+            RotateRoboto(driveSpeed, turnSpeed, distance > 0);
 
                 // Display drive status for the driver.
                 // sendTelemetry(true);
-            } // end of while loop
+            }
             telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
             telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
             telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
@@ -408,7 +398,6 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
             telemetry.update();
 
             // Stop all motion & Turn off RUN_TO_POSITION
-
             moveRobot(0, 0);
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -416,9 +405,9 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             Orientations();
             turnToHeading(maxDriveSpeed,heading);
-        } // end of if statement
+          }
 
-    } // end of public void StrafeRobot
+        }
 
     /**
      *  Spin on the central axis to point in a new direction.
@@ -455,11 +444,11 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
 //            telemetry.addData("HeadingErr", headingError);
 //            telemetry.addData("HeadinggetThresh",TempThreshold);
 //            telemetry.update();
-        } // end of while loop
+        }
 
         // Stop all motion;
         moveRobot(0, 0);
-    } // end of public void turnToHeading
+    }
 
     /**
      *  Obtain & hold a heading for a finite amount of time
@@ -492,11 +481,11 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
 
             // Display drive status for the driver.
             sendTelemetry(false);
-        } // end of while loop
+        }
 
         // Stop all motion;
         moveRobot(0, 0);
-    } // end of public void holdHeading
+    }
 
     // **********  LOW Level driving functions.  ********************
 
@@ -519,7 +508,7 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
 
         // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
         return Range.clip(headingError * proportionalGain, -1, 1);
-    } // end of public double getSteeringCorrection
+    }
 
     /**
      * Take separate drive (fwd/rev) and turn (right/left) requests,
@@ -536,17 +525,36 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
 
         // Scale speeds down if either one exceeds +/- 1.0;
         double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-        if (max > 1.0) {
+        if (max > 1.0)
+        {
             leftSpeed /= max;
             rightSpeed /= max;
-        } // end of if statement
+        }
 
         leftFrontDrive.setPower(leftSpeed);
         rightFrontDrive.setPower(rightSpeed);
         leftBackDrive.setPower(leftSpeed);
         rightBackDrive.setPower(rightSpeed);
-    } // end of public void moveRobot
+    }
+    public void RotateRoboto(double drive, double turn, Boolean isLeft ) {
+        driveSpeed = drive;     // save this value as a class member so it can be used by telemetry.
+        turnSpeed  = turn;      // save this value as a class member so it can be used by telemetry.
+        leftSpeed  = drive - turn;
+        rightSpeed = drive + turn;
 
+        // Scale speeds down if either one exceeds +/- 1.0;
+        double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+        if (max > 1.0)
+        {
+            leftSpeed /= max;
+            rightSpeed /= max;
+        }
+
+        leftFrontDrive.setPower((isLeft ? -1 : 1) * leftSpeed);
+        rightFrontDrive.setPower((isLeft ? 1 : -1) * rightSpeed);
+        leftBackDrive.setPower((isLeft ? 1 : -1) * leftSpeed);
+        rightBackDrive.setPower((isLeft ? -1 : 1) * rightSpeed);
+    }
     /**
      *  Display the various control parameters while driving
      *
@@ -560,30 +568,28 @@ public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
             telemetry.addData("Target Pos L:R",  "%7d:%7d",      leftFrontTarget, rightFrontTarget);
             telemetry.addData("Actual Pos L:R",  "%7d:%7d:%7d:%7d",      leftFrontDrive.getCurrentPosition(),
                     rightFrontDrive.getCurrentPosition(),leftBackDrive.getCurrentPosition(),rightBackDrive.getCurrentPosition());
-        } //end of if statement
-
-        else {
+        } else {
             telemetry.addData("Motion", "Turning");
-        } // end of else statement
+        }
 
         telemetry.addData("Heading- Target : Current", "%5.2f : %5.0f", targetHeading, getHeading());
         telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
         telemetry.addData("Wheel Speeds L : R", "%5.2f : %5.2f", leftSpeed, rightSpeed);
         telemetry.update();
-
-    } // end of private void sendTelemetry
+    }
     /**
      * read the Robot heading directly from the IMU (in degrees)
      */
     public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
-    } // end of public double getHeading
+    }
 
-     public void Wait(double seconds) {
+    public void Wait(double seconds) {
         Time.reset();
         while (Time.milliseconds()  < seconds * 1000) {
             // doesnt need anything
-        } // end of while loop
-     } // end of public void Wait
-} // end of public class
+        }
+    }
+}
+
