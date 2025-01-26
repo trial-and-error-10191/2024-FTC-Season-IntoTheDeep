@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -28,11 +26,11 @@ public class ArmMechanism {
         this.telemetry = telemetry;
 
         extendMotor = hwMap.get(DcMotor.class, "extend_motor");
-        extendMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        extendMotor.setDirection(DcMotor.Direction.FORWARD);
         extendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         rotateMotor = hwMap.get(DcMotor.class, "rotate_motor");
-        rotateMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        rotateMotor.setDirection(DcMotor.Direction.FORWARD);
         rotateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         extensionLowerLimitSwitch = hwMap.get(TouchSensor.class, "extension_limit_switch");
@@ -53,7 +51,7 @@ public class ArmMechanism {
         if (raisingLift) { // If going up, move lift up while guard against overextending
             if (extendMotor.getCurrentPosition() >= extensionMaxEncoderCount) {
                 extendMotor.setPower(0.0);
-                //extendMotor.setTargetPosition(extendMotor.getCurrentPosition());
+                extendMotor.setTargetPosition(extensionMaxEncoderCount);
                 extendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             } else {
                 int targetPosition = extendMotor.getCurrentPosition() + EXTENSION_INCREMENT;
@@ -71,9 +69,6 @@ public class ArmMechanism {
                 extendMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 extendMotor.setPower(EXTENSION_SPEED);
             }
-        } else if (!extendMotor.isBusy()) { // If we've reached target position, turn off motors
-            extendMotor.setPower(0.0);
-            extendMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -96,17 +91,14 @@ public class ArmMechanism {
         } else if (loweringArm) { // If going down, guard against lowering too far
             if (rotateMotor.getCurrentPosition() >= rotationMaxEncoderCount) {
                 rotateMotor.setPower(0.0);
-                //rotateMotor.setTargetPosition(rotateMotor.getCurrentPosition());
+                rotateMotor.setTargetPosition(rotationMaxEncoderCount);
                 rotateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             } else {
                 int targetPosition = rotateMotor.getCurrentPosition() + ROTATION_INCREMENT;
                 rotateMotor.setTargetPosition(targetPosition);
                 rotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rotateMotor.setPower(EXTENSION_SPEED);
+                rotateMotor.setPower(ROTATION_SPEED);
             }
-        } else if (!rotateMotor.isBusy()) { // If we've reached target position, turn off motors
-            rotateMotor.setPower(0.0);
-            rotateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 }
