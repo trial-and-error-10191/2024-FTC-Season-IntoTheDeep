@@ -29,26 +29,27 @@ public class SampleClaw {
     }
 
     public void clawClamp(boolean open) {
-        if (open && ClawOpen) {
-            ClawOpen = false;
-            servoClamp.setPosition(closePos);
+        if (!lastInput && open) {
+            ClawOpen = !ClawOpen;
+            if (ClawOpen) {
+                servoClamp.setPosition(openPos);
+            } else {
+                servoClamp.setPosition(closePos);
+            }
         }
-        else if (open && !ClawOpen) {                      // Makes the claw open
-            ClawOpen = true;
-            servoClamp.setPosition(openPos);
-        }
+        lastInput = open;
     }
 
-    public void clawClampAuto(boolean clawArmClamp) {        // claw clamping for autonomous
-        if (clawArmClamp) {
-            ClawOpen = true;
-            servoClamp.setPosition(openPos);
-        }
-        else { // Makes the claw close
-            ClawOpen = false;
-            servoClamp.setPosition(closePos);
-        }
-    }
+//    public void clawClampAuto(boolean clawArmClamp) {        // claw clamping for autonomous
+//        if (clawArmClamp) {
+//            ClawOpen = true;
+//            servoClamp.setPosition(openPos);
+//        }
+//        else { // Makes the claw close
+//            ClawOpen = false;
+//            servoClamp.setPosition(closePos);
+//        }
+//    }
 
     public void clawExtend(boolean extend, boolean contracting) {
         if (extend) {                        // Makes the claw extend up?
@@ -66,21 +67,21 @@ public class SampleClaw {
         servoExtend.setPosition(extendPosition);
     }
 
-    public void clawExtendAuto(double clawArmPosition) {    // claw extending for autonomous
-        if (extendPosition < clawArmPosition) {             // Tells claw to rise
-            extendPosition += INCREMENT;
-            if (extendPosition >= MAX_POS) {
-                extendPosition = MAX_POS;
-            }
-        }
-        else if (extendPosition > clawArmPosition) {        // Makes the claw lower
-            extendPosition -= INCREMENT;
-            if (extendPosition <= MIN_POS ) {
-                extendPosition = MIN_POS;
-            }
-        }
-        servoExtend.setPosition(extendPosition);
-    }
+//    public void clawExtendAuto(double clawArmPosition) {    // claw extending for autonomous
+//        if (extendPosition < clawArmPosition) {             // Tells claw to rise
+//            extendPosition += INCREMENT;
+//            if (extendPosition >= MAX_POS) {
+//                extendPosition = MAX_POS;
+//            }
+//        }
+//        else if (extendPosition > clawArmPosition) {        // Makes the claw lower
+//            extendPosition -= INCREMENT;
+//            if (extendPosition <= MIN_POS ) {
+//                extendPosition = MIN_POS;
+//            }
+//        }
+//        servoExtend.setPosition(extendPosition);
+//    }
 
     public void clawRotate(float left, float right) {
         if (left > 0) {                                     // rotates claw to the left
@@ -98,19 +99,19 @@ public class SampleClaw {
         servoRotation.setPosition(rotatePosition);
     }
 
-    public void clawRotateAuto(double clawArmRotate) {      // claw rotation for autonomous
-        if (rotatePosition < clawArmRotate) {               // claw rotation to the left
-            rotatePosition += INCREMENT;
-            if (rotatePosition >= MAX_POS) {
-                rotatePosition = MAX_POS;
-            }
-        }
-        else if (rotatePosition > clawArmRotate) {          // claw rotation to the right
-            rotatePosition -= INCREMENT;
-            if (rotatePosition <= MIN_POS ) {
-                rotatePosition = MIN_POS;
-            }
-        }
-        servoRotation.setPosition(rotatePosition);
-    }
+//    public void clawRotateAuto(double clawArmRotate) {      // claw rotation for autonomous
+//        if (rotatePosition < clawArmRotate) {               // claw rotation to the left
+//            rotatePosition += INCREMENT;
+//            if (rotatePosition >= MAX_POS) {
+//                rotatePosition = MAX_POS;
+//            }
+//        }
+//        else if (rotatePosition > clawArmRotate) {          // claw rotation to the right
+//            rotatePosition -= INCREMENT;
+//            if (rotatePosition <= MIN_POS ) {
+//                rotatePosition = MIN_POS;
+//            }
+//        }
+//        servoRotation.setPosition(rotatePosition);
+//    }
 }

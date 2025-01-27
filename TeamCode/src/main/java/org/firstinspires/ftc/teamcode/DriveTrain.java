@@ -83,9 +83,9 @@ public class DriveTrain {
 
     // This function needs an axial, lateral, and yaw input. It uses this input to drive the drive train motors.
     // The last two variables are for direction switching.
-   public void LiftHandle(int LiftCounts) {
-        CurrentLiftCounts = Math.abs(LiftCounts);
-   }
+//   public void LiftHandle(int LiftCounts) {
+//        CurrentLiftCounts = Math.abs(LiftCounts);
+//   }
 
 
     public void drive(double axial, double lateral, double yaw) {
