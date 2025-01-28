@@ -4,6 +4,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -11,7 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name="Autonomous for Observation to Rung", group="Robot")
+@Autonomous(name="AutoObservationRung", group="Robot")
 //@Disabled
 public class AutoObservationRung extends LinearOpMode {
 
@@ -63,10 +64,10 @@ public class AutoObservationRung extends LinearOpMode {
     static final double     P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable.
 
     public void Orientations() {
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
         Wait(0.1);
     }
     public void flip(String FirstLocation, String SecondLocation) {
@@ -124,7 +125,7 @@ public class AutoObservationRung extends LinearOpMode {
          *
          * To Do:  EDIT these two lines to match YOUR mounting configuration.
          */
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
@@ -158,13 +159,13 @@ public class AutoObservationRung extends LinearOpMode {
         // Set the encoders for closed loop speed control, and reset the heading.
         // BEGIN AUTO CODE //
 
-         driveStraight(TURN_SPEED, 23, 0);
-         Wait(1);
+         driveStraight(TURN_SPEED, 2000000000, 0);
+        // Wait(1);
          // this is where the code for the grabbing mechanism will go
-         driveStraight(TURN_SPEED, -22, 0);
+        // driveStraight(TURN_SPEED, -22, 0);
          // Wait(1);
-         StrafeRobot(TURN_SPEED, 46, 0);
-         Wait(1);
+        // StrafeRobot(TURN_SPEED, 46, 0);
+        // Wait(1);
 
         //extend arm and drop onto bar
         // Step through each leg of the path,
@@ -505,7 +506,8 @@ public class AutoObservationRung extends LinearOpMode {
 
         telemetry.addData("Heading- Target : Current", "%5.2f : %5.0f", targetHeading, getHeading());
         telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
-        telemetry.addData("Wheel Speeds L : R", "%5.2f : %5.2f", leftSpeed, rightSpeed);
+        telemetry.addData("Front Wheel Speeds L : R", "%5.2f : %5.2f", leftFrontDrive.getPower(), rightFrontDrive.getPower());
+        telemetry.addData("Back Wheel Speeds L : R", "%5.2f : %5.2f", rightBackDrive.getPower(), leftBackDrive.getPower());
         telemetry.update();
 
     } // end of private void sendTelemetry
