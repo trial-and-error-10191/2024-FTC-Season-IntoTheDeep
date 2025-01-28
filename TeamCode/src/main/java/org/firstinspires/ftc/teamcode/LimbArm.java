@@ -80,11 +80,12 @@ public class LimbArm {
 //    }
 
     public void armRotate(float turn) {
-        if (limbExtend.getCurrentPosition() > extensionLimit) {
-            targetPosition = extensionLimit;
-            limbExtend.setTargetPosition(targetPosition);
-        }
-        if (turn != 0) {
+//        if (limbExtend.getCurrentPosition() > extensionLimit) {
+//            targetPosition = extensionLimit;
+//            limbExtend.setTargetPosition(targetPosition);
+//        }
+        //if (turn != 0) {
+        if (Math.abs(turn) >= 0.05f) {
             rotatePos = limbRotate.getCurrentPosition() + (int) (turn * ROTATION_RATE);
         }
         if (rotatePos < maxRotatePos) {
