@@ -58,8 +58,10 @@ public class Teleop_DriveByEncoder extends LinearOpMode {
 //        } else if (loweringLift) { // If going down, guard against retracting too far
 //            targetPosition = motor.getCurrentPosition() - 10;
 //        }
-        targetPosition = motor.getCurrentPosition() + (int)(liftSpeed * 40);
-
+        if (Math.abs(liftSpeed) > 0.05f) {
+            targetPosition = motor.getCurrentPosition() + (int) (liftSpeed * 40);
+        }
+        
         motor.setTargetPosition(targetPosition);
     }
 }
