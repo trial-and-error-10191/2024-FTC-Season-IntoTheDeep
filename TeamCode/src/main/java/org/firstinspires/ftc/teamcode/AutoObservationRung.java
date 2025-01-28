@@ -256,29 +256,23 @@ public class AutoObservationRung extends LinearOpMode {
         } // end of if statement
     } // end of public void driveStraight
     public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
-
         Orientations();
-
         if (distance > 0) {
             flip("L", "B");
             flip("R", "F");
-        } // end of if statement
-
-        else {
+        } else {
             flip("L", "F");
             flip("R", "B");
-        } // end of else statement
+        }
 
         telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
-
         if (opModeIsActive()) {
             leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
             // Determine new target position, and pass to motor controller
-
+            // Determine new target position, and pass to motor controller
             int moveCounts = (int)(Math.abs(distance) * COUNTS_PER_INCH);
             leftFrontTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
             leftBackTarget = leftBackDrive.getCurrentPosition() + moveCounts;
@@ -287,7 +281,6 @@ public class AutoObservationRung extends LinearOpMode {
 
             // Set Target FIRST, then turn on RUN_TO_POSITION
             // If Strafing then reverse motor directions
-
             leftFrontDrive.setTargetPosition(leftFrontTarget);
             rightFrontDrive.setTargetPosition(rightFrontTarget);
             leftBackDrive.setTargetPosition(leftBackTarget);
@@ -304,21 +297,22 @@ public class AutoObservationRung extends LinearOpMode {
             moveRobot(maxDriveSpeed, 0);
 
             // keep looping while we are still active, and BOTH motors are running.
-            while (opModeIsActive() && (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+            while (opModeIsActive() &&
+                    (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
 
                 // Determine required steering to keep on heading
                 turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
 
-//            // if driving in reverse, the motor correction also needs to be reversed
-//            if (distance < 0)
+                // if driving in reverse, the motor correction also needs to be reversed
+//            if (distance < 0) {
 //                turnSpeed *= -1.0;
-
+//            }
                 // Apply the turning correction to the current driving speed.
-                moveRobot(driveSpeed, turnSpeed);
+                RotateRoboto(driveSpeed, turnSpeed, distance < 0);
 
                 // Display drive status for the driver.
                 // sendTelemetry(true);
-            } // end of while loop
+            }
             telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
             telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
             telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
@@ -326,7 +320,6 @@ public class AutoObservationRung extends LinearOpMode {
             telemetry.update();
 
             // Stop all motion & Turn off RUN_TO_POSITION
-
             moveRobot(0, 0);
             leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -334,7 +327,7 @@ public class AutoObservationRung extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             Orientations();
             turnToHeading(maxDriveSpeed,heading);
-        } // end of if statement
+        }
 
     } // end of public void StrafeRobot
 
@@ -464,6 +457,32 @@ public class AutoObservationRung extends LinearOpMode {
         leftBackDrive.setPower(leftSpeed);
         rightBackDrive.setPower(rightSpeed);
     } // end of public void moveRobot
+
+    public void RotateRoboto(double drive, double turn, Boolean isLeft ) {
+//        driveSpeed = drive;     // save this value as a class member so it can be used by telemetry.
+//        turnSpeed  = turn;      // save this value as a class member so it can be used by telemetry.
+//        leftSpeed  = drive - turn;
+//        rightSpeed = drive + turn;
+        leftFrontDrive.setPower(drive + ((isLeft ? 1 : -1) * turn));
+        rightFrontDrive.setPower(drive + ((isLeft ? 1 : -1) * turn));
+        leftBackDrive.setPower(drive + ((isLeft ? -1 : 1) * turn));
+        rightBackDrive.setPower(drive + ((isLeft ? -1 : 1) * turn));
+
+        // Scale speeds down if either one exceeds +/- 1.0;
+//        double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+//        if (max > 1.0)
+//        {
+//            leftSpeed /= max;
+//            rightSpeed /= max;
+//        }
+
+
+
+//        leftFrontDrive.setPower((isLeft ? -1 : 1) * leftSpeed);
+//        rightFrontDrive.setPower((isLeft ? 1 : -1) * rightSpeed);
+//        leftBackDrive.setPower((isLeft ? 1 : -1) * leftSpeed);
+//        rightBackDrive.setPower((isLeft ? -1 : 1) * rightSpeed);
+    }
 
     /**
      *  Display the various control parameters while driving
