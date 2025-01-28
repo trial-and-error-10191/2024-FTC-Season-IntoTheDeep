@@ -84,7 +84,9 @@ public class LimbArm {
             targetPosition = extensionLimit;
             limbExtend.setTargetPosition(targetPosition);
         }
-        rotatePos = limbRotate.getCurrentPosition() + (int)(turn * ROTATION_RATE);
+        if (turn != 0) {
+            rotatePos = limbRotate.getCurrentPosition() + (int) (turn * ROTATION_RATE);
+        }
         if (rotatePos < maxRotatePos) {
             rotatePos = maxRotatePos;
         } else if (turn > 0 && !limitRotate.getState()) {
