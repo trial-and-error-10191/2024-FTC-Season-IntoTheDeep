@@ -114,4 +114,23 @@ public class SampleClaw {
 //        }
 //        servoRotation.setPosition(rotatePosition);
 //    }
+
+   public void OpenClaw() {
+// opens the claw
+        servoClamp.setPosition(openPos);
+    }
+  public void CloseClaw() {
+// closes the claw
+        servoClamp.setPosition(closePos);
+    }
+
+   public void RotateClaw(double Posistion_Claw) {
+// rotates the claw to a given posistion
+        servoRotation.setPosition(Posistion_Claw);
+    }
+
+   public void ExtendClaw(double Posistion_Extend) {
+// rotates the claw in a different axis
+        servoExtend.setPosition(Posistion_Extend);
+    }
 }
