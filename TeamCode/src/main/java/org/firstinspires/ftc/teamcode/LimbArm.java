@@ -96,4 +96,20 @@ public class LimbArm {
         }
         limbRotate.setPower(rotatePower);
     }
+// work on at home
+//    ExtendAutoArm(int Counts) {
+//        if (Counts < 0) {
+//            limbExtend.setTargetPosition(0);
+//        } else (Counts > maxExtendPos) {
+//            limbExtend.setTargetPosition(maxExtendPos);
+//        } else {
+//            limbExtend.setTargetPosition(Counts);
+//        }
+//        limbExtend.setPower(EXTEND_POWER);
+//        limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        boolean isUp = ((Counts - limbExtend.getCurrentPosistion()) > 0)
+//        while (limbExtend.isBusy()) {
+//            spoolServo.setPower(isUp ? 1 : -1)
+//        }
+//    }
 }
