@@ -11,13 +11,13 @@ public class LimbArm {
     CRServo spoolServo;                         // Servo that hold wires for lift
     private final double EXTEND_POWER = 0.5;                      // Motor power for lift extension
     double rotatePower = 0;                     // Motor power for lift rotation
-    int extensionLimit = 0;                     // Limit for extension
+    int extensionLimit = 3780;                     // Limit for extension
     final int maxExtendPos = 3780;             // Encoder counter max for lift extension
     int maxRotatePos = -2356;                   // Encoder counter for lift rotation
     int targetPosition = 0;
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
-    private final int EXTENSION_RATE = 30;
+    private final int EXTENSION_RATE = 160;
 
     public LimbArm(HardwareMap hwMap) {
         limbExtend = hwMap.get(DcMotor.class, "limbExtend");
@@ -37,37 +37,40 @@ public class LimbArm {
     }
 
     public void RunMotor(float extend) {
-        extendLimit();
+        float servoExtend = extend;
+        //extendLimit();
         if (extend != 0) {
             targetPosition = limbExtend.getCurrentPosition() + (int) (extend * EXTENSION_RATE);
         }
         if (targetPosition > extensionLimit) { // If going up, guard against overextending
             targetPosition = extensionLimit;
+            servoExtend = 0;
         } else if (extend < 0 && !limitExtend.getState()) { // If going down, guard against retracting too far
             limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             targetPosition = limbExtend.getCurrentPosition();
+            servoExtend = 0;
             limbExtend.setTargetPosition(targetPosition);
             limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         limbExtend.setTargetPosition(targetPosition);
-        spoolServo.setPower(extend);
+        spoolServo.setPower(servoExtend * 0.85);
     }
 
-    public void extendLimit() {
-        int rotatePos = limbRotate.getCurrentPosition();
-        if (rotatePos <= 0 && rotatePos > -1099) {                  // This one reaches to the corner of our reach
-            extensionLimit = maxExtendPos;
-        }
-        else if (rotatePos <= -1099 && rotatePos > -1600) {        // This one rises up slightly
-            extensionLimit = 2472;
-        }
-        else if (rotatePos <= -1600 && rotatePos > -1940) {        // This one goes straight forward
-            extensionLimit = 2100;
-        }
-        else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This one touches the ground
-            extensionLimit = 2229;
-        }
-    }
+//    public void extendLimit() {
+//        int rotatePos = limbRotate.getCurrentPosition();
+//        if (rotatePos <= 0 && rotatePos > -1099) {                  // This one reaches to the corner of our reach
+//            extensionLimit = maxExtendPos;
+//        }
+//        else if (rotatePos <= -1099 && rotatePos > -1600) {        // This one rises up slightly
+//            extensionLimit = 2472;
+//        }
+//        else if (rotatePos <= -1600 && rotatePos > -1940) {        // This one goes straight forward
+//            extensionLimit = 2100;
+//        }
+//        else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This one touches the ground
+//            extensionLimit = 2229;
+//        }
+//    }
 
     public void armRotate(float turn) {
         if (limbExtend.getCurrentPosition() > extensionLimit) {
