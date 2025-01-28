@@ -28,15 +28,14 @@
  */
 
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
@@ -88,9 +87,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="BlueNet", group="Robot")
+@Autonomous(name="Robot: autoNearSpecBlue", group="Robot")
 //@Disabled
-public class autoNearNetBlue extends LinearOpMode {
+public class autoNearSpecBlue extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftFrontDrive   = null;
@@ -191,12 +190,9 @@ public class autoNearNetBlue extends LinearOpMode {
         imu.resetYaw();
 
         StrafeRobot(DRIVE_SPEED, 5);
-        driveStraight(DRIVE_SPEED, 32, 0);
-        driveStraight(DRIVE_SPEED, -28, 0);
-        turnToHeading(TURN_SPEED, -90);
-        driveStraight(DRIVE_SPEED, 55, -90);
-        turnToHeading(TURN_SPEED, 180);
-        driveStraight(DRIVE_SPEED, 30, 90);
+        driveStraight(DRIVE_SPEED, 85, 0);
+        driveStraight(DRIVE_SPEED, -115, 0);
+        StrafeRobot(DRIVE_SPEED, -7);
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
