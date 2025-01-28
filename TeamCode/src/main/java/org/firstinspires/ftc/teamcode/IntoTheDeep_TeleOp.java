@@ -1,8 +1,6 @@
    package org.firstinspires.ftc.teamcode;
-   import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
    import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
    import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-   import com.qualcomm.robotcore.util.ElapsedTime;
 
 // This file is the main TeleOp file.
 
@@ -33,11 +31,18 @@
                // Makes the claw rotate
                robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger);
                // Makes the limb arm extend/contract
-//               robot.limbArm.armExtend(-gamepad2.left_stick_y);
-//               // Makes the limb arm rotate
-//               robot.limbArm.armRotate(gamepad2.right_stick_x);
+               if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
+                   gamepad2.left_stick_y = 0;
+               }
+               robot.limbArm.RunMotor(-gamepad2.left_stick_y);
 
-//               // Provides telemetry for all motors, servos, and sensors.
+               // Makes the limb arm rotate
+               if (gamepad2.right_stick_x < 0.05 && gamepad2.right_stick_x > -0.05) { // Makes sure there's no drifting
+                   gamepad2.right_stick_x = 0;
+               }
+               robot.limbArm.armRotate(gamepad2.right_stick_x);
+
+               // Provides telemetry for all motors, servos, and sensors.
 //               telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",
 //                       robot.driveTrain.leftFrontDrive.getPower(),
 //                       robot.driveTrain.rightFrontDrive.getPower());
@@ -56,7 +61,11 @@
 //                       robot.limbArm.limbExtend.getCurrentPosition());
 //               telemetry.addData("Rotating encoder (Rotate)", "%5d",
 //                       robot.limbArm.limbRotate.getCurrentPosition());
-//               telemetry.update();
+               telemetry.addData("Extend Encoder Count: d%", robot.limbArm.limbExtend.getCurrentPosition());
+               telemetry.addData("Extend Target: d%", robot.limbArm.limbExtend.getTargetPosition());
+               telemetry.addData("", "");
+               telemetry.addData("Rotation Encoder Count: ", "%d", robot.limbArm.limbRotate.getCurrentPosition());
+               telemetry.update();
            }
        }
    }
