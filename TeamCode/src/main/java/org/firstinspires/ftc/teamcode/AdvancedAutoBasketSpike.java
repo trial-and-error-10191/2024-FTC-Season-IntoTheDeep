@@ -160,7 +160,7 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
             // BEGIN AUTO CODE //
 
             driveStraight(TURN_SPEED, 19, 0);
-            // Wait(1);
+            Wait(1);
             // this is where the code for the grabbing mechanism will go
             driveStraight(TURN_SPEED, -10, 0);
             // Wait(1);

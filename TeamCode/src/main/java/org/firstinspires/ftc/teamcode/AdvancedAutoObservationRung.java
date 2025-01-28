@@ -190,7 +190,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
             driveStraight(TURN_SPEED, -22, 0);
            // Wait(1);
             StrafeRobot(TURN_SPEED, 29, 0);
-
+            Wait(1);
 
 
             // 0 for heading is whatever the robot's original position is. 90 goes to the left of 0, and negative 90 goes to the right of the 0.

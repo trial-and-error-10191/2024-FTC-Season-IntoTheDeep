@@ -162,7 +162,7 @@ public class AutoObservationRung extends LinearOpMode {
          Wait(1);
          // this is where the code for the grabbing mechanism will go
          driveStraight(TURN_SPEED, -22, 0);
-         Wait(1);
+         // Wait(1);
          StrafeRobot(TURN_SPEED, 46, 0);
          Wait(1);
 
