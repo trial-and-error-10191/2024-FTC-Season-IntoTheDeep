@@ -49,13 +49,16 @@ public class Teleop_DriveByEncoder extends LinearOpMode {
 //        boolean raisingLift = gamepad.dpad_up;
 //        boolean loweringLift = gamepad.dpad_down;
         float liftSpeed = -gamepad1.left_stick_y; // from gamepad, up -> negative, down -> positive.
+        if (-0.05f <= liftSpeed && liftSpeed <= 0.05f) {
+            liftSpeed = 0.0f;
+        }
 
 //        if (raisingLift) { // If going up, move lift up while guard against overextending
 //            targetPosition = motor.getCurrentPosition() + 10;
 //        } else if (loweringLift) { // If going down, guard against retracting too far
 //            targetPosition = motor.getCurrentPosition() - 10;
 //        }
-        targetPosition = motor.getTargetPosition() + (int)(liftSpeed * 20);
+        targetPosition = motor.getCurrentPosition() + (int)(liftSpeed * 40);
 
         motor.setTargetPosition(targetPosition);
     }
