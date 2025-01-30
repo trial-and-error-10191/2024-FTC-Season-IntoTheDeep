@@ -21,7 +21,6 @@ public class Teleop_DriveByEncoder extends LinearOpMode {
         motor.setTargetPosition(motor.getCurrentPosition());
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setPower(0.5);
-        //motor.setVelocity(10); This isn't working in this setup. not sure why. targetPosition's value is changing much slower
         targetPosition = motor.getCurrentPosition();
 
         telemetry.addData("Status", "Waiting for Start");
@@ -44,24 +43,14 @@ public class Teleop_DriveByEncoder extends LinearOpMode {
     }
 
     private void RunMotor(Gamepad gamepad) {
-        // dpad up/down to extend/retract lift
-        // Determine where driver is telling motor to go
-//        boolean raisingLift = gamepad.dpad_up;
-//        boolean loweringLift = gamepad.dpad_down;
         float liftSpeed = -gamepad1.left_stick_y; // from gamepad, up -> negative, down -> positive.
         if (-0.05f <= liftSpeed && liftSpeed <= 0.05f) {
             liftSpeed = 0.0f;
         }
 
-//        if (raisingLift) { // If going up, move lift up while guard against overextending
-//            targetPosition = motor.getCurrentPosition() + 10;
-//        } else if (loweringLift) { // If going down, guard against retracting too far
-//            targetPosition = motor.getCurrentPosition() - 10;
-//        }
         if (Math.abs(liftSpeed) > 0.05f) {
             targetPosition = motor.getCurrentPosition() + (int) (liftSpeed * 40);
         }
-        
         motor.setTargetPosition(targetPosition);
     }
 }
