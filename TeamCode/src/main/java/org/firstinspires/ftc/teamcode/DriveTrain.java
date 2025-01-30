@@ -54,7 +54,7 @@ public class DriveTrain {
         rightBackDrive = hwMap.get(DcMotor.class, "rightBack");
 
         // Initializes motor directions:
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -130,6 +130,8 @@ public class DriveTrain {
         leftBackPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
         rightFrontPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
         rightBackPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
+
+        leftFrontPower *= 0.7; // this motor is 312 rpm, others are 223. 223/312 ~ 0.7
 
         // The next four lines gives the calculated power to each motor.
         leftFrontDrive.setPower(leftFrontPower);
