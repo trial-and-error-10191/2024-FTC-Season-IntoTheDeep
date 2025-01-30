@@ -88,7 +88,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  */
 
 @Autonomous(name="Robot: autoNearSpecBlue", group="Robot")
-//@Disabled
+@Disabled
 public class autoNearSpecBlue extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -188,6 +188,8 @@ public class autoNearSpecBlue extends LinearOpMode {
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
+
+
 
         StrafeRobot(DRIVE_SPEED, 5);
         driveStraight(DRIVE_SPEED, 85, 0);
