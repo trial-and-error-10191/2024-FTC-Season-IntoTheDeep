@@ -23,10 +23,11 @@ public class LimbArm {
         limbExtend = hwMap.get(DcMotor.class, "limbExtend");
         limbExtend.setDirection(DcMotor.Direction.REVERSE);
         limbExtend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        targetPosition = limbExtend.getCurrentPosition();
-        limbExtend.setTargetPosition(targetPosition);
-        limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        limbExtend.setPower(EXTEND_POWER);
+//        targetPosition = limbExtend.getCurrentPosition();
+//        limbExtend.setTargetPosition(targetPosition);
+//        limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        limbExtend.setPower(EXTEND_POWER);
+        limbExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         limbRotate = hwMap.get(DcMotor.class, "limbRotate");
 
@@ -36,23 +37,42 @@ public class LimbArm {
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
     }
 
+//    public void RunMotor(float extend) {
+//        float servoExtend = extend;
+//        //extendLimit();
+//        if (extend != 0) {
+//            targetPosition = limbExtend.getCurrentPosition() + (int) (extend * EXTENSION_RATE);
+//        }
+//        if (targetPosition > extensionLimit) { // If going up, guard against overextending
+//            targetPosition = extensionLimit;
+//            servoExtend = 0;
+//        } else if (extend < 0 && !limitExtend.getState()) { // If going down, guard against retracting too far
+//            limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//            targetPosition = limbExtend.getCurrentPosition();
+//            servoExtend = 0;
+//            limbExtend.setTargetPosition(targetPosition);
+//            limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        }
+//        limbExtend.setTargetPosition(targetPosition);
+//        spoolServo.setPower(servoExtend * 0.85);
+//    }
+//
     public void RunMotor(float extend) {
         float servoExtend = extend;
         //extendLimit();
-        if (extend != 0) {
-            targetPosition = limbExtend.getCurrentPosition() + (int) (extend * EXTENSION_RATE);
-        }
+//        if (extend != 0) {
+//            targetPosition = limbExtend.getCurrentPosition() + (int) (extend * EXTENSION_RATE);
+//        }
+        float liftPower = extend;
         if (targetPosition > extensionLimit) { // If going up, guard against overextending
-            targetPosition = extensionLimit;
-            servoExtend = 0;
+            liftPower = 0.0f;
+            servoExtend = 0.0f;
         } else if (extend < 0 && !limitExtend.getState()) { // If going down, guard against retracting too far
-            limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            targetPosition = limbExtend.getCurrentPosition();
-            servoExtend = 0;
-            limbExtend.setTargetPosition(targetPosition);
-            limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            liftPower = 0.0f;
+            servoExtend = 0.0f;
         }
-        limbExtend.setTargetPosition(targetPosition);
+//        limbExtend.setTargetPosition(targetPosition);
+        limbExtend.setPower(liftPower);
         spoolServo.setPower(servoExtend * 0.85);
     }
 
@@ -73,10 +93,10 @@ public class LimbArm {
 //    }
 
     public void armRotate(float turn) {
-        if (limbExtend.getCurrentPosition() > extensionLimit) {
-            targetPosition = extensionLimit;
-            limbExtend.setTargetPosition(targetPosition);
-        }
+//        if (limbExtend.getCurrentPosition() > extensionLimit) {
+//            targetPosition = extensionLimit;
+//            limbExtend.setTargetPosition(targetPosition);
+//        }
         if (turn < 0) {                           // Makes the arm rotate down?
             rotatePower = turn;
             if (limbRotate.getCurrentPosition() <= maxRotatePos) {

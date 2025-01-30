@@ -23,9 +23,9 @@
                robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
                // Makes the claw open/close
                robot.sampleClaw.clawClamp(gamepad2.a);
-//               // Makes the claw extend/contract
+               // Makes the claw extend/contract
                robot.sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper);
-//               // Makes the claw rotate
+               // Makes the claw rotate
                robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger);
 
                // Makes the limb arm extend/contract
@@ -60,7 +60,7 @@
 //               telemetry.addData("Rotating encoder (Rotate)", "%5d",
 //                       robot.limbArm.limbRotate.getCurrentPosition());
                telemetry.addData("Extend Encoder Count: d%", robot.limbArm.limbExtend.getCurrentPosition());
-               telemetry.addData("Extend Target: d%", robot.limbArm.limbExtend.getTargetPosition());
+               //telemetry.addData("Extend Target: d%", robot.limbArm.limbExtend.getTargetPosition());
                telemetry.addData("", "");
                telemetry.addData("Rotation Encoder Count: ", "%d", robot.limbArm.limbRotate.getCurrentPosition());
                telemetry.update();
