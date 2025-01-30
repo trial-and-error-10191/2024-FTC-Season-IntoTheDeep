@@ -9,12 +9,12 @@ public class LimbArm {
 
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
     CRServo spoolServo;                         // Servo that hold wires for lift
-    private final double EXTEND_POWER = 0.5;                      // Motor power for lift extension
+    private double EXTEND_POWER = 0.5;          // Motor power for lift extension
     double rotatePower = 0;                     // Motor power for lift rotation
-    int extensionLimit = 3780;                     // Limit for extension
-    final int maxExtendPos = 3780;             // Encoder counter max for lift extension
+    int extensionLimit = 3780;                  // Limit for extension
+    final int maxExtendPos = 3780;              // Encoder counter max for lift extension
     int maxRotatePos = -2356;                   // Encoder counter for lift rotation
-    int targetPosition = 0;
+    int targetPosition = 0;                     // The desired position for the lift
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
     private final int EXTENSION_RATE = 160;
@@ -36,7 +36,7 @@ public class LimbArm {
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
     }
 
-    public void RunMotor(float extend) {
+    public void RunMotor(float extend, boolean slowSpeed) {
         float servoExtend = extend;
         //extendLimit();
         if (extend != 0) {
@@ -52,8 +52,19 @@ public class LimbArm {
             limbExtend.setTargetPosition(targetPosition);
             limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
+        else if (slowSpeed) {
+            EXTEND_POWER = 0.1;
+        }
         limbExtend.setTargetPosition(targetPosition);
         spoolServo.setPower(servoExtend * 0.85);
+    }
+    public void spoolCorrection(boolean expel, boolean reverse) {
+        if (expel) {
+            spoolServo.setPower(0.2);
+        }
+        else if (reverse) {
+            spoolServo.setPower(-0.2);
+        }
     }
 
 //    public void extendLimit() {
@@ -95,5 +106,22 @@ public class LimbArm {
             rotatePower = 0;
         }
         limbRotate.setPower(rotatePower);
+    }
+    public void goUpToHighNet(boolean goUp) {
+        if (goUp) {
+            limbRotate.setTargetPosition(0);
+            limbExtend.setTargetPosition(extensionLimit);
+        }
+    }
+    public void turnToSubmersible(boolean getSample) {
+        if (getSample) {
+            limbRotate.setTargetPosition(-1170);
+        }
+    }
+    public void goUpToHighBar(boolean specimenPlace) {
+        if (specimenPlace) {
+            limbRotate.setTargetPosition(0);
+            limbExtend.setTargetPosition(3000);
+        }
     }
 }

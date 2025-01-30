@@ -28,17 +28,24 @@
 //               // Makes the claw rotate
 //               robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger);
 
-               // Makes the limb arm extend/contract
+               // Makes the limb arm extend/contract, and gives the option to have precise movement
                if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
                    gamepad2.left_stick_y = 0;
                }
-               robot.limbArm.RunMotor(-gamepad2.left_stick_y);
-
+               robot.limbArm.RunMotor(-gamepad2.left_stick_y, gamepad2.b);
+               // Makes the arm rise to the high net for samples
+               robot.limbArm.goUpToHighNet(gamepad2.y);
+               // Makes the arm prepped to grab a sample from the submersible
+               robot.limbArm.turnToSubmersible(gamepad2.x);
+               // Makes the arm rise to the high bar for specimens
+               robot.limbArm.goUpToHighBar(gamepad1.y);
                // Makes the limb arm rotate
                if (gamepad2.right_stick_x < 0.05 && gamepad2.right_stick_x > -0.05) { // Makes sure there's no drifting
                    gamepad2.right_stick_x = 0;
                }
                robot.limbArm.armRotate(gamepad2.right_stick_x);
+               // Spool correction stuff
+               robot.limbArm.spoolCorrection(gamepad2.dpad_up, gamepad2.dpad_down);
 
                // Provides telemetry for all motors, servos, and sensors.
 //               telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",
