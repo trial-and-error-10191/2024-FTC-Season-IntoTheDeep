@@ -66,8 +66,8 @@ public class AutoBasketSpike extends LinearOpMode {
         public void Orientations() {
             leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
             leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-            rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-            rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+            rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+            rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
             Wait(0.1);
         }
         public void flip(String FirstLocation, String SecondLocation) {
@@ -125,7 +125,7 @@ public class AutoBasketSpike extends LinearOpMode {
              *
              * To Do:  EDIT these two lines to match YOUR mounting configuration.
              */
-            RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+            RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
             RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
             RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
@@ -168,7 +168,7 @@ public class AutoBasketSpike extends LinearOpMode {
             // Wait(1);
             turnToHeading(TURN_SPEED, -88.0);
             // Wait(1);
-            driveStraight(TURN_SPEED, 44, -88.0);
+            driveStraight(TURN_SPEED, 58, -88.0);
             // Wait(1);
             turnToHeading(TURN_SPEED, 180.0);
             // Wait(1);
