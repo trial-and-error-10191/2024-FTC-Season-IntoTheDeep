@@ -82,21 +82,19 @@ public class LimbArm {
             if (limbRotate.getCurrentPosition() <= maxRotatePos) {
                 rotatePower = 0;
             }
-        }
-        else if (turn > 0) {                      // Makes the arm rotate up?
+        } else if (turn > 0) {                      // Makes the arm rotate up?
             rotatePower = turn;
             if (!limitRotate.getState()) {      // Stop motor and reset encoder if limit switch is triggered
                 limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rotatePower = 0;
             }
-        }
-        else {
+        } else {
             rotatePower = 0;
         }
         limbRotate.setPower(rotatePower);
     }
-// work on at home
+
     public void ExtendAutoArm(int Counts) {
         if (Counts < 0) {
             limbExtend.setTargetPosition(0);
@@ -111,5 +109,10 @@ public class LimbArm {
         while (limbExtend.isBusy()) {
             spoolServo.setPower(isUp ? 1 : -1);
         }
+    }
+
+    public void auto_armRotate(double Speed, int Counts) {
+        limbRotate.setTargetPosition(Counts);
+        limbRotate.setPower(Speed);
     }
 }
