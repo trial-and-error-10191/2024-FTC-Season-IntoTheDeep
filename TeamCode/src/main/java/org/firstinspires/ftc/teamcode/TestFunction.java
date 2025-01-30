@@ -16,15 +16,14 @@ public class TestFunction extends LinearOpMode {
     @Override
     public void runOpMode() {
         SampleClaw Claw = new SampleClaw(hardwareMap);
+        LimbArm Limb = new LimbArm(hardwareMap);
         waitForStart();
-Claw.OpenClaw();
-Wait(1);
-Claw.CloseClaw();
-Wait(1);
-Claw.RotateClaw(0.5);
-Wait(1);
-Claw.ExtendClaw( 0.5);
-Wait(1);
+Limb.ExtendAutoArm(500);
+Wait(5);
+Limb.ExtendAutoArm(100);
+Wait(5);
+//Limb.auto_armRotate(0.5, 300);
+//Wait(5);
 
     }
 }

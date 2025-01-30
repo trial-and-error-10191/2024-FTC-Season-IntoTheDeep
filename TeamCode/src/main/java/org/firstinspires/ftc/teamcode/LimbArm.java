@@ -82,34 +82,40 @@ public class LimbArm {
             if (limbRotate.getCurrentPosition() <= maxRotatePos) {
                 rotatePower = 0;
             }
-        }
-        else if (turn > 0) {                      // Makes the arm rotate up?
+        } else if (turn > 0) {                      // Makes the arm rotate up?
             rotatePower = turn;
             if (!limitRotate.getState()) {      // Stop motor and reset encoder if limit switch is triggered
                 limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 rotatePower = 0;
             }
-        }
-        else {
+        } else {
             rotatePower = 0;
         }
         limbRotate.setPower(rotatePower);
     }
-// work on at home
-//    ExtendAutoArm(int Counts) {
-//        if (Counts < 0) {
-//            limbExtend.setTargetPosition(0);
-//        } else (Counts > maxExtendPos) {
-//            limbExtend.setTargetPosition(maxExtendPos);
-//        } else {
-//            limbExtend.setTargetPosition(Counts);
-//        }
-//        limbExtend.setPower(EXTEND_POWER);
-//        limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        boolean isUp = ((Counts - limbExtend.getCurrentPosistion()) > 0)
-//        while (limbExtend.isBusy()) {
-//            spoolServo.setPower(isUp ? 1 : -1)
-//        }
-//    }
+
+    public void ExtendAutoArm(int Counts) {
+        if (Counts < 0) {
+            limbExtend.setTargetPosition(0);
+        } else if (Counts > maxExtendPos) {
+            limbExtend.setTargetPosition(maxExtendPos);
+        } else {
+            limbExtend.setTargetPosition(Counts);
+        }
+        limbExtend.setPower(EXTEND_POWER);
+        limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        boolean isUp = ((Counts - limbExtend.getCurrentPosition()) > 0);
+        while (limbExtend.isBusy()) {
+            spoolServo.setPower(isUp ? 1 : -1);
+        }
+        spoolServo.setPower(0);
+    }
+
+    public void auto_armRotate(double Speed, int Counts) {
+        limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        limbRotate.setTargetPosition(Counts);
+        limbRotate.setPower(Speed);
+    }
 }
