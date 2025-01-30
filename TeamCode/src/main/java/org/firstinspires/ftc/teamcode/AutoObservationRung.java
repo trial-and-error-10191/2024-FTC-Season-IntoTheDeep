@@ -159,7 +159,7 @@ public class AutoObservationRung extends LinearOpMode {
         // Set the encoders for closed loop speed control, and reset the heading.
         // BEGIN AUTO CODE //
 
-         driveStraight(TURN_SPEED, 2000000000, 0);
+         driveStraight(TURN_SPEED, 23, 0);
         // Wait(1);
          // this is where the code for the grabbing mechanism will go
         // driveStraight(TURN_SPEED, -22, 0);
