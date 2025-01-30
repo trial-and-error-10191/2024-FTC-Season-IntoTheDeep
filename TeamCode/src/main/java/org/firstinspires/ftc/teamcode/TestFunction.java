@@ -16,7 +16,7 @@ public class TestFunction extends LinearOpMode {
     @Override
     public void runOpMode() {
         SampleClaw Claw = new SampleClaw(hardwareMap);
-        LimbArm Limb = new LimbArm(hardwareMap);
+        LimbArm Limb = new LimbArm(hardwareMap, telemetry);
         waitForStart();
 Limb.ExtendAutoArm(500);
 Wait(5);

@@ -5,8 +5,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class LimbArm {
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+public class LimbArm {
+    Telemetry telemetry;
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
     CRServo spoolServo;                         // Servo that hold wires for lift
     private final double EXTEND_POWER = 0.5;                      // Motor power for lift extension
@@ -19,7 +21,7 @@ public class LimbArm {
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
     private final int EXTENSION_RATE = 160;
 
-    public LimbArm(HardwareMap hwMap) {
+    public LimbArm(HardwareMap hwMap, Telemetry telemetry) {
         limbExtend = hwMap.get(DcMotor.class, "limbExtend");
         limbExtend.setDirection(DcMotor.Direction.REVERSE);
         limbExtend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -31,9 +33,9 @@ public class LimbArm {
         limbRotate = hwMap.get(DcMotor.class, "limbRotate");
 
         spoolServo = hwMap.get(CRServo.class, "spoolServo");
-
         limitExtend = hwMap.get(DigitalChannel.class, "limitExtend");
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
+        this.telemetry = telemetry;
     }
 
     public void RunMotor(float extend) {
@@ -107,7 +109,10 @@ public class LimbArm {
         limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         boolean isUp = ((Counts - limbExtend.getCurrentPosition()) > 0);
         while (limbExtend.isBusy()) {
-            spoolServo.setPower(isUp ? 1 : -1);
+            telemetry.addData("isBusy", spoolServo.getPower() );
+            telemetry.addData("LifeExtension", limbExtend.getCurrentPosition() );
+            telemetry.update();
+            spoolServo.setPower(isUp ? 0.9 : -0.9);
         }
         spoolServo.setPower(0);
     }
