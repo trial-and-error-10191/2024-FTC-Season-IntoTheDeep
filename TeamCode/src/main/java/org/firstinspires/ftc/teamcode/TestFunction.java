@@ -18,9 +18,12 @@ public class TestFunction extends LinearOpMode {
         SampleClaw Claw = new SampleClaw(hardwareMap);
         LimbArm Limb = new LimbArm(hardwareMap);
         waitForStart();
-Limb.ExtendAutoArm(2000);
-Limb.ExtendAutoArm(0);
-Limb.auto_armRotate(0.5, 300);
+Limb.ExtendAutoArm(500);
+Wait(5);
+Limb.ExtendAutoArm(100);
+Wait(5);
+//Limb.auto_armRotate(0.5, 300);
+//Wait(5);
 
     }
 }

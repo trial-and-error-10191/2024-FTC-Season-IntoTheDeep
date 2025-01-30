@@ -112,6 +112,8 @@ public class LimbArm {
     }
 
     public void auto_armRotate(double Speed, int Counts) {
+        limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         limbRotate.setTargetPosition(Counts);
         limbRotate.setPower(Speed);
     }
