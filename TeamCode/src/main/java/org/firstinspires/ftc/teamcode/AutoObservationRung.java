@@ -64,7 +64,7 @@ public class AutoObservationRung extends LinearOpMode {
     static final double     P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable.
 
     public void Orientations() {
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -160,12 +160,12 @@ public class AutoObservationRung extends LinearOpMode {
         // BEGIN AUTO CODE //
 
          driveStraight(TURN_SPEED, 23, 0);
-        // Wait(1);
+         Wait(1);
          // this is where the code for the grabbing mechanism will go
-        // driveStraight(TURN_SPEED, -22, 0);
+         driveStraight(TURN_SPEED, -22, 0);
          // Wait(1);
-        // StrafeRobot(TURN_SPEED, 46, 0);
-        // Wait(1);
+         StrafeRobot(TURN_SPEED, 46, 0);
+         Wait(1);
 
         //extend arm and drop onto bar
         // Step through each leg of the path,

@@ -64,7 +64,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
         static final double     P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable.
 
         public void Orientations() {
-            leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+            leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
             leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
             rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
             rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
