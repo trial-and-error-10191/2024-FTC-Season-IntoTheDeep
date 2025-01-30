@@ -109,6 +109,7 @@ public class LimbArm {
         while (limbExtend.isBusy()) {
             spoolServo.setPower(isUp ? 1 : -1);
         }
+        spoolServo.setPower(0);
     }
 
     public void auto_armRotate(double Speed, int Counts) {
