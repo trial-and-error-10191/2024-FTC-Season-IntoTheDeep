@@ -64,6 +64,14 @@ public class LimbArm {
         limbExtend.setTargetPosition(targetPosition);
         spoolServo.setPower(servoExtend * 0.85);
     }
+    public void spoolCorrection(boolean expel, boolean reverse) {
+        if (expel) {
+            spoolServo.setPower(0.2);
+        }
+        else if (reverse) {
+            spoolServo.setPower(-0.2);
+        }
+    }
 
 //    public void extendLimit() {
 //        int rotatePos = limbRotate.getCurrentPosition();
@@ -126,5 +134,23 @@ public class LimbArm {
         limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         limbRotate.setTargetPosition(Counts);
         limbRotate.setPower(Speed);
+    }
+    public void goUpToHighNet(boolean goUp) {
+        if (goUp) {
+            limbRotate.setTargetPosition(0);
+            limbExtend.setTargetPosition(extensionLimit);
+        }
+    }
+    public void turnToSubmersible(boolean getSample) {
+        if (getSample) {
+            limbExtend.setTargetPosition(500);
+            limbRotate.setTargetPosition(-1170);
+        }
+    }
+    public void goUpToHighBar(boolean specimenPlace) {
+        if (specimenPlace) {
+            limbRotate.setTargetPosition(0);
+            limbExtend.setTargetPosition(3000);
+        }
     }
 }
