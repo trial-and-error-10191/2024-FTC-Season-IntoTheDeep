@@ -9,7 +9,7 @@ public class LimbArm {
 
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
     CRServo spoolServo;                         // Servo that hold wires for lift
-    private double EXTEND_POWER = 0.5;          // Motor power for lift extension
+    private final double EXTEND_POWER = 0.5;          // Motor power for lift extension
     double rotatePower = 0;                     // Motor power for lift rotation
     int extensionLimit = 3780;                  // Limit for extension
     final int maxExtendPos = 3780;              // Encoder counter max for lift extension
@@ -36,7 +36,7 @@ public class LimbArm {
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
     }
 
-    public void RunMotor(float extend, boolean slowSpeed) {
+    public void RunMotor(float extend) {
         float servoExtend = extend;
         //extendLimit();
         if (extend != 0) {
@@ -51,9 +51,6 @@ public class LimbArm {
             servoExtend = 0;
             limbExtend.setTargetPosition(targetPosition);
             limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
-        else if (slowSpeed) {
-            EXTEND_POWER = 0.1;
         }
         limbExtend.setTargetPosition(targetPosition);
         spoolServo.setPower(servoExtend * 0.85);
@@ -115,6 +112,7 @@ public class LimbArm {
     }
     public void turnToSubmersible(boolean getSample) {
         if (getSample) {
+            limbExtend.setTargetPosition(500);
             limbRotate.setTargetPosition(-1170);
         }
     }

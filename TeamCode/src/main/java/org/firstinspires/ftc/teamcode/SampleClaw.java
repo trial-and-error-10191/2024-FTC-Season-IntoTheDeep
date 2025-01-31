@@ -7,7 +7,7 @@ public class SampleClaw {
     boolean ClawOpen = false;
     boolean lastInput = false;
 
-    static final double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    static double INCREMENT   = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final double MAX_POS     =  1.0;     // Maximum rotational position
     static final double MIN_POS     =  0.0;     // Minimum rotational position
     static final double openPos     =  10.0;    // servo position for open claw
@@ -51,7 +51,13 @@ public class SampleClaw {
 //        }
 //    }
 
-    public void clawExtend(boolean extend, boolean contracting) {
+    public void clawExtend(boolean extend, boolean contracting, boolean slow) {
+        if (slow) {
+            INCREMENT = 0.0005;
+        }
+        if (!slow) {
+            INCREMENT = 0.01;
+        }
         if (extend) {                        // Makes the claw extend up?
             extendPosition += INCREMENT;
             if (extendPosition >= MAX_POS) {
@@ -83,7 +89,13 @@ public class SampleClaw {
 //        servoExtend.setPosition(extendPosition);
 //    }
 
-    public void clawRotate(float left, float right) {
+    public void clawRotate(float left, float right, boolean slow) {
+        if (slow) {
+            INCREMENT = 0.0005;
+        }
+        if (!slow) {
+            INCREMENT = 0.01;
+        }
         if (left > 0) {                                     // rotates claw to the left
             rotatePosition += INCREMENT;
             if (rotatePosition >= MAX_POS) {
