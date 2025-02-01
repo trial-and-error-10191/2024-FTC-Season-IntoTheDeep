@@ -164,15 +164,15 @@ public class AutoBasketSpike extends LinearOpMode {
             // this is where the code for the grabbing mechanism will go
             driveStraight(TURN_SPEED, -12, 0);
             // Wait(1);
-            StrafeRobot(TURN_SPEED, 4, 0);
+            StrafeRobot(TURN_SPEED, 6, 0);
             // Wait(1);
             turnToHeading(TURN_SPEED, -88.0);
             // Wait(1);
-            driveStraight(TURN_SPEED, 58, -88.0);
+            driveStraight(TURN_SPEED, 62, -88.0);
             // Wait(1);
             turnToHeading(TURN_SPEED, 180.0);
             // Wait(1);
-            driveStraight(TURN_SPEED, 5, 180.0);
+            driveStraight(TURN_SPEED, 10, 180.0);
             Wait(1);
             // This is where code for raising the arm to get a lvl. 1 ascent
 
@@ -464,7 +464,7 @@ public class AutoBasketSpike extends LinearOpMode {
                 rightSpeed /= max;
             } // end of if statement
 
-            leftFrontDrive.setPower(leftSpeed);
+            leftFrontDrive.setPower(leftSpeed * 0.85);
             rightFrontDrive.setPower(rightSpeed);
             leftBackDrive.setPower(leftSpeed);
             rightBackDrive.setPower(rightSpeed);
