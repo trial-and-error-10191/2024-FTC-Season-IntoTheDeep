@@ -27,7 +27,6 @@ public class SampleClaw {
         servoExtend   = hwMap.get(Servo.class, "claw_Extend");
         servoRotation = hwMap.get(Servo.class, "claw_Rotation");
     }
-
     public void clawClamp(boolean open) {
         if (!lastInput && open) {
             ClawOpen = !ClawOpen;
@@ -39,7 +38,14 @@ public class SampleClaw {
         }
         lastInput = open;
     }
-
+    public void clawClampAuto(boolean open) {
+        if (open) {
+            servoClamp.setPosition(openPos);
+        }
+        else {
+            servoClamp.setPosition(closePos);
+        }
+    }
 //    public void clawClampAuto(boolean clawArmClamp) {        // claw clamping for autonomous
 //        if (clawArmClamp) {
 //            ClawOpen = true;
@@ -58,6 +64,21 @@ public class SampleClaw {
         if (!slow) {
             INCREMENT = 0.01;
         }
+        if (extend) {                        // Makes the claw extend up?
+            extendPosition += INCREMENT;
+            if (extendPosition >= MAX_POS) {
+                extendPosition = MAX_POS;
+            }
+        }
+        else if (contracting) {              // Makes the claw extend down?
+            extendPosition -= INCREMENT;
+            if (extendPosition <= MIN_POS ) {
+                extendPosition = MIN_POS;
+            }
+        }
+        servoExtend.setPosition(extendPosition);
+    }
+    public void clawExtendAuto(boolean extend, boolean contracting) {
         if (extend) {                        // Makes the claw extend up?
             extendPosition += INCREMENT;
             if (extendPosition >= MAX_POS) {
@@ -96,6 +117,21 @@ public class SampleClaw {
         if (!slow) {
             INCREMENT = 0.01;
         }
+        if (left > 0) {                                     // rotates claw to the left
+            rotatePosition += INCREMENT;
+            if (rotatePosition >= MAX_POS) {
+                rotatePosition = MAX_POS;
+            }
+        }
+        else if (right > 0) {                               // rotates claw to the right
+            rotatePosition -= INCREMENT;
+            if (rotatePosition <= MIN_POS ) {
+                rotatePosition = MIN_POS;
+            }
+        }
+        servoRotation.setPosition(rotatePosition);
+    }
+    public void clawRotateAuto(float left, float right) {
         if (left > 0) {                                     // rotates claw to the left
             rotatePosition += INCREMENT;
             if (rotatePosition >= MAX_POS) {

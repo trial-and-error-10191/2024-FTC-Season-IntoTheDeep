@@ -55,7 +55,13 @@ public class LimbArm {
         limbExtend.setTargetPosition(targetPosition);
         spoolServo.setPower(servoExtend * 0.85);
     }
-    public void spoolCorrection(boolean expel, boolean reverse) {
+    public void AutoExtendMotor(int extendAuto) { // Allows the arm to extend in autonomous
+        if (extendAuto > maxExtendPos) {
+            extendAuto = maxExtendPos;
+        }
+        limbExtend.setTargetPosition(extendAuto);
+    }
+    public void spoolCorrection(boolean expel, boolean reverse) { // Thing that allows the spool to be corrected manually
         if (expel) {
             spoolServo.setPower(0.2);
         }
@@ -103,6 +109,12 @@ public class LimbArm {
             rotatePower = 0;
         }
         limbRotate.setPower(rotatePower);
+    }
+    public void armRotateAuto(int rotateAuto) { // Allows the arm to rotate in autonomous
+        if (rotateAuto < maxRotatePos) {
+            rotateAuto = maxRotatePos;
+        }
+        limbRotate.setTargetPosition(rotateAuto);
     }
     public void goUpToHighNet(boolean goUp) {
         if (goUp) {
