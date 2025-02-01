@@ -16,6 +16,6 @@ public class Robot {
         driveTrain = new DriveTrain(hwMap, telemetry);
    //     ascentMechanism = new AscentMechanism(hwMap);
         sampleClaw = new SampleClaw(hwMap);
-        limbArm = new LimbArm(hwMap);
+        limbArm = new LimbArm(hwMap, telemetry);
     }
 }
