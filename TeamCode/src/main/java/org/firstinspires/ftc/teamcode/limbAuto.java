@@ -9,7 +9,7 @@ public class limbAuto extends LinearOpMode {
     LimbArm arm;
     private ElapsedTime Time = new ElapsedTime();
     public void runOpMode() {
-        arm = new LimbArm(hardwareMap);
+        arm = new LimbArm(hardwareMap, telemetry);
         // Wait for the game to start (Display Gyro value while waiting)
         while (opModeInInit()) {
             telemetry.addData(">", "Waiting to Start");
