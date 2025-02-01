@@ -11,6 +11,12 @@ public class LimbArm {
     Telemetry telemetry;
     DcMotor limbExtend, limbRotate;             // DC motors for lift arm
     CRServo spoolServo;                         // Servo that hold wires for lift
+    private final double EXTEND_POWER = 0.5;          // Motor power for lift extension
+    double rotatePower = 0;                     // Motor power for lift rotation
+    int extensionLimit = 3780;                  // Limit for extension
+    final int maxExtendPos = 3780;              // Encoder counter max for lift extension
+    int maxRotatePos = -2356;                   // Encoder counter for lift rotation
+    int targetPosition = 0;                     // The desired position for the lift
     private final double EXTEND_POWER = 0.5;                      // Motor power for lift extension
     private final double ROTATE_POWER = 0.5;                     // Motor power for lift rotation
     int extensionLimit = 3780;                     // Limit for extension
@@ -40,6 +46,7 @@ public class LimbArm {
         limbRotate.setPower(ROTATE_POWER);
 
         spoolServo = hwMap.get(CRServo.class, "spoolServo");
+
         limitExtend = hwMap.get(DigitalChannel.class, "limitExtend");
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
         this.telemetry = telemetry;
@@ -63,6 +70,20 @@ public class LimbArm {
         }
         limbExtend.setTargetPosition(targetPosition);
         spoolServo.setPower(servoExtend * 0.85);
+    }
+    public void AutoExtendMotor(int extendAuto) { // Allows the arm to extend in autonomous
+        if (extendAuto > maxExtendPos) {
+            extendAuto = maxExtendPos;
+        }
+        limbExtend.setTargetPosition(extendAuto);
+    }
+    public void spoolCorrection(boolean expel, boolean reverse) { // Thing that allows the spool to be corrected manually
+        if (expel) {
+            spoolServo.setPower(0.2);
+        }
+        else if (reverse) {
+            spoolServo.setPower(-0.2);
+        }
     }
 
 //    public void extendLimit() {
@@ -126,5 +147,29 @@ public class LimbArm {
         limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         limbRotate.setTargetPosition(Counts);
         limbRotate.setPower(Speed);
+    }
+    public void armRotateAuto(int rotateAuto) { // Allows the arm to rotate in autonomous
+        if (rotateAuto < maxRotatePos) {
+            rotateAuto = maxRotatePos;
+        }
+        limbRotate.setTargetPosition(rotateAuto);
+    }
+    public void goUpToHighNet(boolean goUp) {
+        if (goUp) {
+            limbRotate.setTargetPosition(0);
+            limbExtend.setTargetPosition(extensionLimit);
+        }
+    }
+    public void turnToSubmersible(boolean getSample) {
+        if (getSample) {
+            limbExtend.setTargetPosition(500);
+            limbRotate.setTargetPosition(-1170);
+        }
+    }
+    public void goUpToHighBar(boolean specimenPlace) {
+        if (specimenPlace) {
+            limbRotate.setTargetPosition(0);
+            limbExtend.setTargetPosition(3000);
+        }
     }
 }
