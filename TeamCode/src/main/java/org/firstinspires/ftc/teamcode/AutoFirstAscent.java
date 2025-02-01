@@ -12,16 +12,16 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name="AutoObservationRung", group="Robot")
+@Autonomous(name="AutoFirstAscent", group="Robot")
 //@Disabled
-public class AutoObservationRung extends LinearOpMode {
+public class AutoFirstAscent extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftFrontDrive   = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
     private DcMotor leftBackDrive = null;
-    private IMU             imu         = null;
+    private IMU imu         = null;
     private final ElapsedTime Time = new ElapsedTime();
     // Control/Expansion Hub IMU
 
@@ -53,7 +53,7 @@ public class AutoObservationRung extends LinearOpMode {
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
     static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
-    static final double     TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
+    static final double     TURN_SPEED              = 0.5;     // Max turn speed to limit turn rate.
     static final double     HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
     // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
@@ -157,17 +157,21 @@ public class AutoObservationRung extends LinearOpMode {
         } // end of while loop
 
         // Set the encoders for closed loop speed control, and reset the heading.
-        // BEGIN AUTO CODE //
+        // BEGIN AUTO CODE
 
-         driveStraight(TURN_SPEED, 37, 0);
-         Wait(1);
-         // this is where the code for the grabbing mechanism will go
-         driveStraight(TURN_SPEED, -35, 0);
-         // Wait(1);
-         StrafeRobot(TURN_SPEED, 46, 0);
-         Wait(1);
+        StrafeRobot(TURN_SPEED, -6, 0);
+        // Wait(1);
+        driveStraight(TURN_SPEED, 62, 0);
+        // Wait(1);
+        turnToHeading(TURN_SPEED, -90);
+        // Wait(1);
+        driveStraight(TURN_SPEED, 5, -90);
+        Wait(1);
+        // This is where code for raising the arm to get a lvl. 1 ascent will go
 
-        //extend arm and drop onto bar
+
+        // 0 for heading is whatever the robot's original position is. 90 goes to the left of 0, and negative 90 goes to the right of the 0.
+        // Lastly, 180 goes the exact opposite of where 0 is.
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
@@ -506,8 +510,7 @@ public class AutoObservationRung extends LinearOpMode {
 
         telemetry.addData("Heading- Target : Current", "%5.2f : %5.0f", targetHeading, getHeading());
         telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
-        telemetry.addData("Front Wheel Speeds L : R", "%5.2f : %5.2f", leftFrontDrive.getPower(), rightFrontDrive.getPower());
-        telemetry.addData("Back Wheel Speeds L : R", "%5.2f : %5.2f", rightBackDrive.getPower(), leftBackDrive.getPower());
+        telemetry.addData("Wheel Speeds L : R", "%5.2f : %5.2f", leftSpeed, rightSpeed);
         telemetry.update();
 
     } // end of private void sendTelemetry
@@ -526,3 +529,4 @@ public class AutoObservationRung extends LinearOpMode {
         } // end of while loop
     } // end of public void Wait
 } // end of public class
+

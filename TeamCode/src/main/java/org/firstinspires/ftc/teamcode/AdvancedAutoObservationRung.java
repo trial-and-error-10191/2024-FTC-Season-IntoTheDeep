@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous(name="AdvancedAutoObservationRung", group="Robot")
-//@Disabled
+@Disabled
  public class AdvancedAutoObservationRung extends LinearOpMode {
 
         /* Declare OpMode members. */
@@ -481,7 +482,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
                 rightSpeed /= max;
             } // end of if statement
 
-            leftFrontDrive.setPower(leftSpeed);
+            leftFrontDrive.setPower(leftSpeed * 0.85);
             rightFrontDrive.setPower(rightSpeed);
             leftBackDrive.setPower(leftSpeed);
             rightBackDrive.setPower(rightSpeed);

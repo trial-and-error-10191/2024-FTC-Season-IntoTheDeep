@@ -206,7 +206,7 @@ public class DriveTrain {
             rightSpeed /= max;
         }
 telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSpeed);
-        leftFrontDrive.setPower(leftSpeed);
+        leftFrontDrive.setPower(leftSpeed * 0.85);
         rightFrontDrive.setPower(rightSpeed);
         leftBackDrive.setPower(leftSpeed);
         rightBackDrive.setPower(rightSpeed);
