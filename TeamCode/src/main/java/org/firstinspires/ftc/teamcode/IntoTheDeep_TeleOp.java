@@ -24,10 +24,6 @@
                // Makes the claw open/close
                robot.sampleClaw.clawClamp(gamepad2.a);
                // Makes the claw extend/contract
-               robot.sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper);
-               // Makes the claw rotate
-               robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger);
-               // Makes the claw extend/contract
                robot.sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
                // Makes the claw rotate
                robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
