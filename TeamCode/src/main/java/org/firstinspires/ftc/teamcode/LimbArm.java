@@ -107,11 +107,6 @@ public class LimbArm {
         }
         if (rotatePos < maxRotatePos) {
             rotatePos = maxRotatePos;
-        } else if (turn > 0 && !limitRotate.getState()) {
-            limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rotatePos = limbRotate.getCurrentPosition();
-            limbRotate.setTargetPosition(rotatePos);
-            limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         limbRotate.setTargetPosition(rotatePos);
     }
