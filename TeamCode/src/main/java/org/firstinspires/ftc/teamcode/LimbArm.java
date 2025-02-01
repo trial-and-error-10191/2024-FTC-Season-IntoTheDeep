@@ -118,4 +118,18 @@ public class LimbArm {
         }
         limbRotate.setTargetPosition(rotatePos);
     }
+
+    public void rotateByPower(float turn) {
+        float rotatePower = 0.0f;
+        if (Math.abs(turn) > 0.05f) {
+            rotatePower = turn;
+        }
+        // Guard against rotating too far forward
+        // Guard against rotating too far backward
+        limbRotate.setPower(rotatePower);
+    }
+
+    public void initRotateByPower() {
+        limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 }

@@ -18,6 +18,7 @@
            telemetry.update();
 
            waitForStart();
+           robot.limbArm.initRotateByPower();
            while (opModeIsActive()) {
 
                robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
@@ -38,7 +39,8 @@
                if (gamepad2.right_stick_x < 0.05 && gamepad2.right_stick_x > -0.05) { // Makes sure there's no drifting
                    gamepad2.right_stick_x = 0;
                }
-               robot.limbArm.armRotate(gamepad2.right_stick_x);
+               //robot.limbArm.armRotate(gamepad2.right_stick_x);
+               robot.limbArm.rotateByPower(gamepad2.right_stick_x);
 
                // Provides telemetry for all motors, servos, and sensors.
 //               telemetry.addData("Front Driving Motors (Left, Right)", "%4.2f, %4.2f",
