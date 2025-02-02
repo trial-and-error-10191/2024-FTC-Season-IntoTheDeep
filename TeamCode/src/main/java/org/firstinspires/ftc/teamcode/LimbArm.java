@@ -117,12 +117,15 @@ public class LimbArm {
             rotatePower = turn;
         }
         // Guard against rotating too far forward
-        if (limbRotate.getCurrentPosition() <= maxRotatePos) {
+
+        if (limbRotate.getCurrentPosition() <= maxRotatePos && turn < 0) {
             rotatePower = 0;
         }
         // Guard against rotating too far backward
         else if (turn >= 0 && !limitRotate.getState()) {
             rotatePower = 0;
+            limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         limbRotate.setPower(rotatePower);
     }
@@ -162,6 +165,7 @@ public class LimbArm {
             rotateAuto = maxRotatePos;
         }
         limbRotate.setTargetPosition(rotateAuto);
+
     }
     public void goUpToHighNet(boolean goUp) {
         if (goUp) {
