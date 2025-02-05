@@ -39,8 +39,9 @@
                if (gamepad2.right_stick_x < 0.05 && gamepad2.right_stick_x > -0.05) { // Makes sure there's no drifting
                    gamepad2.right_stick_x = 0;
                }
+               //robot.driveTrain.LiftHandle(robot.limbArm.limbExtend.getCurrentPosition());
                //robot.limbArm.armRotate(gamepad2.right_stick_y);
-               robot.limbArm.rotateByPower(gamepad2.right_stick_y);
+               robot.limbArm.rotateByPower(-gamepad2.right_stick_y);
                // Spool correction stuff
                robot.limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
                // Makes the arm rise to the high net for samples

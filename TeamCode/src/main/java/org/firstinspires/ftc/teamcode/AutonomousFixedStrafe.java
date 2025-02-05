@@ -113,6 +113,7 @@ public class AutonomousFixedStrafe extends LinearOpMode {
     private int leftBackTarget   = 0;
     private int rightBackTarget  = 0;
     private int rightFrontTarget = 0;
+    LimbArm arm;
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
@@ -183,6 +184,9 @@ public class AutonomousFixedStrafe extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+        arm = new LimbArm(hardwareMap, telemetry);
+
         // Initialize the drive system variables.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
