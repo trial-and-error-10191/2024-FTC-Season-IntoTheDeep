@@ -1,4 +1,4 @@
-   package Teleoperation;
+   package org.firstinspires.ftc.teamcode.Teleoperation;
    import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
    import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 

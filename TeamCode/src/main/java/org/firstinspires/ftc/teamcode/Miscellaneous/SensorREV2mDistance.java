@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Miscelaneous;
+package org.firstinspires.ftc.teamcode.Miscellaneous;
 
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
