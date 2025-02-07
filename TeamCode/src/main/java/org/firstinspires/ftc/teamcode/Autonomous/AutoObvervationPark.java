@@ -1,11 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -13,9 +11,8 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name="AdvancedAutoBasketSpike", group="Robot")
-@Disabled
-public class AdvancedAutoBasketSpike extends LinearOpMode {
+@Autonomous(name="AutoObservationPark", group="Robot")
+public class AutoObvervationPark extends LinearOpMode {
 
 
         /* Declare OpMode members. */
@@ -26,8 +23,7 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
         private IMU imu         = null;
         private final ElapsedTime Time = new ElapsedTime();
         // Control/Expansion Hub IMU
-        LimbArm arm;
-        SampleClaw claw;
+
         private double          headingError  = 0;
 
         // These variable are declared here (as class members) so they can be updated in various methods,
@@ -56,7 +52,7 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
         // These constants define the desired driving/control characteristics
         // They can/should be tweaked to suit the specific robot drive train.
         static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
-        static final double     TURN_SPEED              = 0.5;     // Max turn speed to limit turn rate.
+        static final double     TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
         static final double     HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
         // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
         // Define the Proportional control coefficient (or GAIN) for "heading control".
@@ -162,34 +158,10 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
             // Set the encoders for closed loop speed control, and reset the heading.
             // BEGIN AUTO CODE //
 
-            driveStraight(TURN_SPEED, 19, 0);
-            // Wait(1);
-            arm.armRotateAuto(-2000);
-            // Wait(1);
-           // driveStraight(TURN_SPEED, -10, 0);
-            // Wait(1);
-           // StrafeRobot(TURN_SPEED, 40, 0);
-           // Wait(1);
-            // code for the grabbing mechanism... again
-           // StrafeRobot(TURN_SPEED, -40, 0);
-           // Wait(1);
-            // Code for grabbing mechanism
-           // StrafeRobot(TURN_SPEED, 40, 0);
-           // Wait(1);
-            // code for the grabbing mechanism
-           // StrafeRobot(TURN_SPEED, -40, 0);
-           // Wait(1);
-            // code for the grabbing mechanism
-           // StrafeRobot(TURN_SPEED, 40, 0);
-           // Wait(1);
-            // code for the grabbing mechanism
-           // StrafeRobot(TURN_SPEED, -40, 0);
-           // Wait(1);
-            // code for the grabbing mechanism
+            StrafeRobot(TURN_SPEED, 46, 0);
+            Wait(1);
 
-
-            // 0 for heading is whatever the robot's original position is. 90 goes to the left of 0, and negative 90 goes to the right of the 0.
-            // Lastly, 180 goes the exact opposite of where 0 is.
+            //extend arm and drop onto bar
             // Step through each leg of the path,
             // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
             //          holdHeading() is used after turns to let the heading stabilize
@@ -278,81 +250,81 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
                 rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             } // end of if statement
         } // end of public void driveStraight
-    public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
-        Orientations();
-        if (distance > 0) {
-            flip("L", "B");
-            flip("R", "F");
-        } else {
-            flip("L", "F");
-            flip("R", "B");
-        }
+        public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
+            Orientations();
+            if (distance > 0) {
+                flip("L", "B");
+                flip("R", "F");
+            } else {
+                flip("L", "F");
+                flip("R", "B");
+            }
 
-        telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
-        if (opModeIsActive()) {
-            leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            // Determine new target position, and pass to motor controller
-            // Determine new target position, and pass to motor controller
-            int moveCounts = (int)(Math.abs(distance) * COUNTS_PER_INCH);
-            leftFrontTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
-            leftBackTarget = leftBackDrive.getCurrentPosition() + moveCounts;
-            rightFrontTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
-            rightBackTarget = rightBackDrive.getCurrentPosition() + moveCounts;
+            telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
+            if (opModeIsActive()) {
+                leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                // Determine new target position, and pass to motor controller
+                // Determine new target position, and pass to motor controller
+                int moveCounts = (int)(Math.abs(distance) * COUNTS_PER_INCH);
+                leftFrontTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
+                leftBackTarget = leftBackDrive.getCurrentPosition() + moveCounts;
+                rightFrontTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
+                rightBackTarget = rightBackDrive.getCurrentPosition() + moveCounts;
 
-            // Set Target FIRST, then turn on RUN_TO_POSITION
-            // If Strafing then reverse motor directions
-            leftFrontDrive.setTargetPosition(leftFrontTarget);
-            rightFrontDrive.setTargetPosition(rightFrontTarget);
-            leftBackDrive.setTargetPosition(leftBackTarget);
-            rightBackDrive.setTargetPosition(rightBackTarget);
+                // Set Target FIRST, then turn on RUN_TO_POSITION
+                // If Strafing then reverse motor directions
+                leftFrontDrive.setTargetPosition(leftFrontTarget);
+                rightFrontDrive.setTargetPosition(rightFrontTarget);
+                leftBackDrive.setTargetPosition(leftBackTarget);
+                rightBackDrive.setTargetPosition(rightBackTarget);
 
-            leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            // Set the required driving speed  (must be positive for RUN_TO_POSITION)
-            // Start driving straight, and then enter the control loop
-            maxDriveSpeed = Math.abs(maxDriveSpeed);
-            moveRobot(maxDriveSpeed, 0);
+                // Set the required driving speed  (must be positive for RUN_TO_POSITION)
+                // Start driving straight, and then enter the control loop
+                maxDriveSpeed = Math.abs(maxDriveSpeed);
+                moveRobot(maxDriveSpeed, 0);
 
-            // keep looping while we are still active, and BOTH motors are running.
-            while (opModeIsActive() &&
-                    (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+                // keep looping while we are still active, and BOTH motors are running.
+                while (opModeIsActive() &&
+                        (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
 
-                // Determine required steering to keep on heading
-                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
+                    // Determine required steering to keep on heading
+                    turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
 
-                // if driving in reverse, the motor correction also needs to be reversed
+                    // if driving in reverse, the motor correction also needs to be reversed
 //            if (distance < 0) {
 //                turnSpeed *= -1.0;
 //            }
-                // Apply the turning correction to the current driving speed.
-                RotateRoboto(driveSpeed, turnSpeed, distance < 0);
+                    // Apply the turning correction to the current driving speed.
+                    RotateRoboto(driveSpeed, turnSpeed, distance < 0);
 
-                // Display drive status for the driver.
-                // sendTelemetry(true);
+                    // Display drive status for the driver.
+                    // sendTelemetry(true);
+                }
+                telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
+                telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
+                telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
+                telemetry.addData(" RB end encoder counter", rightBackDrive.getCurrentPosition() );
+                telemetry.update();
+
+                // Stop all motion & Turn off RUN_TO_POSITION
+                moveRobot(0, 0);
+                leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Orientations();
+                turnToHeading(maxDriveSpeed,heading);
             }
-            telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
-            telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
-            telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
-            telemetry.addData(" RB end encoder counter", rightBackDrive.getCurrentPosition() );
-            telemetry.update();
 
-            // Stop all motion & Turn off RUN_TO_POSITION
-            moveRobot(0, 0);
-            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            Orientations();
-            turnToHeading(maxDriveSpeed,heading);
-        }
-
-    } // end of public void StrafeRobot
+        } // end of public void StrafeRobot
 
         /**
          *  Spin on the central axis to point in a new direction.
@@ -481,17 +453,17 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
             rightBackDrive.setPower(rightSpeed);
         } // end of public void moveRobot
 
-    public void RotateRoboto(double drive, double turn, Boolean isLeft ) {
+        public void RotateRoboto(double drive, double turn, Boolean isLeft ) {
 //        driveSpeed = drive;     // save this value as a class member so it can be used by telemetry.
 //        turnSpeed  = turn;      // save this value as a class member so it can be used by telemetry.
 //        leftSpeed  = drive - turn;
 //        rightSpeed = drive + turn;
-        leftFrontDrive.setPower(drive + ((isLeft ? 1 : -1) * turn));
-        rightFrontDrive.setPower(drive + ((isLeft ? 1 : -1) * turn));
-        leftBackDrive.setPower(drive + ((isLeft ? -1 : 1) * turn));
-        rightBackDrive.setPower(drive + ((isLeft ? -1 : 1) * turn));
+            leftFrontDrive.setPower(drive + ((isLeft ? 1 : -1) * turn));
+            rightFrontDrive.setPower(drive + ((isLeft ? 1 : -1) * turn));
+            leftBackDrive.setPower(drive + ((isLeft ? -1 : 1) * turn));
+            rightBackDrive.setPower(drive + ((isLeft ? -1 : 1) * turn));
 
-        // Scale speeds down if either one exceeds +/- 1.0;
+            // Scale speeds down if either one exceeds +/- 1.0;
 //        double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
 //        if (max > 1.0)
 //        {
@@ -505,7 +477,7 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
 //        rightFrontDrive.setPower((isLeft ? 1 : -1) * rightSpeed);
 //        leftBackDrive.setPower((isLeft ? 1 : -1) * leftSpeed);
 //        rightBackDrive.setPower((isLeft ? -1 : 1) * rightSpeed);
-    }
+        }
 
         /**
          *  Display the various control parameters while driving
@@ -528,7 +500,8 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
 
             telemetry.addData("Heading- Target : Current", "%5.2f : %5.0f", targetHeading, getHeading());
             telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
-            telemetry.addData("Wheel Speeds L : R", "%5.2f : %5.2f", leftSpeed, rightSpeed);
+            telemetry.addData("Front Wheel Speeds L : R", "%5.2f : %5.2f", leftFrontDrive.getPower(), rightFrontDrive.getPower());
+            telemetry.addData("Back Wheel Speeds L : R", "%5.2f : %5.2f", rightBackDrive.getPower(), leftBackDrive.getPower());
             telemetry.update();
 
         } // end of private void sendTelemetry

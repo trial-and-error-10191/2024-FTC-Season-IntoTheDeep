@@ -1,20 +1,21 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
+import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
-@Autonomous(name="AutoBasketSpike", group="Robot")
+@Autonomous(name="AutoBasketTop", group="Robot")
 //@Disabled
-public class AutoBasketSpike extends LinearOpMode {
+public class AutoBasketTop extends LinearOpMode {
 
         /* Declare OpMode members. */
         private DcMotor leftFrontDrive   = null;
@@ -25,6 +26,7 @@ public class AutoBasketSpike extends LinearOpMode {
         private final ElapsedTime Time = new ElapsedTime();
         // Control/Expansion Hub IMU
         LimbArm arm;
+        SampleClaw claw;
         private double          headingError  = 0;
 
         // These variable are declared here (as class members) so they can be updated in various methods,
@@ -110,7 +112,7 @@ public class AutoBasketSpike extends LinearOpMode {
 
         @Override
         public void runOpMode() {
-
+            claw = new SampleClaw(hardwareMap);
             arm = new LimbArm(hardwareMap, telemetry);
             // Initialize the drive system variables.
             leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
@@ -162,28 +164,36 @@ public class AutoBasketSpike extends LinearOpMode {
 
             driveStraight(TURN_SPEED, 22, 0);
             Wait(1);
-            // this is where the code for the grabbing mechanism will go
-            driveStraight(TURN_SPEED, -15, 0);
-            // Wait(1);
-            StrafeRobot(TURN_SPEED, 6, 0);
-            // Wait(1);
-            turnToHeading(TURN_SPEED, -88.0);
-            // Wait(1);
-            driveStraight(TURN_SPEED, 62, -88.0);
-            // Wait(1);
-            turnToHeading(TURN_SPEED, 180.0);
-            // Wait(1);
-            driveStraight(TURN_SPEED, 13, 180.0);
-            Wait(1);
-            arm.ExtendAutoArm(1900);
+            arm.ExtendAutoArm(arm.maxExtendPos);
             Wait(0.2);
-            arm.armRotateAuto(-500);
+            arm.armRotateAuto(-400);
+            Wait(3);
+            claw.OpenClaw();
+            //0
+            // claw.CloseClaw();
+            Wait(3);
+            arm.armRotateAuto(0);
             Wait(0.2);
-            arm.armRotateAuto(-1500);
+            arm.ExtendAutoArm(0);
+            Wait(0.2);
+//            driveStraight(TURN_SPEED, -15, 0);
+//             Wait(0.2);
+//            StrafeRobot(TURN_SPEED, 6, 0);
+//             Wait(0.2);
+//            turnToHeading(TURN_SPEED, -88.0);
+//             Wait(0.2);
+//            driveStraight(TURN_SPEED, 62, -88.0);
+//             Wait(0.2);
+//            turnToHeading(TURN_SPEED, 180.0);
+//             Wait(0.2);
+//            driveStraight(TURN_SPEED, 13, 180.0);
+//            Wait(1);
+//            arm.ExtendAutoArm(1900);
+//            Wait(0.2);
+//            arm.armRotateAuto(-500);
 //            Wait(0.2);
 //            arm.armRotateAuto(-1500);
-//            Wait(0.2);
-            //arm.armRotateAuto(-2000);
+// uncomment after
             Wait(4);
             // This is where code for raising the arm to get a lvl. 1 ascent
 

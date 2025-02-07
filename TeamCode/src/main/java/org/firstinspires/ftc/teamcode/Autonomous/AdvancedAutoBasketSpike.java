@@ -1,22 +1,21 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.sun.tools.javac.util.RichDiagnosticFormatter;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@Autonomous(name="AdvancedAutoObservationRung", group="Robot")
-// @Disabled
- public class AdvancedAutoObservationRung extends LinearOpMode {
+@Autonomous(name="AdvancedAutoBasketSpike", group="Robot")
+@Disabled
+public class AdvancedAutoBasketSpike extends LinearOpMode {
+
 
         /* Declare OpMode members. */
         private DcMotor leftFrontDrive   = null;
@@ -162,42 +161,30 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
             // Set the encoders for closed loop speed control, and reset the heading.
             // BEGIN AUTO CODE //
 
-            driveStraight(TURN_SPEED, 22, 0);
-           // Wait(1);
-            arm.AutoExtendMotor(-2000);
+            driveStraight(TURN_SPEED, 19, 0);
             // Wait(1);
-            //  arm.AutoExtendMotor(2000);
+            arm.armRotateAuto(-2000);
             // Wait(1);
-          //  turnToHeading(TURN_SPEED, -90.0);
+           // driveStraight(TURN_SPEED, -10, 0);
+            // Wait(1);
+           // StrafeRobot(TURN_SPEED, 40, 0);
            // Wait(1);
-          //  driveStraight(TURN_SPEED, 24, -90.0);
-           // Wait(1);
-          //  StrafeRobot(TURN_SPEED, -16, -90.0);
-           // Wait(1);
-          //  driveStraight(TURN_SPEED, 7, 180);
-           // Wait(1);
-          //  turnToHeading(TURN_SPEED, 180);
-           // Wait(1);
-          //  driveStraight(TURN_SPEED, 26, 180);
-          //  Wait(1);
             // code for the grabbing mechanism... again
-          //  driveStraight(TURN_SPEED, -6, 180);
+           // StrafeRobot(TURN_SPEED, -40, 0);
            // Wait(1);
-          //  StrafeRobot(TURN_SPEED, 20, 180);
+            // Code for grabbing mechanism
+           // StrafeRobot(TURN_SPEED, 40, 0);
            // Wait(1);
-          //  turnToHeading(TURN_SPEED, 90);
+            // code for the grabbing mechanism
+           // StrafeRobot(TURN_SPEED, -40, 0);
            // Wait(1);
-          //  driveStraight(TURN_SPEED, 16, 90);
+            // code for the grabbing mechanism
+           // StrafeRobot(TURN_SPEED, 40, 0);
            // Wait(1);
-          //  turnToHeading(TURN_SPEED, 0);
+            // code for the grabbing mechanism
+           // StrafeRobot(TURN_SPEED, -40, 0);
            // Wait(1);
-          //  driveStraight(TURN_SPEED, 10, 0);
-          //  Wait(1);
-            //This is for the grabbing mechanism
-          //  driveStraight(TURN_SPEED, -22, 0);
-           // Wait(1);
-          //  StrafeRobot(TURN_SPEED, 29, 0);
-          //  Wait(1);
+            // code for the grabbing mechanism
 
 
             // 0 for heading is whatever the robot's original position is. 90 goes to the left of 0, and negative 90 goes to the right of the 0.
@@ -555,11 +542,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
         public void Wait(double seconds) {
             Time.reset();
             while (Time.milliseconds()  < seconds * 1000) {
-
                 // doesn't need anything
-
             } // end of while loop
-
         } // end of public void Wait
-
     } // end of public class

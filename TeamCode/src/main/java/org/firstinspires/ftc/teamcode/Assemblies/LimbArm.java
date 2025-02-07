@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Assemblies;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,12 +9,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class LimbArm {
     Telemetry telemetry;
-    DcMotor limbExtend, limbRotate;             // DC motors for lift arm
+    public DcMotor limbExtend;
+    public DcMotor limbRotate;             // DC motors for lift arm
     CRServo spoolServo;                         // Servo that hold wires for lift
-    private final double EXTEND_POWER = 0.5;                      // Motor power for lift extension
-    private final double ROTATE_POWER = 0.5;                     // Motor power for lift rotation
+    public final double EXTEND_POWER = 0.5;                      // Motor power for lift extension
+    public final double ROTATE_POWER = 0.5;                     // Motor power for lift rotation
     int extensionLimit = 3780;                     // Limit for extension
-    final int maxExtendPos = 3780;             // Encoder counter max for lift extension
+    public final int maxExtendPos = 3780;             // Encoder counter max for lift extension
     int maxRotatePos = -2356;                  // max encoder counter for lift rotation
     int rotatePos = 0;                         // Encoder counter for lift rotation
     int targetPosition = 0;

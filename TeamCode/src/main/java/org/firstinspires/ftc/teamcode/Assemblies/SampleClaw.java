@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Assemblies;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -17,7 +17,7 @@ public class SampleClaw {
 
 
     // Define class members
-    Servo servoClamp;
+    public Servo servoClamp;
     Servo servoExtend;
     Servo servoRotation;
 
