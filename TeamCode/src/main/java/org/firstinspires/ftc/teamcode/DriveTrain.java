@@ -98,7 +98,7 @@ public class DriveTrain {
         // initializes deadzone
         double deadzone = 0.05;
         // initializes sensitivity
-        double sensitivity = 0.5;
+        double sensitivity = 0.75;
 
         double leftFrontPower = 0;
         double rightFrontPower = 0;

@@ -48,7 +48,7 @@ public class LimbArm {
 
     public void RunMotor(float extend) {
         float servoExtend = extend;
-        //extendLimit();
+        extendLimit();
         if (extend != 0) {
             targetPosition = limbExtend.getCurrentPosition() + (int) (extend * EXTENSION_RATE);
         }
@@ -80,21 +80,21 @@ public class LimbArm {
         }
     }
 
-//    public void extendLimit() {
-//        int rotatePos = limbRotate.getCurrentPosition();
-//        if (rotatePos <= 0 && rotatePos > -1099) {                  // This one reaches to the corner of our reach
-//            extensionLimit = maxExtendPos;
-//        }
-//        else if (rotatePos <= -1099 && rotatePos > -1600) {        // This one rises up slightly
-//            extensionLimit = 2472;
-//        }
-//        else if (rotatePos <= -1600 && rotatePos > -1940) {        // This one goes straight forward
-//            extensionLimit = 2100;
-//        }
-//        else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This one touches the ground
-//            extensionLimit = 2229;
-//        }
-//    }
+    public void extendLimit() {
+        int rotatePos = limbRotate.getCurrentPosition();
+        if (rotatePos <= 0 && rotatePos > -1099) {                  // This one reaches to the corner of our reach
+            extensionLimit = maxExtendPos;
+        }
+        else if (rotatePos <= -1099 && rotatePos > -1600) {        // This one rises up slightly
+            extensionLimit = 2472;
+        }
+        else if (rotatePos <= -1600 && rotatePos > -1940) {        // This one goes straight forward
+            extensionLimit = 2100;
+        }
+        else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This one touches the ground
+            extensionLimit = 2229;
+        }
+    }
 
     public void armRotate(float turn) {
 //        if (limbExtend.getCurrentPosition() > extensionLimit) {
