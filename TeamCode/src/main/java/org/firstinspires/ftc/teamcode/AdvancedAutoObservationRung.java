@@ -9,12 +9,13 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.sun.tools.javac.util.RichDiagnosticFormatter;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Autonomous(name="AdvancedAutoObservationRung", group="Robot")
-@Disabled
+// @Disabled
  public class AdvancedAutoObservationRung extends LinearOpMode {
 
         /* Declare OpMode members. */
@@ -25,7 +26,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
         private IMU imu         = null;
         private final ElapsedTime Time = new ElapsedTime();
         // Control/Expansion Hub IMU
-
+        LimbArm arm;
+        SampleClaw claw;
         private double          headingError  = 0;
 
         // These variable are declared here (as class members) so they can be updated in various methods,
@@ -161,38 +163,41 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
             // BEGIN AUTO CODE //
 
             driveStraight(TURN_SPEED, 22, 0);
-            Wait(1);
-            // this is where the code for the grabbing mechanism will go
-            turnToHeading(TURN_SPEED, -90.0);
            // Wait(1);
-            driveStraight(TURN_SPEED, 24, -90.0);
+            arm.AutoExtendMotor(-2000);
+            // Wait(1);
+            //  arm.AutoExtendMotor(2000);
+            // Wait(1);
+          //  turnToHeading(TURN_SPEED, -90.0);
            // Wait(1);
-            StrafeRobot(TURN_SPEED, -16, -90.0);
+          //  driveStraight(TURN_SPEED, 24, -90.0);
            // Wait(1);
-            driveStraight(TURN_SPEED, 7, 180);
+          //  StrafeRobot(TURN_SPEED, -16, -90.0);
            // Wait(1);
-            turnToHeading(TURN_SPEED, 180);
+          //  driveStraight(TURN_SPEED, 7, 180);
            // Wait(1);
-            driveStraight(TURN_SPEED, 26, 180);
-            Wait(1);
+          //  turnToHeading(TURN_SPEED, 180);
+           // Wait(1);
+          //  driveStraight(TURN_SPEED, 26, 180);
+          //  Wait(1);
             // code for the grabbing mechanism... again
-            driveStraight(TURN_SPEED, -6, 180);
+          //  driveStraight(TURN_SPEED, -6, 180);
            // Wait(1);
-            StrafeRobot(TURN_SPEED, 20, 180);
+          //  StrafeRobot(TURN_SPEED, 20, 180);
            // Wait(1);
-            turnToHeading(TURN_SPEED, 90);
+          //  turnToHeading(TURN_SPEED, 90);
            // Wait(1);
-            driveStraight(TURN_SPEED, 16, 90);
+          //  driveStraight(TURN_SPEED, 16, 90);
            // Wait(1);
-            turnToHeading(TURN_SPEED, 0);
+          //  turnToHeading(TURN_SPEED, 0);
            // Wait(1);
-            driveStraight(TURN_SPEED, 10, 0);
-            Wait(1);
+          //  driveStraight(TURN_SPEED, 10, 0);
+          //  Wait(1);
             //This is for the grabbing mechanism
-            driveStraight(TURN_SPEED, -22, 0);
+          //  driveStraight(TURN_SPEED, -22, 0);
            // Wait(1);
-            StrafeRobot(TURN_SPEED, 29, 0);
-            Wait(1);
+          //  StrafeRobot(TURN_SPEED, 29, 0);
+          //  Wait(1);
 
 
             // 0 for heading is whatever the robot's original position is. 90 goes to the left of 0, and negative 90 goes to the right of the 0.

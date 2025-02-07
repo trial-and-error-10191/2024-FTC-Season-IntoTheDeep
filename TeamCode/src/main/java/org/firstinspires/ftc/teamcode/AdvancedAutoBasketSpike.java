@@ -26,7 +26,8 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
         private IMU imu         = null;
         private final ElapsedTime Time = new ElapsedTime();
         // Control/Expansion Hub IMU
-
+        LimbArm arm;
+        SampleClaw claw;
         private double          headingError  = 0;
 
         // These variable are declared here (as class members) so they can be updated in various methods,
@@ -162,27 +163,28 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
             // BEGIN AUTO CODE //
 
             driveStraight(TURN_SPEED, 19, 0);
-            Wait(1);
-            // this is where the code for the grabbing mechanism will go
-            driveStraight(TURN_SPEED, -10, 0);
             // Wait(1);
-            StrafeRobot(TURN_SPEED, 40, 0);
-            Wait(1);
+            arm.armRotateAuto(-2000);
+            // Wait(1);
+           // driveStraight(TURN_SPEED, -10, 0);
+            // Wait(1);
+           // StrafeRobot(TURN_SPEED, 40, 0);
+           // Wait(1);
             // code for the grabbing mechanism... again
-            StrafeRobot(TURN_SPEED, -40, 0);
-            Wait(1);
+           // StrafeRobot(TURN_SPEED, -40, 0);
+           // Wait(1);
             // Code for grabbing mechanism
-            StrafeRobot(TURN_SPEED, 40, 0);
-            Wait(1);
+           // StrafeRobot(TURN_SPEED, 40, 0);
+           // Wait(1);
             // code for the grabbing mechanism
-            StrafeRobot(TURN_SPEED, -40, 0);
-            Wait(1);
+           // StrafeRobot(TURN_SPEED, -40, 0);
+           // Wait(1);
             // code for the grabbing mechanism
-            StrafeRobot(TURN_SPEED, 40, 0);
-            Wait(1);
+           // StrafeRobot(TURN_SPEED, 40, 0);
+           // Wait(1);
             // code for the grabbing mechanism
-            StrafeRobot(TURN_SPEED, -40, 0);
-            Wait(1);
+           // StrafeRobot(TURN_SPEED, -40, 0);
+           // Wait(1);
             // code for the grabbing mechanism
 
 
