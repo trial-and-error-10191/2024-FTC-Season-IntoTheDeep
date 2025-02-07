@@ -136,7 +136,7 @@ public class DriveTrain {
         rightFrontPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
         rightBackPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
 
-        leftFrontPower *= 0.7; // this motor is 312 rpm, others are 223. 223/312 ~ 0.7
+//        leftFrontPower *= 0.7; // this motor is 312 rpm, others are 223. 223/312 ~ 0.7
 
         // The next four lines gives the calculated power to each motor.
         leftFrontDrive.setPower(leftFrontPower);
