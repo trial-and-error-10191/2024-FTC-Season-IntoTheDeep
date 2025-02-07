@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
+import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @Autonomous(name="AdvancedAutoBasketSpike", group="Robot")
 @Disabled
@@ -163,16 +165,28 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
 
             driveStraight(TURN_SPEED, 19, 0);
             // Wait(1);
-            arm.armRotateAuto(-2000);
+            arm.ExtendAutoArm(-2000);
+            // Wait(1);
+            // arm.ExtendAutoArm(2000);
             // Wait(1);
            // driveStraight(TURN_SPEED, -10, 0);
             // Wait(1);
            // StrafeRobot(TURN_SPEED, 40, 0);
            // Wait(1);
-            // code for the grabbing mechanism... again
+            // arm.armRotateAuto(-2000);
+            // Wait(1);
+            // arm.ExtendAutoArm(-2000);
+            // Wait(1);
+            // arm.armRotateAuto(-1000);
+            // Wait(1);
+            // arm.ExtendAutoArm(2000);
+            // Wait(1);
            // StrafeRobot(TURN_SPEED, -40, 0);
            // Wait(1);
-            // Code for grabbing mechanism
+            // arm.ExtendAutoArm(-2000);
+            // Wait(1);
+            // arm.ExtendAutoArm(2000);
+            // Wait(1);
            // StrafeRobot(TURN_SPEED, 40, 0);
            // Wait(1);
             // code for the grabbing mechanism
