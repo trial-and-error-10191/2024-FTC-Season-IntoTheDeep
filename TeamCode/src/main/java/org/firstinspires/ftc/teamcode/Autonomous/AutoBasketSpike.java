@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
+import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @Autonomous(name="AutoBasketSpike", group="Robot")
 //@Disabled
@@ -25,6 +26,7 @@ public class AutoBasketSpike extends LinearOpMode {
         private final ElapsedTime Time = new ElapsedTime();
         // Control/Expansion Hub IMU
         LimbArm arm;
+        SampleClaw claw;
         private double          headingError  = 0;
 
         // These variable are declared here (as class members) so they can be updated in various methods,
@@ -110,8 +112,9 @@ public class AutoBasketSpike extends LinearOpMode {
 
         @Override
         public void runOpMode() {
-
+            claw = new SampleClaw(hardwareMap);
             arm = new LimbArm(hardwareMap, telemetry);
+
             // Initialize the drive system variables.
             leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
             rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
@@ -160,10 +163,17 @@ public class AutoBasketSpike extends LinearOpMode {
             // Set the encoders for closed loop speed control, and reset the heading.
             // BEGIN AUTO CODE
 
-            driveStraight(TURN_SPEED, 22, 0);
+            driveStraight(TURN_SPEED, 35, 0);
+            Wait(0.2);
+            arm.ExtendAutoArm(arm.maxExtendPos);
             Wait(1);
-            // this is where the code for the grabbing mechanism will go
-            driveStraight(TURN_SPEED, -15, 0);
+            claw.OpenClaw();
+            Wait(0.4);
+            driveStraight(TURN_SPEED, -8, 0);
+            // Wait(0.5);
+            arm.ExtendAutoArm(-3000);
+            Wait(0.3);
+            driveStraight(TURN_SPEED, -7, 0);
             // Wait(1);
             StrafeRobot(TURN_SPEED, 6, 0);
             // Wait(1);
@@ -175,11 +185,7 @@ public class AutoBasketSpike extends LinearOpMode {
             // Wait(1);
             driveStraight(TURN_SPEED, 13, 180.0);
             Wait(1);
-            arm.ExtendAutoArm(1900);
-            Wait(0.2);
-            arm.armRotateAuto(-500);
-            Wait(0.2);
-            arm.armRotateAuto(-1500);
+           // Code for arm goes here
 //            Wait(0.2);
 //            arm.armRotateAuto(-1500);
 //            Wait(0.2);
@@ -475,7 +481,7 @@ public class AutoBasketSpike extends LinearOpMode {
                 rightSpeed /= max;
             } // end of if statement
 
-            leftFrontDrive.setPower(leftSpeed * 0.85);
+            leftFrontDrive.setPower(leftSpeed * 0.8);
             rightFrontDrive.setPower(rightSpeed);
             leftBackDrive.setPower(leftSpeed);
             rightBackDrive.setPower(rightSpeed);

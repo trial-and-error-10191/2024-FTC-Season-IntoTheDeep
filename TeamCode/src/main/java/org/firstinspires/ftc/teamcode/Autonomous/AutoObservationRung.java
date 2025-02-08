@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -10,6 +11,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
+import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @Autonomous(name="AutoObservationRung", group="Robot")
 //@Disabled
@@ -23,7 +26,8 @@ public class AutoObservationRung extends LinearOpMode {
     private IMU             imu         = null;
     private final ElapsedTime Time = new ElapsedTime();
     // Control/Expansion Hub IMU
-
+    LimbArm arm;
+    SampleClaw claw;
     private double          headingError  = 0;
 
     // These variable are declared here (as class members) so they can be updated in various methods,
@@ -109,6 +113,8 @@ public class AutoObservationRung extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        claw = new SampleClaw(hardwareMap);
+        arm = new LimbArm(hardwareMap, telemetry);
 
         // Initialize the drive system variables.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
@@ -158,11 +164,22 @@ public class AutoObservationRung extends LinearOpMode {
         // Set the encoders for closed loop speed control, and reset the heading.
         // BEGIN AUTO CODE //
 
-         driveStraight(TURN_SPEED, 37, 0);
+         driveStraight(TURN_SPEED, 34, 0);
+         Wait(0.3);
+         StrafeRobot(TURN_SPEED, -10, 0);
+         Wait(0.2);
+         arm.armRotateAuto(-400);
+         Wait(0.2);
+         arm.ExtendAutoArm(-3000);
+         Wait(0.5);
+         claw.RotateClaw(0.7); // not accurate
          Wait(1);
-         // this is where the code for the grabbing mechanism will go
+         arm.ExtendAutoArm(1800);
+         Wait(0.2);
+         claw.OpenClaw();
+         Wait(0.4);
          driveStraight(TURN_SPEED, -35, 0);
-         // Wait(1);
+         Wait(0.6);
          StrafeRobot(TURN_SPEED, 46, 0);
          Wait(1);
 
@@ -452,7 +469,7 @@ public class AutoObservationRung extends LinearOpMode {
             rightSpeed /= max;
         } // end of if statement
 
-        leftFrontDrive.setPower(leftSpeed * 0.85);
+        leftFrontDrive.setPower(leftSpeed * 0.8);
         rightFrontDrive.setPower(rightSpeed);
         leftBackDrive.setPower(leftSpeed);
         rightBackDrive.setPower(rightSpeed);

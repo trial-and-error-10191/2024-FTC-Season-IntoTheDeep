@@ -163,24 +163,32 @@ import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
             // Set the encoders for closed loop speed control, and reset the heading.
             // BEGIN AUTO CODE //
 
-            driveStraight(TURN_SPEED, 22, 0);
+            driveStraight(TURN_SPEED, 34, 0);
            // Wait(1);
-            arm.AutoExtendMotor(-2000);
+            StrafeRobot(TURN_SPEED, -10, 0);
             // Wait(1);
-            //  arm.AutoExtendMotor(2000);
-            // Wait(1);
-          //  turnToHeading(TURN_SPEED, -90.0);
+            arm.armRotateAuto(-400);
+            // Wait(0.2);
+            arm.ExtendAutoArm(-3000);
+            Wait(0.5);
+            claw.RotateClaw(0.7); // not accurate
+            Wait(1);
+            arm.ExtendAutoArm(1800);
+            Wait(0.2);
+            claw.OpenClaw();
+            Wait(0.4);
+            turnToHeading(TURN_SPEED, -90.0);
            // Wait(1);
-          //  driveStraight(TURN_SPEED, 24, -90.0);
+            driveStraight(TURN_SPEED, 24, -90.0);
            // Wait(1);
-          //  StrafeRobot(TURN_SPEED, -16, -90.0);
+            StrafeRobot(TURN_SPEED, -16, -90.0);
            // Wait(1);
-          //  driveStraight(TURN_SPEED, 7, 180);
+            driveStraight(TURN_SPEED, 7, 180);
            // Wait(1);
-          //  turnToHeading(TURN_SPEED, 180);
+            turnToHeading(TURN_SPEED, 180);
            // Wait(1);
-          //  driveStraight(TURN_SPEED, 26, 180);
-          //  Wait(1);
+            driveStraight(TURN_SPEED, 26, 180);
+            Wait(1);
             // code for the grabbing mechanism... again
           //  driveStraight(TURN_SPEED, -6, 180);
            // Wait(1);

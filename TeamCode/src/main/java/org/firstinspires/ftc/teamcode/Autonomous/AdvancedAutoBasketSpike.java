@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @Autonomous(name="AdvancedAutoBasketSpike", group="Robot")
-@Disabled
+// @Disabled
 public class AdvancedAutoBasketSpike extends LinearOpMode {
 
 
@@ -114,6 +114,8 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
 
         @Override
         public void runOpMode() {
+            claw = new SampleClaw(hardwareMap);
+            arm = new LimbArm(hardwareMap, telemetry);
 
             // Initialize the drive system variables.
             leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
@@ -163,16 +165,22 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
             // Set the encoders for closed loop speed control, and reset the heading.
             // BEGIN AUTO CODE //
 
-            driveStraight(TURN_SPEED, 19, 0);
+            driveStraight(TURN_SPEED, 35, 0);
+            Wait(0.5);
+            turnToHeading(TURN_SPEED, 0);
+            Wait(0.5);
+            arm.ExtendAutoArm(arm.maxExtendPos);
+            Wait(0.5);
+            arm.armRotateAuto(-400);
+            Wait(3);
+            claw.OpenClaw();
             // Wait(1);
             arm.ExtendAutoArm(-2000);
+            Wait(0.8);
+            driveStraight(TURN_SPEED, -10, 0);
             // Wait(1);
-            // arm.ExtendAutoArm(2000);
-            // Wait(1);
-           // driveStraight(TURN_SPEED, -10, 0);
-            // Wait(1);
-           // StrafeRobot(TURN_SPEED, 40, 0);
-           // Wait(1);
+            StrafeRobot(TURN_SPEED, 40, 0);
+            Wait(1);
             // arm.armRotateAuto(-2000);
             // Wait(1);
             // arm.ExtendAutoArm(-2000);
