@@ -1,16 +1,17 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
+import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @Autonomous(name="AutoFirstAscent", group="Robot")
 //@Disabled
@@ -23,6 +24,8 @@ public class AutoFirstAscent extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private IMU imu         = null;
     private final ElapsedTime Time = new ElapsedTime();
+    LimbArm arm;
+    SampleClaw claw;
     // Control/Expansion Hub IMU
 
     private double          headingError  = 0;
@@ -111,6 +114,9 @@ public class AutoFirstAscent extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        arm = new LimbArm(hardwareMap, telemetry);
+        claw = new SampleClaw(hardwareMap);
+
         // Initialize the drive system variables.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
@@ -165,9 +171,16 @@ public class AutoFirstAscent extends LinearOpMode {
         // Wait(1);
         turnToHeading(TURN_SPEED, -90);
         // Wait(1);
-        driveStraight(TURN_SPEED, 5, -90);
-        Wait(1);
-        // This is where code for raising the arm to get a lvl. 1 ascent will go
+        driveStraight(TURN_SPEED, 10, -90);
+         Wait(1);
+       // arm.armRotateAuto(-50);
+       // Wait(1);
+       // arm.AutoExtendMotor(500);
+        // Wait(1);
+       // arm.armRotateAuto(100);
+       // Wait(1);
+
+
 
 
         // 0 for heading is whatever the robot's original position is. 90 goes to the left of 0, and negative 90 goes to the right of the 0.
