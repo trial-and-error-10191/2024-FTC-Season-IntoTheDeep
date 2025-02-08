@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @TeleOp(name = "FieldOrientedTeleOp", group = "LinearOpMode")
 public class GobblerTeleOp extends LinearOpMode {
@@ -18,51 +19,48 @@ public class GobblerTeleOp extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
+    private IMU imu = null;
 
-    BNO055IMU imu;
-    Orientation angles = new Orientation();
+    double angles = 0;
 
     double initYaw;
     double adjustedYaw;
 
     public void runOpMode() {
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        initYaw = angles.firstAngle;
-
         leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
 
+        /* The next two lines define Hub orientation.
+         * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
+         *
+         * To Do:  EDIT these two lines to match YOUR mounting configuration.
+         */
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
-        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-        imu.initialize(new BNO055IMU.Parameters());
+
+        // Now initialize the IMU with this mounting orientation
+        // This sample expects the IMU to be in a REV Hub and named "imu".
+        imu = hardwareMap.get(IMU.class, "imu");
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
+
+        imu.resetYaw();
 
         waitForStart();
 
         double deadzone = 0.05;
         while (opModeIsActive()) {
-            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-            adjustedYaw = angles.firstAngle-initYaw;
-            double zeroedYaw = -initYaw + angles.firstAngle;
+            YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+            angles = orientation.getYaw(AngleUnit.DEGREES);
 
             double fieldStrafe = gamepad1.left_stick_x;
             double fieldForward = -gamepad1.left_stick_y;
             double fieldTurn = gamepad1.right_stick_x;
 
-            double robotForward = fieldForward * Math.cos(zeroedYaw) + fieldStrafe * Math.sin(zeroedYaw);
-            double robotStrafe = fieldStrafe * Math.cos(zeroedYaw) - fieldForward * Math.sin(zeroedYaw);
+            double robotForward = fieldForward * Math.cos(angles) + fieldStrafe * Math.sin(angles);
+            double robotStrafe = fieldStrafe * Math.cos(angles) - fieldForward * Math.sin(angles);
             double robotTurn = fieldTurn;
 
             double leftFrontPower = 0;
