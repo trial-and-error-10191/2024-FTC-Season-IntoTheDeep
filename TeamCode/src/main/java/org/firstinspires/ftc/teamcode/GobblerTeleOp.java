@@ -50,39 +50,52 @@ public class GobblerTeleOp extends LinearOpMode {
 
         waitForStart();
 
+        double deadzone = 0.05;
         while (opModeIsActive()) {
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
             adjustedYaw = angles.firstAngle-initYaw;
             double zeroedYaw = -initYaw + angles.firstAngle;
 
-            double x = gamepad1.left_stick_x;
-            double y = -gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
+            double fieldStrafe = gamepad1.left_stick_x;
+            double fieldForward = -gamepad1.left_stick_y;
+            double fieldTurn = gamepad1.right_stick_x;
 
-            double theta = Math.atan2(y, x) * 180/Math.PI;
-            double realTheta;
-            realTheta = (360 - zeroedYaw) + theta;
-            double power = Math.hypot(x, y);
+            double robotForward = fieldForward * Math.cos(zeroedYaw) + fieldStrafe * Math.sin(zeroedYaw);
+            double robotStrafe = fieldStrafe * Math.cos(zeroedYaw) - fieldForward * Math.sin(zeroedYaw);
+            double robotTurn = fieldTurn;
 
-            double sin = Math.sin((realTheta * (Math.PI/180)) - (Math.PI/4));
-            double cos = Math.cos((realTheta * (Math.PI/180)) - (Math.PI/4));
-            double maxSinCos = Math.max(Math.abs(sin), Math.abs(cos));
+            double leftFrontPower = 0;
+            double rightFrontPower = 0;
+            double leftBackPower = 0;
+            double rightBackPower = 0;
 
-            double leftFront = (power * cos/maxSinCos + turn);
-            double leftBack = (power * cos/maxSinCos - turn);
-            double rightFront = (power * cos/maxSinCos + turn);
-            double rightBack = (power * cos/maxSinCos - turn);
-            if ((power + Math.abs(turn)) > 1) {
-                leftFront /= power + turn;
-                leftBack /= power - turn;
-                rightFront /= power + turn;
-                rightBack /= power - turn;
+            if (Math.abs(robotForward) > deadzone || Math.abs(robotStrafe) > deadzone || Math.abs(robotTurn) > deadzone) {
+                leftFrontPower = robotForward + robotStrafe + robotTurn;
+                rightFrontPower = robotForward - robotStrafe - robotTurn;
+                leftBackPower = robotForward - robotStrafe + robotTurn;
+                rightBackPower = robotForward + robotStrafe - robotTurn;
             }
-            leftFrontDrive.setPower(leftFront);
-            leftBackDrive.setPower(leftBack);
-            rightFrontDrive.setPower(rightFront);
-            rightBackDrive.setPower(rightBack);
+
+            double max;
+
+            // All code below this comment normalizes the values so no wheel power exceeds 100%.
+            max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+            max = Math.max(max, Math.abs(leftBackPower));
+            max = Math.max(max, Math.abs(rightBackPower));
+
+            if (max > 1.0) {
+                leftFrontPower /= max; // leftFrontPower = leftFrontPower / max;
+                rightFrontPower /= max;
+                leftBackPower /= max;
+                rightBackPower /= max;
+            }
+
+            // The next four lines gives the calculated power to each motor.
+            leftFrontDrive.setPower(leftFrontPower);
+            rightFrontDrive.setPower(rightFrontPower);
+            leftBackDrive.setPower(leftBackPower);
+            rightBackDrive.setPower(rightBackPower);
         }
     }
 }
