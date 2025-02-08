@@ -49,6 +49,7 @@ public class LimbArm {
     public void RunMotor(float extend) {
         float servoExtend = extend;
         extendLimit();
+
         if (extend != 0) {
             targetPosition = limbExtend.getCurrentPosition() + (int) (extend * EXTENSION_RATE);
         }
@@ -73,26 +74,20 @@ public class LimbArm {
     }
     public void spoolCorrection(boolean expel, boolean reverse) { // Thing that allows the spool to be corrected manually
         if (expel) {
-            spoolServo.setPower(0.2);
+            spoolServo.setPower(0.5);
         }
         else if (reverse) {
-            spoolServo.setPower(-0.2);
+            spoolServo.setPower(-0.5);
         }
     }
 
     public void extendLimit() {
         int rotatePos = limbRotate.getCurrentPosition();
-        if (rotatePos <= 0 && rotatePos > -1099) {                  // This one reaches to the corner of our reach
+        if (rotatePos <= 0 && rotatePos > -849) {                  // This one reaches to the corner of our reach
             extensionLimit = maxExtendPos;
         }
-        else if (rotatePos <= -1099 && rotatePos > -1600) {        // This one rises up slightly
-            extensionLimit = 2472;
-        }
-        else if (rotatePos <= -1600 && rotatePos > -1940) {        // This one goes straight forward
-            extensionLimit = 2100;
-        }
-        else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This one touches the ground
-            extensionLimit = 2229;
+        else if (rotatePos <= -849 && rotatePos > maxRotatePos) {        // This one rises up slightly
+            extensionLimit = 2282;
         }
     }
 
