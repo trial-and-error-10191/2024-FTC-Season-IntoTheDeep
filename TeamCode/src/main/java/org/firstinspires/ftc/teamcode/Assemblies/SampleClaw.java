@@ -57,6 +57,7 @@ public class SampleClaw {
                 extendPosition = MIN_POS;
             }
         }
+
         servoExtend.setPosition(extendPosition);
     }
     public void clawRotate(float left, float right, boolean slow) {
@@ -98,4 +99,21 @@ public class SampleClaw {
 // rotates the claw in a different axis
         servoExtend.setPosition(Posistion_Extend);
     }
+    public void PositionServoDown(double RotationEC) {
+        double Theta = (RotationEC / 22.64) + 90;
+        double servoAngle = 90 - Theta;
+        double requiredServoPosistion = (servoAngle * 0.0041) - 0.2;
+         servoExtend.setPosition(requiredServoPosistion);
+    }
+    public void PositionServoRight(double RotationEC) {
+        double Theta = (RotationEC / 22.64) + 90;
+        double servoAngle = 180 - Theta;
+        double requiredServoPosistion = (servoAngle * 0.0041) - 0.2;
+        servoExtend.setPosition(requiredServoPosistion);
+        servoRotation.setPosition(0.5);
+    }
+
 }
+
+
+

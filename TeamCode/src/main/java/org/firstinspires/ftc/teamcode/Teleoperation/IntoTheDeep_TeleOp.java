@@ -29,6 +29,7 @@
                robot.sampleClaw.clawClamp(gamepad2.a);
                // Makes the claw extend/contract
                robot.sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
+
                // Makes the claw rotate
                robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
 
@@ -47,6 +48,7 @@
                robot.limbArm.rotateByPower(-gamepad2.right_stick_y);
                // Spool correction stuff
                robot.limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
+
                // Makes the arm rise to the high net for samples
 //               robot.limbArm.goUpToHighNet(gamepad1.y);
 //               // Makes the arm prepped to grab a sample from the submersible
