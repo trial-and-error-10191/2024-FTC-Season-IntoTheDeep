@@ -23,15 +23,18 @@
            waitForStart();
            robot.limbArm.initRotateByPower();
            while (opModeIsActive()) {
+               robot.updateState(gamepad1);
 
                robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-               // Makes the claw open/close
-               robot.sampleClaw.clawClamp(gamepad2.a);
-               // Makes the claw extend/contract
-               robot.sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
 
-               // Makes the claw rotate
-               robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
+               robot.moveClaw(gamepad2);
+//               // Makes the claw open/close
+//               robot.sampleClaw.clawClamp(gamepad2.a);
+//               // Makes the claw extend/contract
+//               robot.sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
+//
+//               // Makes the claw rotate
+//               robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
 
                // Makes the limb arm extend/contract, and gives the option to have precise movement
                if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting

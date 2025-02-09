@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Assemblies;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -21,12 +22,22 @@ public class SampleClaw {
     Servo servoExtend;
     Servo servoRotation;
 
+    private enum ClawState {
+        MANUAL,
+        SAMPLE_HUNTING,
+        SPECIMENT_HUNTING;
+    }
+
+    ClawState state;
+
     public SampleClaw(HardwareMap hwMap) {
         // initiates servo name
         servoClamp    = hwMap.get(Servo.class, "claw_Clamp");
         servoExtend   = hwMap.get(Servo.class, "claw_Extend");
         servoRotation = hwMap.get(Servo.class, "claw_Rotation");
+        state = ClawState.MANUAL;
     }
+
     public void clawClamp(boolean open) {
         if (!lastInput && open) {
             ClawOpen = !ClawOpen;
@@ -113,6 +124,13 @@ public class SampleClaw {
         servoRotation.setPosition(0.5);
     }
 
+    public void updateState(Gamepad gamepad, int rotationPosition) {
+        // based on gamepad and rotation position, set claw state
+    }
+
+    public void move(Gamepad gamepad) {
+        // based on gamepad and claw state, move claw
+    }
 }
 
 

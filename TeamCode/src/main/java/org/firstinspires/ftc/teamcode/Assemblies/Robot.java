@@ -2,6 +2,7 @@
 package org.firstinspires.ftc.teamcode.Assemblies;
 
 
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -17,5 +18,13 @@ public class Robot {
    //     ascentMechanism = new AscentMechanism(hwMap);
         sampleClaw = new SampleClaw(hwMap);
         limbArm = new LimbArm(hwMap, telemetry);
+    }
+
+    public void updateState(Gamepad gamepad) {
+        sampleClaw.updateState(gamepad, limbArm.limbRotate.getCurrentPosition());
+    }
+
+    public void moveClaw(Gamepad gamepad) {
+        sampleClaw.move(gamepad);
     }
 }
