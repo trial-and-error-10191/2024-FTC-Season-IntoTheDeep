@@ -4,6 +4,7 @@
 package org.firstinspires.ftc.teamcode.Assemblies;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -97,7 +98,7 @@ public class DriveTrain {
         // initializes deadzone
         double deadzone = 0.05;
         // initializes sensitivity
-        double sensitivity = 0.5;
+        double sensitivity = 0.75;
 
         double leftFrontPower = 0;
         double rightFrontPower = 0;
