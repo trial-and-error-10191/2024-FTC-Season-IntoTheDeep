@@ -122,6 +122,9 @@ public class LimbArm {
         if (limbRotate.getCurrentPosition() <= maxRotatePos && turn < 0) {
             rotatePower = 0;
         }
+        else if (rotatePos >= -200 && rotatePower > 0) {
+            rotatePower *= 0.5f;
+        }
         // Guard against rotating too far backward
         else if (turn >= 0 && !limitRotate.getState()) {
             rotatePower = 0;
