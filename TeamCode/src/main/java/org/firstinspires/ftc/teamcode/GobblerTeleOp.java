@@ -8,9 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @TeleOp(name = "FieldOrientedTeleOp", group = "LinearOpMode")
@@ -31,6 +28,12 @@ public class GobblerTeleOp extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
+
+        // Initializes motor directions:
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
         /* The next two lines define Hub orientation.
          * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
@@ -53,7 +56,7 @@ public class GobblerTeleOp extends LinearOpMode {
         double deadzone = 0.05;
         while (opModeIsActive()) {
             YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-            angles = orientation.getYaw(AngleUnit.DEGREES);
+            angles = -orientation.getYaw(AngleUnit.RADIANS);
 
             double fieldStrafe = gamepad1.left_stick_x;
             double fieldForward = -gamepad1.left_stick_y;
@@ -90,10 +93,13 @@ public class GobblerTeleOp extends LinearOpMode {
             }
 
             // The next four lines gives the calculated power to each motor.
-            leftFrontDrive.setPower(leftFrontPower);
-            rightFrontDrive.setPower(rightFrontPower);
-            leftBackDrive.setPower(leftBackPower);
-            rightBackDrive.setPower(rightBackPower);
+            leftFrontDrive.setPower(leftFrontPower * 0.5);
+            rightFrontDrive.setPower(rightFrontPower * 0.5);
+            leftBackDrive.setPower(leftBackPower * 0.5);
+            rightBackDrive.setPower(rightBackPower * 0.5);
+
+            telemetry.addData("angles", "%4.2f", angles);
+            telemetry.update();
         }
     }
 }
