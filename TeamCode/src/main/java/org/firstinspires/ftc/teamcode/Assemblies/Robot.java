@@ -24,7 +24,7 @@ public class Robot {
         sampleClaw.updateState(gamepad, limbArm.limbRotate.getCurrentPosition());
     }
 
-    public void moveClaw(Gamepad gamepad) {
-        sampleClaw.move(gamepad);
+    public void moveClaw(Gamepad gamepad, double rotationPosition) {
+        sampleClaw.move(gamepad, rotationPosition);
     }
 }

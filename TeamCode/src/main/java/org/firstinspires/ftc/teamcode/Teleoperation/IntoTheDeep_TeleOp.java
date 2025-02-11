@@ -27,7 +27,7 @@
 
                robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
-               robot.moveClaw(gamepad2);
+               robot.moveClaw(gamepad2, robot.limbArm.LimbExtendCount());
 //               // Makes the claw open/close
 //               robot.sampleClaw.clawClamp(gamepad2.a);
 //               // Makes the claw extend/contract
