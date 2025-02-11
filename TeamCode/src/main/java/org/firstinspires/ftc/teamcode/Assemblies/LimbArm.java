@@ -74,10 +74,10 @@ public class LimbArm {
     }
     public void spoolCorrection(boolean expel, boolean reverse) { // Thing that allows the spool to be corrected manually
         if (expel) {
-            spoolServo.setPower(0.2);
+            spoolServo.setPower(0.5);
         }
         else if (reverse) {
-            spoolServo.setPower(-0.2);
+            spoolServo.setPower(-0.5);
         }
     }
 

@@ -18,7 +18,7 @@ public class SampleClaw {
 
     // Define class members
     public Servo servoClamp;
-    Servo servoExtend;
+    public Servo servoExtend;
     Servo servoRotation;
 
     public SampleClaw(HardwareMap hwMap) {

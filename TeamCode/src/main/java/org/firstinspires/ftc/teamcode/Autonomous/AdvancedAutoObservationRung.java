@@ -114,6 +114,8 @@ import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
         @Override
         public void runOpMode() {
+            claw = new SampleClaw(hardwareMap);
+            arm = new LimbArm(hardwareMap, telemetry);
 
             // Initialize the drive system variables.
             leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
@@ -163,32 +165,36 @@ import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
             // Set the encoders for closed loop speed control, and reset the heading.
             // BEGIN AUTO CODE //
 
-            driveStraight(TURN_SPEED, 34, 0);
-           // Wait(1);
-            StrafeRobot(TURN_SPEED, -10, 0);
+            claw.ExtendClaw(0.53); // not accurate
+            arm.ExtendAutoArm(1960);
             // Wait(1);
-            arm.armRotateAuto(-400);
-            // Wait(0.2);
-            arm.ExtendAutoArm(-3000);
-            Wait(0.5);
-            claw.RotateClaw(0.7); // not accurate
-            Wait(1);
-            arm.ExtendAutoArm(1800);
-            Wait(0.2);
-            claw.OpenClaw();
+            arm.armRotateAuto(-1200);
             Wait(0.4);
-            turnToHeading(TURN_SPEED, -90.0);
-           // Wait(1);
-            driveStraight(TURN_SPEED, 24, -90.0);
-           // Wait(1);
-            StrafeRobot(TURN_SPEED, -16, -90.0);
-           // Wait(1);
-            driveStraight(TURN_SPEED, 7, 180);
-           // Wait(1);
-            turnToHeading(TURN_SPEED, 180);
-           // Wait(1);
-            driveStraight(TURN_SPEED, 26, 180);
-            Wait(1);
+            claw.RotateClaw(0.7);
+            // Wait(1);
+            driveStraight(TURN_SPEED, 20, 0);
+            // Wait(1);
+            StrafeRobot(TURN_SPEED, -10, 0);
+            Wait(0.5);
+//            Wait(1);
+//            driveStraight(TURN_SPEED, 16, 0);
+//            Wait(0.6);
+//            arm.ExtendAutoArm(-1200);
+//            Wait(0.4);
+//            claw.OpenClaw();
+//            Wait(0.4);
+//            turnToHeading(TURN_SPEED, -90.0);
+//           // Wait(1);
+//            driveStraight(TURN_SPEED, 24, -90.0);
+//           // Wait(1);
+//            StrafeRobot(TURN_SPEED, -16, -90.0);
+//           // Wait(1);
+//            driveStraight(TURN_SPEED, 7, 180);
+//           // Wait(1);
+//            turnToHeading(TURN_SPEED, 180);
+//           // Wait(1);
+//            driveStraight(TURN_SPEED, 26, 180);
+//            Wait(1);
             // code for the grabbing mechanism... again
           //  driveStraight(TURN_SPEED, -6, 180);
            // Wait(1);
