@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Assemblies.Robot;
 
 @TeleOp (name = "Field oriented controls", group = "LinearOpMode")
 public class Field_TeleOp extends LinearOpMode {
@@ -23,6 +24,9 @@ public class Field_TeleOp extends LinearOpMode {
     double adjustedYaw;
 
     public void runOpMode() {
+        // Initiates the robots system and subsystems!
+        Robot robot = new Robot(hardwareMap, telemetry);
+
         leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
@@ -92,10 +96,33 @@ public class Field_TeleOp extends LinearOpMode {
             }
 
             // The next four lines gives the calculated power to each motor.
-            leftFrontDrive.setPower(leftFrontPower * 0.5);
-            rightFrontDrive.setPower(rightFrontPower * 0.5);
-            leftBackDrive.setPower(leftBackPower * 0.5);
-            rightBackDrive.setPower(rightBackPower * 0.5);
+            leftFrontDrive.setPower(leftFrontPower);
+            rightFrontDrive.setPower(rightFrontPower);
+            leftBackDrive.setPower(leftBackPower);
+            rightBackDrive.setPower(rightBackPower);
+
+            // Makes the claw open/close
+            robot.sampleClaw.clawClamp(gamepad2.a);
+            // Makes the claw extend/contract
+            robot.sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
+            // Makes the claw rotate
+            robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
+
+            // Makes the limb arm extend/contract, and gives the option to have precise movement
+            if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
+                gamepad2.left_stick_y = 0;
+            }
+            robot.limbArm.RunMotor(-gamepad2.left_stick_y);
+
+            // Makes the limb arm rotate
+            if (gamepad2.right_stick_x < 0.05 && gamepad2.right_stick_x > -0.05) { // Makes sure there's no drifting
+                gamepad2.right_stick_x = 0;
+            }
+            //robot.driveTrain.LiftHandle(robot.limbArm.limbExtend.getCurrentPosition());
+            //robot.limbArm.armRotate(gamepad2.right_stick_y);
+            robot.limbArm.rotateByPower(-gamepad2.right_stick_y);
+            // Spool correction stuff
+            robot.limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
 
             telemetry.addData("angles", "%4.2f", angles);
             telemetry.update();
