@@ -120,18 +120,17 @@ public class SampleClaw {
         servoExtend.setPosition(requiredServoPosistion);
     }
 
-    public double PositionServoHorizontal(double RotationEC) {
+    public void PositionServoHorizontal(double RotationEC) {
         double Theta = (RotationEC / 22.64) + 90;
         double servoAngle = 180 - Theta;
         double requiredServoPosistion = (servoAngle * 0.0041) - 0.2;
-        return requiredServoPosistion;
-        //  servoExtend.setPosition(requiredServoPosistion);
-        //  servoRotation.setPosition(0.5);
+        servoExtend.setPosition(requiredServoPosistion);
+        servoRotation.setPosition(0.7);
     }
 
     public void updateState(Gamepad gamepad, int rotationPosition) {
         // based on gamepad and rotation position, set claw state
-        boolean isUp = rotationPosition < -1300;
+        boolean isUp = rotationPosition > -1300;
         if (gamepad.x) {
                 state = ClawState.MANUAL;
         }
@@ -140,7 +139,6 @@ public class SampleClaw {
                 state = ClawState.SAMPLE_HUNTING;
         }
         if (gamepad.b) {
-            if (!isUp)
                 state = ClawState.SPECIMEN_HUNTING;
         }
     }
