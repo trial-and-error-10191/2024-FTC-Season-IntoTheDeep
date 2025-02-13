@@ -12,11 +12,11 @@ import org.firstinspires.ftc.teamcode.Assemblies.Robot;
 
 @TeleOp (name = "Field oriented controls", group = "LinearOpMode")
 public class Field_TeleOp extends LinearOpMode {
-    private DcMotor leftFrontDrive = null;
-    private DcMotor leftBackDrive = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor rightBackDrive = null;
-    private IMU imu = null;
+    public DcMotor leftFrontDrive = null;
+    public DcMotor leftBackDrive = null;
+    public DcMotor rightFrontDrive = null;
+    public DcMotor rightBackDrive = null;
+    public IMU imu = null;
 
     double angles = 0;
 
