@@ -165,31 +165,22 @@ import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
             // Set the encoders for closed loop speed control, and reset the heading.
             // BEGIN AUTO CODE //
 
-            claw.ExtendClaw(0.53); // not accurate
+            claw.ExtendClaw(0.53);
             arm.ExtendAutoArm(1960);
-            // Wait(1);
             arm.armRotateAuto(-1200);
             Wait(0.4);
             claw.RotateClaw(0.7);
-            // Wait(1);
-            driveStraight(TURN_SPEED, 20, 0);
-            // Wait(1);
+            driveStraight(TURN_SPEED, 26, 0);
             StrafeRobot(TURN_SPEED, -10, 0);
-            Wait(0.5);
-//            Wait(1);
-//            driveStraight(TURN_SPEED, 16, 0);
-//            Wait(0.6);
-//            arm.ExtendAutoArm(-1200);
-//            Wait(0.4);
-//            claw.OpenClaw();
-//            Wait(0.4);
-//            turnToHeading(TURN_SPEED, -90.0);
-//           // Wait(1);
-//            driveStraight(TURN_SPEED, 24, -90.0);
-//           // Wait(1);
-//            StrafeRobot(TURN_SPEED, -16, -90.0);
-//           // Wait(1);
-//            driveStraight(TURN_SPEED, 7, 180);
+            driveStraight(TURN_SPEED, 10, 0);
+            claw.OpenClaw();
+            Wait(0.4);
+            arm.armRotateAuto(0);
+            arm.ExtendAutoArm(0);
+            turnToHeading(TURN_SPEED, -90.0);
+            driveStraight(TURN_SPEED, 24, -90.0);
+            StrafeRobot(TURN_SPEED, -16, -90.0);
+            driveStraight(TURN_SPEED, 7, 180);
 //           // Wait(1);
 //            turnToHeading(TURN_SPEED, 180);
 //           // Wait(1);

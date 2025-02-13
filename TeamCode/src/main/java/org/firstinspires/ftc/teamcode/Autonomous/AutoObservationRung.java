@@ -164,20 +164,17 @@ public class AutoObservationRung extends LinearOpMode {
         // Set the encoders for closed loop speed control, and reset the heading.
         // BEGIN AUTO CODE //
 
-         driveStraight(TURN_SPEED, 34, 0);
-         Wait(0.3);
-         StrafeRobot(TURN_SPEED, -10, 0);
-         Wait(0.2);
-         arm.armRotateAuto(-400);
-         Wait(0.2);
-         arm.ExtendAutoArm(-3000);
-         Wait(0.5);
-         claw.RotateClaw(0.7); // not accurate
-         Wait(1);
-         arm.ExtendAutoArm(1800);
-         Wait(0.2);
-         claw.OpenClaw();
-         Wait(0.4);
+        claw.ExtendClaw(0.53);
+        arm.ExtendAutoArm(1960);
+        arm.armRotateAuto(-1200);
+        claw.RotateClaw(0.7);
+        driveStraight(TURN_SPEED, 26, 0);
+        StrafeRobot(TURN_SPEED, -10, 0);
+        driveStraight(TURN_SPEED, 10, 0);
+        claw.OpenClaw();
+        Wait(0.4);
+        arm.armRotateAuto(0);
+        arm.ExtendAutoArm(0);
          driveStraight(TURN_SPEED, -35, 0);
          Wait(0.6);
          StrafeRobot(TURN_SPEED, 46, 0);
