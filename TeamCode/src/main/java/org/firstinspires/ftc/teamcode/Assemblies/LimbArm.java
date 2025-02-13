@@ -23,7 +23,9 @@ public class LimbArm {
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
     private final int EXTENSION_RATE = 160;
     private final int ROTATION_RATE = 40;
-
+public int LimbExtendCount() {
+    return limbRotate.getCurrentPosition();
+}
     public LimbArm(HardwareMap hwMap, Telemetry telemetry) {
         limbExtend = hwMap.get(DcMotor.class, "limbExtend");
         limbExtend.setDirection(DcMotor.Direction.REVERSE);
