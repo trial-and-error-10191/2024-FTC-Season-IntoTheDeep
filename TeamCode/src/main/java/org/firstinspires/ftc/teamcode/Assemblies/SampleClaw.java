@@ -15,7 +15,7 @@ public class SampleClaw {
     static final double closePos = 1.0;     // servo position for closed claw
     double rotatePosition = 0.5;                  // Start at halfway position
     double extendPosition = 0.8;                  // Start at halfway position
-
+    public boolean slow = false;
 
     // Define class members
     public Servo servoClamp;
@@ -27,6 +27,14 @@ public class SampleClaw {
         SAMPLE_HUNTING,
         SPECIMEN_HUNTING;
     }
+public void SlowToggle(Gamepad gamepad2) {
+        if (gamepad2.y) {
+            slow = !slow;
+            while (gamepad2.y) {
+                // nothing
+            }
+        }
+}
 
     ClawState state;
 
@@ -50,7 +58,7 @@ public class SampleClaw {
         lastInput = open;
     }
 
-    public void clawExtend(boolean extend, boolean contracting, boolean slow) {
+    public void clawExtend(boolean extend, boolean contracting) {
         if (slow) {
             INCREMENT = 0.0005;
         }
@@ -72,7 +80,7 @@ public class SampleClaw {
         servoExtend.setPosition(extendPosition);
     }
 
-    public void clawRotate(float left, float right, boolean slow) {
+    public void clawRotate(float left, float right) {
         if (slow) {
             INCREMENT = 0.0005;
         }
@@ -148,12 +156,12 @@ if (state == ClawState.MANUAL) {
     // Makes the claw open/close
                clawClamp(gamepad2.a);
                // Makes the claw extend/contract
-               clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
+               clawExtend(gamepad2.left_bumper, gamepad2.right_bumper);
                // Makes the claw rotate
-               clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
+               clawRotate(gamepad2.left_trigger, gamepad2.right_trigger);
 } else if (state == ClawState.SAMPLE_HUNTING) {
     PositionServoDown(rotationPosition);
-    clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
+    clawRotate(gamepad2.left_trigger, gamepad2.right_trigger);
     clawClamp(gamepad2.a);
 } else if (state == ClawState.SPECIMEN_HUNTING){
     PositionServoHorizontal(rotationPosition);

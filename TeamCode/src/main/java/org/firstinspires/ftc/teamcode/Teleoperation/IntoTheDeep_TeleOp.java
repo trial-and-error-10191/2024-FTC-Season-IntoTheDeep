@@ -1,6 +1,7 @@
    package org.firstinspires.ftc.teamcode.Teleoperation;
    import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
    import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+   import com.qualcomm.robotcore.hardware.Gamepad;
 
    import org.firstinspires.ftc.teamcode.Assemblies.Robot;
 
@@ -26,7 +27,6 @@
                robot.updateState(gamepad1);
 
                robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-
                robot.moveClaw(gamepad2, robot.limbArm.LimbExtendCount());
 //               // Makes the claw open/close
 //               robot.sampleClaw.clawClamp(gamepad2.a);
@@ -85,6 +85,14 @@
                telemetry.addData("", "");
                telemetry.addData("Rotation Encoder Count: ", "%d", robot.limbArm.limbRotate.getCurrentPosition());
                telemetry.update();
+               public void SlowToggle(Gamepad gamepad2) {
+                   if (gamepad2.y) {
+                       robot.sampleClaw.SlowToggle();
+                       while (gamepad2.y) {
+                           // nothing
+                       }
+                   }
+               }
            }
        }
    }
