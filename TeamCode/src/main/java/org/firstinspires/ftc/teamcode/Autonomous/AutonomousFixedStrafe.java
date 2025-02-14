@@ -41,6 +41,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
+import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 /*
  *  This OpMode illustrates the concept of driving an autonomous path based on Gyro (IMU) heading and encoder counts.
@@ -115,6 +116,7 @@ public class AutonomousFixedStrafe extends LinearOpMode {
     private int rightBackTarget  = 0;
     private int rightFrontTarget = 0;
     LimbArm arm;
+    SampleClaw Claw;
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
@@ -187,6 +189,7 @@ public class AutonomousFixedStrafe extends LinearOpMode {
     public void runOpMode() {
 
         arm = new LimbArm(hardwareMap, telemetry);
+        Claw = new SampleClaw(hardwareMap);
 
         // Initialize the drive system variables.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
@@ -234,11 +237,6 @@ public class AutonomousFixedStrafe extends LinearOpMode {
         // Set the encoders for closed loop speed control, and reset the heading.
         // BEGIN AUTO CODE //
 
-        //extend arm and drop onto bar
-        // Step through each leg of the path,
-        // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
-        //          holdHeading() is used after turns to let the heading stabilize
-        //          Add a sleep(2000) after any step to keep the telemetry data visible for review
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // Pause to display last telemetry message.

@@ -23,7 +23,9 @@ public class LimbArm {
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
     private final int EXTENSION_RATE = 160;
     private final int ROTATION_RATE = 40;
-
+public int LimbExtendCount() {
+    return limbRotate.getCurrentPosition();
+}
     public LimbArm(HardwareMap hwMap, Telemetry telemetry) {
         limbExtend = hwMap.get(DcMotor.class, "limbExtend");
         limbExtend.setDirection(DcMotor.Direction.REVERSE);
@@ -49,7 +51,7 @@ public class LimbArm {
 
     public void RunMotor(float extend) {
         float servoExtend = extend;
-        //extendLimit();
+        extendLimit();
         if (extend != 0) {
             targetPosition = limbExtend.getCurrentPosition() + (int) (extend * EXTENSION_RATE);
         }
@@ -81,21 +83,21 @@ public class LimbArm {
         }
     }
 
-//    public void extendLimit() {
-//        int rotatePos = limbRotate.getCurrentPosition();
-//        if (rotatePos <= 0 && rotatePos > -1099) {                  // This one reaches to the corner of our reach
-//            extensionLimit = maxExtendPos;
-//        }
-//        else if (rotatePos <= -1099 && rotatePos > -1600) {        // This one rises up slightly
-//            extensionLimit = 2472;
-//        }
-//        else if (rotatePos <= -1600 && rotatePos > -1940) {        // This one goes straight forward
-//            extensionLimit = 2100;
-//        }
-//        else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This one touches the ground
-//            extensionLimit = 2229;
-//        }
-//    }
+    public void extendLimit() {
+        int rotatePos = limbRotate.getCurrentPosition();
+        if (rotatePos <= 0 && rotatePos > -1099) {                  // This one reaches to the corner of our reach
+            extensionLimit = maxExtendPos;
+        }
+        else if (rotatePos <= -1099 && rotatePos > -1600) {        // This one rises up slightly
+            extensionLimit = 2472;
+        }
+        else if (rotatePos <= -1600 && rotatePos > -1940) {        // This one goes straight forward
+            extensionLimit = 2100;
+        }
+        else if (rotatePos <= -1940 && rotatePos > maxRotatePos) { // This one touches the ground
+            extensionLimit = 2229;
+        }
+    }
 
     public void armRotate(float turn) {
 //        if (limbExtend.getCurrentPosition() > extensionLimit) {
@@ -121,6 +123,9 @@ public class LimbArm {
 
         if (limbRotate.getCurrentPosition() <= maxRotatePos && turn < 0) {
             rotatePower = 0;
+        }
+        else if (rotatePos >= -200 && rotatePower > 0) {
+            rotatePower *= 0.5f;
         }
         // Guard against rotating too far backward
         else if (turn >= 0 && !limitRotate.getState()) {
