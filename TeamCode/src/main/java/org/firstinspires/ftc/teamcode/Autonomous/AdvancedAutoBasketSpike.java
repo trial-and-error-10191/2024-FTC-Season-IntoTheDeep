@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @Autonomous(name="AdvancedAutoBasketSpike", group="Robot")
-// @Disabled
+@Disabled
 public class AdvancedAutoBasketSpike extends LinearOpMode {
 
 

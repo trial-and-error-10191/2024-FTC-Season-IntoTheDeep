@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @Autonomous(name="AdvancedAutoObservationRung", group="Robot")
-// @Disabled
+@Disabled
  public class AdvancedAutoObservationRung extends LinearOpMode {
 
         /* Declare OpMode members. */

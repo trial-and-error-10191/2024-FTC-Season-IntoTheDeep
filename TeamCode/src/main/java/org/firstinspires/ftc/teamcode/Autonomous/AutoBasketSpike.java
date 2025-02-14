@@ -22,7 +22,7 @@ public class AutoBasketSpike extends LinearOpMode {
         private DcMotor rightFrontDrive = null;
         private DcMotor rightBackDrive = null;
         private DcMotor leftBackDrive = null;
-        private IMU imu         = null;
+        private IMU imu = null;
         private final ElapsedTime Time = new ElapsedTime();
         // Control/Expansion Hub IMU
         LimbArm arm;
@@ -185,11 +185,11 @@ public class AutoBasketSpike extends LinearOpMode {
             // Wait(1);
             driveStraight(TURN_SPEED, 13, 180.0);
             Wait(1);
-           // Code for arm goes here
-//            Wait(0.2);
-//            arm.armRotateAuto(-1500);
-//            Wait(0.2);
-            //arm.armRotateAuto(-2000);
+            // Code for arm goes here
+            Wait(0.2);
+            arm.armRotateAuto(-1500);
+            Wait(0.2);
+            arm.armRotateAuto(-2000);
             Wait(4);
             // This is where code for raising the arm to get a lvl. 1 ascent
 
