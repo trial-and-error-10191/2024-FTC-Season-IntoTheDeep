@@ -22,8 +22,7 @@ public class SampleClaw {
     public Servo servoClamp;
     Servo servoExtend;
     Servo servoRotation;
-
-    private enum ClawState {
+    public enum ClawState {
         MANUAL,
         SAMPLE_HUNTING,
         SPECIMEN_HUNTING;
@@ -35,7 +34,7 @@ public void SlowToggle(Gamepad gamepad2) {
     PreviousPress = gamepad2.y;
 }
 
-    ClawState state;
+    public ClawState state;
 
     public SampleClaw(HardwareMap hwMap) {
         // initiates servo name

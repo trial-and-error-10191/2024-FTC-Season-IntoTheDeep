@@ -23,6 +23,7 @@ public class LimbArm {
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
     private final int EXTENSION_RATE = 160;
     private final int ROTATION_RATE = 40;
+    int RotationEC = 0;
 public int LimbExtendCount() {
     return limbRotate.getCurrentPosition();
 }
@@ -191,7 +192,8 @@ public int LimbExtendCount() {
             limbExtend.setTargetPosition(3000);
         }
     }
-    public void ExtendBase(double RotationEC) {
+    public void ExtendBase() {
+    RotationEC = limbRotate.getCurrentPosition();
         extendLimit();
         int HeightInEc = 1000; // placeholder for D
         double Theta = (RotationEC / 22.64) + 90;

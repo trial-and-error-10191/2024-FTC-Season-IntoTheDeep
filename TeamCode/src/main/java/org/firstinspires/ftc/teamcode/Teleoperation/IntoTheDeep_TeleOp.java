@@ -4,6 +4,7 @@
    import com.qualcomm.robotcore.hardware.Gamepad;
 
    import org.firstinspires.ftc.teamcode.Assemblies.Robot;
+   import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 
 // This file is the main TeleOp file.
@@ -40,8 +41,11 @@
                if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
                    gamepad2.left_stick_y = 0;
                }
-               robot.limbArm.RunMotor(-gamepad2.left_stick_y);
-
+               if (robot.sampleClaw.state == SampleClaw.ClawState.SAMPLE_HUNTING ) {
+                   robot.limbArm.ExtendBase();
+               } else {
+                   robot.limbArm.RunMotor(-gamepad2.left_stick_y);
+               }
                // Makes the limb arm rotate
                if (gamepad2.right_stick_x < 0.05 && gamepad2.right_stick_x > -0.05) { // Makes sure there's no drifting
                    gamepad2.right_stick_x = 0;
