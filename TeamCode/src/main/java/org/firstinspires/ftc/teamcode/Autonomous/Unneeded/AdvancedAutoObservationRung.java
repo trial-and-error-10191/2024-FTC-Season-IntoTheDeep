@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Unneeded;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -14,9 +14,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
-@Autonomous(name="AutoBasketTop", group="Robot")
+@Autonomous(name="AdvancedAutoObservationRung", group="Robot")
 @Disabled
-public class AutoBasketTop extends LinearOpMode {
+ public class AdvancedAutoObservationRung extends LinearOpMode {
 
         /* Declare OpMode members. */
         private DcMotor leftFrontDrive   = null;
@@ -115,6 +115,7 @@ public class AutoBasketTop extends LinearOpMode {
         public void runOpMode() {
             claw = new SampleClaw(hardwareMap);
             arm = new LimbArm(hardwareMap, telemetry);
+
             // Initialize the drive system variables.
             leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
             rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
@@ -161,42 +162,47 @@ public class AutoBasketTop extends LinearOpMode {
             } // end of while loop
 
             // Set the encoders for closed loop speed control, and reset the heading.
-            // BEGIN AUTO CODE
+            // BEGIN AUTO CODE //
 
-            driveStraight(TURN_SPEED, 22, 0);
-            Wait(1);
-            arm.ExtendAutoArm(arm.maxExtendPos);
-            Wait(0.2);
-            arm.armRotateAuto(-400);
-            Wait(3);
+            claw.ExtendClaw(0.53);
+            arm.ExtendAutoArm(1960);
+            arm.armRotateAuto(-1200);
+            Wait(0.4);
+            claw.RotateClaw(0.7);
+            driveStraight(TURN_SPEED, 26, 0);
+            StrafeRobot(TURN_SPEED, -10, 0);
+            driveStraight(TURN_SPEED, 10, 0);
             claw.OpenClaw();
-            //0
-            // claw.CloseClaw();
-            Wait(3);
+            Wait(0.4);
             arm.armRotateAuto(0);
-            Wait(0.2);
             arm.ExtendAutoArm(0);
-            Wait(0.2);
-//            driveStraight(TURN_SPEED, -15, 0);
-//             Wait(0.2);
-//            StrafeRobot(TURN_SPEED, 6, 0);
-//             Wait(0.2);
-//            turnToHeading(TURN_SPEED, -88.0);
-//             Wait(0.2);
-//            driveStraight(TURN_SPEED, 62, -88.0);
-//             Wait(0.2);
-//            turnToHeading(TURN_SPEED, 180.0);
-//             Wait(0.2);
-//            driveStraight(TURN_SPEED, 13, 180.0);
+            turnToHeading(TURN_SPEED, -90.0);
+            driveStraight(TURN_SPEED, 24, -90.0);
+            StrafeRobot(TURN_SPEED, -16, -90.0);
+            driveStraight(TURN_SPEED, 7, 180);
+//           // Wait(1);
+//            turnToHeading(TURN_SPEED, 180);
+//           // Wait(1);
+//            driveStraight(TURN_SPEED, 26, 180);
 //            Wait(1);
-//            arm.ExtendAutoArm(1900);
-//            Wait(0.2);
-//            arm.armRotateAuto(-500);
-//            Wait(0.2);
-//            arm.armRotateAuto(-1500);
-// uncomment after
-            Wait(4);
-            // This is where code for raising the arm to get a lvl. 1 ascent
+            // code for the grabbing mechanism... again
+          //  driveStraight(TURN_SPEED, -6, 180);
+           // Wait(1);
+          //  StrafeRobot(TURN_SPEED, 20, 180);
+           // Wait(1);
+          //  turnToHeading(TURN_SPEED, 90);
+           // Wait(1);
+          //  driveStraight(TURN_SPEED, 16, 90);
+           // Wait(1);
+          //  turnToHeading(TURN_SPEED, 0);
+           // Wait(1);
+          //  driveStraight(TURN_SPEED, 10, 0);
+          //  Wait(1);
+            //This is for the grabbing mechanism
+          //  driveStraight(TURN_SPEED, -22, 0);
+           // Wait(1);
+          //  StrafeRobot(TURN_SPEED, 29, 0);
+          //  Wait(1);
 
 
             // 0 for heading is whatever the robot's original position is. 90 goes to the left of 0, and negative 90 goes to the right of the 0.
@@ -554,7 +560,11 @@ public class AutoBasketTop extends LinearOpMode {
         public void Wait(double seconds) {
             Time.reset();
             while (Time.milliseconds()  < seconds * 1000) {
+
                 // doesn't need anything
+
             } // end of while loop
+
         } // end of public void Wait
+
     } // end of public class

@@ -67,6 +67,7 @@ public int LimbExtendCount() {
         }
         limbExtend.setTargetPosition(targetPosition);
         spoolServo.setPower(servoExtend * 0.85);
+        telemetry.addData("ExtendLimit", "%b", !limitExtend.getState());
     }
     public void AutoExtendMotor(int extendAuto) { // Allows the arm to extend in autonomous
         if (extendAuto > maxExtendPos) {
@@ -81,6 +82,7 @@ public int LimbExtendCount() {
         else if (reverse) {
             spoolServo.setPower(-0.5);
         }
+        telemetry.addData("SpoolPower", "%4.2f", spoolServo.getPower());
     }
 
     public void extendLimit() {

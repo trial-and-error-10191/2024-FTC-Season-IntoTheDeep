@@ -166,21 +166,15 @@ public class AutoFirstAscent extends LinearOpMode {
         // BEGIN AUTO CODE
 
         StrafeRobot(TURN_SPEED, -6, 0);
-        // Wait(1);
         driveStraight(TURN_SPEED, 62, 0);
-        // Wait(1);
+        arm.armRotateAuto(-1750);
         turnToHeading(TURN_SPEED, -90);
-        // Wait(1);
         driveStraight(TURN_SPEED, 10, -90);
-         Wait(1);
-       // arm.armRotateAuto(-50);
-       // Wait(1);
-       // arm.AutoExtendMotor(500);
-        // Wait(1);
-       // arm.armRotateAuto(100);
-       // Wait(1);
-
-
+        arm.AutoExtendMotor(-600);
+        arm.armRotateAuto(-1900);
+        arm.armRotateAuto(-50);
+        arm.AutoExtendMotor(500);
+        arm.armRotateAuto(100);
 
 
         // 0 for heading is whatever the robot's original position is. 90 goes to the left of 0, and negative 90 goes to the right of the 0.

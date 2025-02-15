@@ -1,4 +1,3 @@
-
 /* Copyright (c) 2022 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -28,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Unneeded;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -90,9 +89,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
  *  Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: Lift test", group="Robot")
+@Autonomous(name="Robot: BasicPark Location A2.5 Facing net", group="Robot")
 @Disabled
-public class liftNearNet extends LinearOpMode {
+public class autoNearSpecBlueAlternative extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftFrontDrive   = null;
@@ -110,10 +109,8 @@ public class liftNearNet extends LinearOpMode {
     private double  turnSpeed     = 0;
     private double  leftSpeed     = 0;
     private double  rightSpeed    = 0;
-    private int     leftFrontTarget    = 0;
-    private int leftBackTarget = 0;
-    private int rightBackTarget = 0;
-    private int rightFrontTarget = 0;
+    private int     leftTarget    = 0;
+    private int     rightTarget   = 0;
     private int     SecondleftTarget    = 0; //Only used for strafing
     private int     SecondrightTarget   = 0; //
     // Calculate the COUNTS_PER_INCH for your specific drive train.
@@ -126,61 +123,20 @@ public class liftNearNet extends LinearOpMode {
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
     static final double     WHEEL_DIAMETER_INCHES   = 3.5 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
+                                                      (WHEEL_DIAMETER_INCHES * 3.1415);
 
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
     static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
     static final double     TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
-    static final double     HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
-    // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
+    static final double     HEADING_THRESHOLD       = 5.0 ;    // How close must the heading get to the target before moving to next step.
+                                                               // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
     // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
     // Increase these numbers if the heading does not correct strongly enough (eg: a heavy robot or using tracks)
     // Decrease these numbers if the heading does not settle on the correct value (eg: very agile robot with omni wheels)
     static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable.
     static final double     P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable.
-
-    public void Orientations() {
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-
-    }
-    public void flip(String FirstLocation, String SecondLocation) {
-        // The input is expected to be L or R for the first value and F or B for the second value
-        if (FirstLocation.equals("L")) {
-            if (SecondLocation.equals("F")) {
-                if (leftFrontDrive.getDirection() == DcMotor.Direction.REVERSE) {
-                    leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-                } else {
-                    leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-                }
-            } else {
-                if (leftBackDrive.getDirection() == DcMotor.Direction.REVERSE) {
-                    leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
-                } else {
-                    leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-                }
-            }
-        } else {
-            if (SecondLocation.equals("F")) {
-                if (rightFrontDrive.getDirection() == DcMotor.Direction.REVERSE) {
-                    rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-                } else {
-                    rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-                }
-            } else {
-                if (rightBackDrive.getDirection() == DcMotor.Direction.REVERSE) {
-                    rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-                } else {
-                    rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-                }
-            }
-
-        }
-    }
 
 
     @Override
@@ -193,8 +149,11 @@ public class liftNearNet extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flip
-        Orientations();
+        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
         /* The next two lines define Hub orientation.
          * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
          *
@@ -218,11 +177,7 @@ public class liftNearNet extends LinearOpMode {
         rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        imu.resetYaw();
+
         // Wait for the game to start (Display Gyro value while waiting)
         while (opModeInInit()) {
             telemetry.addData(">", "Robot Heading = %4.0f", getHeading());
@@ -230,15 +185,13 @@ public class liftNearNet extends LinearOpMode {
         }
 
         // Set the encoders for closed loop speed control, and reset the heading.
-        // BEGIN AUTO CODE //
-        driveStraight(DRIVE_SPEED, 4, getHeading());
-        turnToHeading(TURN_SPEED, 90);
-//        //extend arm and then drop sample and pull it back down.
-        turnToHeading(TURN_SPEED,0 );
-        driveStraight(DRIVE_SPEED, 50, getHeading());
-        turnToHeading(TURN_SPEED, -90);
-        driveStraight(DRIVE_SPEED, 15, getHeading());
-        //extend arm and drop onto bar
+        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        imu.resetYaw();
+
+        driveStraight(DRIVE_SPEED, -30, 0);
         // Step through each leg of the path,
         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
         //          holdHeading() is used after turns to let the heading stabilize
@@ -257,40 +210,39 @@ public class liftNearNet extends LinearOpMode {
 
     // **********  HIGH Level driving functions.  ********************
     /**
-     *  Drive in a straight line, on a fixed compass heading (angle), based on encoder counts.
-     *  Move will stop if either of these conditions occur:
-     *  1) Move gets to the desired position
-     *  2) Driver stops the OpMode running.
-     *
-     * @param maxDriveSpeed MAX Speed for forward/rev motion (range 0 to +1.0) .
-     * @param distance   Distance (in inches) to move from current position.  Negative distance means move backward.
-     * @param heading      Absolute Heading Angle (in Degrees) relative to last gyro reset.
-     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                   If a relative angle is required, add/subtract from the current robotHeading.
-     */
+    *  Drive in a straight line, on a fixed compass heading (angle), based on encoder counts.
+    *  Move will stop if either of these conditions occur:
+    *  1) Move gets to the desired position
+    *  2) Driver stops the OpMode running.
+    *
+    * @param maxDriveSpeed MAX Speed for forward/rev motion (range 0 to +1.0) .
+    * @param distance   Distance (in inches) to move from current position.  Negative distance means move backward.
+    * @param heading      Absolute Heading Angle (in Degrees) relative to last gyro reset.
+    *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+    *                   If a relative angle is required, add/subtract from the current robotHeading.
+    */
     public void driveStraight(double maxDriveSpeed,
                               double distance,
                               double heading) {
-        Orientations();
 
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
             int moveCounts = (int)(distance * COUNTS_PER_INCH);
-            leftFrontTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
-            leftBackTarget = leftBackDrive.getCurrentPosition() + moveCounts;
-            rightFrontTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
-            rightBackTarget = rightBackDrive.getCurrentPosition() + moveCounts;
+            leftTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
+            leftTarget = leftBackDrive.getCurrentPosition() + moveCounts;
+            rightTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
+            rightTarget = rightBackDrive.getCurrentPosition() + moveCounts;
 
             // Set Target FIRST, then turn on RUN_TO_POSITION
-            // If Strafing then reverse motor directions
+           // If Strafing then reverse motor directions
 
 
-            leftFrontDrive.setTargetPosition(leftFrontTarget);
-            rightFrontDrive.setTargetPosition(rightFrontTarget);
-            leftBackDrive.setTargetPosition(leftBackTarget);
-            rightBackDrive.setTargetPosition(rightBackTarget);
+                leftFrontDrive.setTargetPosition(leftTarget);
+                rightFrontDrive.setTargetPosition(rightTarget);
+                leftBackDrive.setTargetPosition(leftTarget);
+                rightBackDrive.setTargetPosition(rightTarget);
 
 
 
@@ -306,7 +258,7 @@ public class liftNearNet extends LinearOpMode {
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                    (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+                   (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
 
                 // Determine required steering to keep on heading
                 turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
@@ -330,77 +282,51 @@ public class liftNearNet extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-    public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
-        Orientations();
-        flip("L", "F");
-        flip("R", "B");
-//    telemetry.addData("Encoder Count aim", (distance * COUNTS_PER_INCH));
-        if (opModeIsActive()) {
+public void StrafeRobot(double maxDriveSpeed, double distance) {
+    // Determine new target position, and pass to motor controller
+    int moveCounts = (int)(Math.abs(distance) * COUNTS_PER_INCH);
+   if (distance > 0) {
+       SecondleftTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
+       leftTarget = leftBackDrive.getCurrentPosition() - moveCounts;
+       SecondrightTarget = rightFrontDrive.getCurrentPosition() - moveCounts;
+       rightTarget = rightBackDrive.getCurrentPosition() + moveCounts;
+   } else {
+       SecondleftTarget = leftFrontDrive.getCurrentPosition() - moveCounts;
+       leftTarget = leftBackDrive.getCurrentPosition() + moveCounts;
+       SecondrightTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
+       rightTarget = rightBackDrive.getCurrentPosition() - moveCounts;
+   }
+    // Set Target FIRST, then turn on RUN_TO_POSITION
+    // If Strafing then reverse motor directions
+    leftFrontDrive.setTargetPosition(SecondleftTarget);
+    rightFrontDrive.setTargetPosition(SecondrightTarget);
+    leftBackDrive.setTargetPosition(leftTarget);
+    rightBackDrive.setTargetPosition(rightTarget);
 
-            // Determine new target position, and pass to motor controller
-            // Determine new target position, and pass to motor controller
-            int moveCounts = (int)(distance * COUNTS_PER_INCH);
-            leftFrontTarget = leftFrontDrive.getCurrentPosition() + moveCounts;
-            leftBackTarget = leftBackDrive.getCurrentPosition() + moveCounts;
-            rightFrontTarget = rightFrontDrive.getCurrentPosition() + moveCounts;
-            rightBackTarget = rightBackDrive.getCurrentPosition() + moveCounts;
+    leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            // Set Target FIRST, then turn on RUN_TO_POSITION
-            // If Strafing then reverse motor directions
+    maxDriveSpeed = Math.abs(maxDriveSpeed);
+    if (maxDriveSpeed > 1) {
+maxDriveSpeed = 1;
+    }
+    leftFrontDrive.setPower(maxDriveSpeed);
+    rightFrontDrive.setPower(maxDriveSpeed);
+    leftBackDrive.setPower(maxDriveSpeed);
+    rightBackDrive.setPower(maxDriveSpeed);
 
-
-            leftFrontDrive.setTargetPosition(leftFrontTarget);
-            rightFrontDrive.setTargetPosition(rightFrontTarget);
-            leftBackDrive.setTargetPosition(leftBackTarget);
-            rightBackDrive.setTargetPosition(rightBackTarget);
-
-
-
-            leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // Set the required driving speed  (must be positive for RUN_TO_POSITION)
-            // Start driving straight, and then enter the control loop
-            maxDriveSpeed = Math.abs(maxDriveSpeed);
-            moveRobot(maxDriveSpeed, 0);
-
-            // keep looping while we are still active, and BOTH motors are running.
-            while (opModeIsActive() &&
-                    (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
-
-                // Determine required steering to keep on heading
-                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
-
-                // if driving in reverse, the motor correction also needs to be reversed
-                if (distance < 0)
-                    turnSpeed *= -1.0;
-
-                // Apply the turning correction to the current driving speed.
-                moveRobot(driveSpeed, turnSpeed);
-
-                // Display drive status for the driver.
-                // sendTelemetry(true);
-            }
-//        telemetry.addData(" LF end encoder counter", leftFrontDrive.getCurrentPosition() );
-//        telemetry.addData(" LB end encoder counter", leftBackDrive.getCurrentPosition() );
-//        telemetry.addData(" RF end encoder counter", rightFrontDrive.getCurrentPosition() );
-//        telemetry.addData(" RB end encoder counter", rightBackDrive.getCurrentPosition() );
-            telemetry.update();
-//        sleep(100000);
-
-            // Stop all motion & Turn off RUN_TO_POSITION
-            // turnToHeading(maxDriveSpeed,heading);
-            moveRobot(0, 0);
-            leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-
+    while (opModeIsActive() &&
+            (leftFrontDrive.isBusy() && rightFrontDrive.isBusy() && rightBackDrive.isBusy() && leftBackDrive.isBusy())) {
+telemetry.addData("LeftTarget", leftTarget);
+telemetry.addData("SLeftTarget", SecondleftTarget);
+telemetry.addData("RightTarget", rightTarget);
+telemetry.addData("SRightTarget", SecondrightTarget);
+telemetry.update();
     }
 
+}
     /**
      *  Spin on the central axis to point in a new direction.
      *  <p>
@@ -536,9 +462,8 @@ public class liftNearNet extends LinearOpMode {
     private void sendTelemetry(boolean straight) {
 
         if (straight) {
-            telemetry.addData("Heading", getHeading());
             telemetry.addData("Motion", "Drive Straight");
-            telemetry.addData("Target Pos L:R",  "%7d:%7d",      leftFrontTarget, rightFrontTarget);
+            telemetry.addData("Target Pos L:R",  "%7d:%7d",      leftTarget,  rightTarget);
             telemetry.addData("Actual Pos L:R",  "%7d:%7d:%7d:%7d",      leftFrontDrive.getCurrentPosition(),
                     rightFrontDrive.getCurrentPosition(),leftBackDrive.getCurrentPosition(),rightBackDrive.getCurrentPosition());
         } else {
@@ -558,3 +483,4 @@ public class liftNearNet extends LinearOpMode {
         return orientation.getYaw(AngleUnit.DEGREES);
     }
 }
+

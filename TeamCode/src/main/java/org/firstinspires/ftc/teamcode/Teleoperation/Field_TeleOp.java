@@ -55,6 +55,7 @@ public class Field_TeleOp extends LinearOpMode {
         imu.resetYaw();
 
         waitForStart();
+        robot.limbArm.initRotateByPower();
 
         double deadzone = 0.05;
         while (opModeIsActive()) {
@@ -101,12 +102,8 @@ public class Field_TeleOp extends LinearOpMode {
             leftBackDrive.setPower(leftBackPower);
             rightBackDrive.setPower(rightBackPower);
 
-            // Makes the claw open/close
-            robot.sampleClaw.clawClamp(gamepad2.a);
-            // Makes the claw extend/contract
-            robot.sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
-            // Makes the claw rotate
-            robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
+            robot.updateState(gamepad1);
+            robot.moveClaw(gamepad2, robot.limbArm.LimbExtendCount());
 
             // Makes the limb arm extend/contract, and gives the option to have precise movement
             if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
@@ -124,6 +121,7 @@ public class Field_TeleOp extends LinearOpMode {
             // Spool correction stuff
             robot.limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
 
+            telemetry.addData("Extend Encoder Count: d%", robot.limbArm.limbExtend.getCurrentPosition());
             telemetry.addData("angles", "%4.2f", angles);
             telemetry.update();
         }
