@@ -16,6 +16,7 @@ public class SampleClaw {
     double rotatePosition = 0.5;                  // Start at halfway position
     double extendPosition = 0.8;                  // Start at halfway position
     public boolean slow = false;
+    boolean PreviousPress = false;
 
     // Define class members
     public Servo servoClamp;
@@ -28,12 +29,10 @@ public class SampleClaw {
         SPECIMEN_HUNTING;
     }
 public void SlowToggle(Gamepad gamepad2) {
-        if (gamepad2.y) {
-            slow = !slow;
-            while (gamepad2.y) {
-                // nothing
-            }
-        }
+    if (gamepad2.y && !PreviousPress) {
+        slow = !slow;
+    }
+    PreviousPress = gamepad2.y;
 }
 
     ClawState state;
@@ -135,6 +134,7 @@ public void SlowToggle(Gamepad gamepad2) {
         servoExtend.setPosition(requiredServoPosistion);
         servoRotation.setPosition(0.7);
     }
+
 
     public void updateState(Gamepad gamepad, int rotationPosition) {
         // based on gamepad and rotation position, set claw state

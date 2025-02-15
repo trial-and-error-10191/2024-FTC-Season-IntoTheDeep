@@ -191,4 +191,17 @@ public int LimbExtendCount() {
             limbExtend.setTargetPosition(3000);
         }
     }
+    public void ExtendBase(double RotationEC) {
+        extendLimit();
+        int HeightInEc = 1000; // placeholder for D
+        double Theta = (RotationEC / 22.64) + 90;
+        Theta = (90 - Math.abs(Theta));
+        double ExtendLength = HeightInEc / Math.cos(Math.toRadians(Theta));
+        if (extensionLimit >= ExtendLength) {
+            ExtendLength = extensionLimit;
+        }
+        if (Theta < 90) {
+            limbExtend.setTargetPosition((int) ExtendLength);
+        }
+    }
 }
