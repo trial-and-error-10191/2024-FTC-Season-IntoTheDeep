@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.Autonomous.Unneeded;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -15,7 +14,6 @@ import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @Autonomous(name="AdvancedAutoObservationRung", group="Robot")
-@Disabled
  public class AdvancedAutoObservationRung extends LinearOpMode {
 
         /* Declare OpMode members. */
@@ -164,45 +162,50 @@ import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
             // Set the encoders for closed loop speed control, and reset the heading.
             // BEGIN AUTO CODE //
 
+            claw.CloseClaw();
             claw.ExtendClaw(0.53);
-            arm.ExtendAutoArm(1960);
-            arm.armRotateAuto(-1200);
-            Wait(0.4);
-            claw.RotateClaw(0.7);
-            driveStraight(TURN_SPEED, 26, 0);
+            arm.ExtendAutoArm(1860);
+            driveStraight(TURN_SPEED, 3, 0);
+            Wait(0.2);
             StrafeRobot(TURN_SPEED, -10, 0);
-            driveStraight(TURN_SPEED, 10, 0);
+            Wait(0.2);
+            arm.armRotateAuto(-1250);
+            Wait(1);
+            claw.RotateClaw(0.7);
+            driveStraight(TURN_SPEED, 20, 0);
+            Wait(3);
             claw.OpenClaw();
             Wait(0.4);
-            arm.armRotateAuto(0);
             arm.ExtendAutoArm(0);
-            turnToHeading(TURN_SPEED, -90.0);
-            driveStraight(TURN_SPEED, 24, -90.0);
-            StrafeRobot(TURN_SPEED, -16, -90.0);
-            driveStraight(TURN_SPEED, 7, 180);
-//           // Wait(1);
-//            turnToHeading(TURN_SPEED, 180);
-//           // Wait(1);
-//            driveStraight(TURN_SPEED, 26, 180);
-//            Wait(1);
-            // code for the grabbing mechanism... again
-          //  driveStraight(TURN_SPEED, -6, 180);
-           // Wait(1);
-          //  StrafeRobot(TURN_SPEED, 20, 180);
-           // Wait(1);
-          //  turnToHeading(TURN_SPEED, 90);
-           // Wait(1);
-          //  driveStraight(TURN_SPEED, 16, 90);
-           // Wait(1);
-          //  turnToHeading(TURN_SPEED, 0);
-           // Wait(1);
-          //  driveStraight(TURN_SPEED, 10, 0);
-          //  Wait(1);
-            //This is for the grabbing mechanism
-          //  driveStraight(TURN_SPEED, -22, 0);
-           // Wait(1);
-          //  StrafeRobot(TURN_SPEED, 29, 0);
-          //  Wait(1);
+            Wait(0.2);
+            arm.armRotateAuto(0);
+            Wait(1);
+            driveStraight(TURN_SPEED, -10, 0);
+            Wait(1);
+            StrafeRobot(TURN_SPEED, 20, 0);
+            Wait(1);
+            driveStraight(TURN_SPEED, 30, 0);
+            Wait(1);
+            StrafeRobot(TURN_SPEED, 20, 0);
+            Wait(1);
+            turnToHeading(TURN_SPEED, 180);
+            Wait(1);
+            driveStraight(TURN_SPEED, 40, 180);
+            Wait(1);
+            arm.armRotateAuto(-1300);
+            Wait(1);
+            claw.CloseClaw();
+            Wait(1);
+            arm.armRotateAuto(-100);
+            StrafeRobot(TURN_SPEED, -30, 180);
+            Wait(1);
+            turnToHeading(TURN_SPEED, 0);
+            arm.armRotateAuto(-1250);
+            Wait(1);
+            claw.RotateClaw(0.7);
+            driveStraight(TURN_SPEED, 20, 0);
+            Wait(3);
+            claw.OpenClaw();
 
 
             // 0 for heading is whatever the robot's original position is. 90 goes to the left of 0, and negative 90 goes to the right of the 0.

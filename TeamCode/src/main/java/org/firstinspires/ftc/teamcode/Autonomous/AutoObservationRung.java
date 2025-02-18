@@ -167,21 +167,27 @@ public class AutoObservationRung extends LinearOpMode {
         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
         // BEGIN AUTO CODE */
 
+        claw.CloseClaw();
         claw.ExtendClaw(0.53);
-        arm.ExtendAutoArm(1960);
-        arm.armRotateAuto(-1200);
-        claw.RotateClaw(0.7);
-        driveStraight(TURN_SPEED, 26, 0);
+        arm.ExtendAutoArm(1860);
+        driveStraight(TURN_SPEED, 3, 0);
+        Wait(0.2);
         StrafeRobot(TURN_SPEED, -10, 0);
-        driveStraight(TURN_SPEED, 10, 0);
+        Wait(0.2);
+        arm.armRotateAuto(-1250);
+        Wait(1);
+        claw.RotateClaw(0.7);
+        driveStraight(TURN_SPEED, 20, 0);
+        Wait(3);
         claw.OpenClaw();
         Wait(0.4);
-        arm.armRotateAuto(0);
         arm.ExtendAutoArm(0);
-        driveStraight(TURN_SPEED, -35, 0);
-        Wait(0.6);
-        StrafeRobot(TURN_SPEED, 46, 0);
+        Wait(0.2);
+        arm.armRotateAuto(0);
         Wait(1);
+        driveStraight(TURN_SPEED, -23, 0);
+        Wait(1);
+        StrafeRobot(TURN_SPEED, 44, 0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
