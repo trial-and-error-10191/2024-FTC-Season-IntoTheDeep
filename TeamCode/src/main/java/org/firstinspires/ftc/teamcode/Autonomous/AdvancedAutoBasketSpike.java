@@ -14,9 +14,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
-@Autonomous(name="AutoObservationPark", group="Robot")
+@Autonomous(name="AdvancedAutoBasketSpike", group="Robot")
 //@Disabled
-public class AutoObvervationPark extends LinearOpMode {
+public class AdvancedAutoBasketSpike extends LinearOpMode {
 
     /* Declare OpMode members. */
     LimbArm arm;
@@ -167,8 +167,71 @@ public class AutoObvervationPark extends LinearOpMode {
          *  Add a sleep(2000) after any step to keep the telemetry data visible for review
          *  BEGIN AUTO CODE */
 
-        StrafeRobot(TURN_SPEED, 38, 0);
-        Wait(1);
+            driveStraight(TURN_SPEED, 2, 0);
+            turnToHeading(TURN_SPEED, 90);
+            arm.ExtendAutoArm(arm.maxExtendPos);
+            driveStraight(TURN_SPEED, 35, 90);
+            Wait(1);
+            arm.armRotateAuto(-189);
+            Wait(1);
+            claw.OpenClaw();
+            Wait(1);
+            driveStraight(TURN_SPEED, -10, -90);
+            arm.ExtendAutoArm(500);
+            Wait(1);
+            StrafeRobot(TURN_SPEED, 40, 0);
+            Wait(1);
+            driveStraight(TURN_SPEED, 10, 90);
+            Wait(1);
+            turnToHeading(TURN_SPEED, 180);
+            arm.armRotateAuto(-500);
+            claw.CloseClaw();
+            arm.armRotateAuto(0);
+            driveStraight(TURN_SPEED, 40, 180);
+            Wait(1);
+            turnToHeading(TURN_SPEED, -90);
+            Wait(1);
+            driveStraight(TURN_SPEED, 35, 90);
+            arm.armRotateAuto(-400);
+            claw.ExtendClaw(0.8);
+            claw.OpenClaw();
+            arm.ExtendAutoArm(500);
+            driveStraight(TURN_SPEED, -5, -90);
+            Wait(1);
+            StrafeRobot(TURN_SPEED, 35, 0);
+            Wait(1);
+            driveStraight(TURN_SPEED, 5, 90);
+            Wait(1);
+            turnToHeading(TURN_SPEED, 180);
+            arm.armRotateAuto(-500);
+            claw.CloseClaw();
+            arm.armRotateAuto(0);
+            // arm.armRotateAuto(-2000);
+            // Wait(1);
+            // arm.ExtendAutoArm(-2000);
+            // Wait(1);
+            // arm.armRotateAuto(-1000);
+            // Wait(1);
+            // arm.ExtendAutoArm(2000);
+            // Wait(1);
+           // StrafeRobot(TURN_SPEED, -40, 0);
+           // Wait(1);
+            // arm.ExtendAutoArm(-2000);
+            // Wait(1);
+            // arm.ExtendAutoArm(2000);
+            // Wait(1);
+           // StrafeRobot(TURN_SPEED, 40, 0);
+           // Wait(1);
+            // code for the grabbing mechanism
+           // StrafeRobot(TURN_SPEED, -40, 0);
+           // Wait(1);
+            // code for the grabbing mechanism
+           // StrafeRobot(TURN_SPEED, 40, 0);
+           // Wait(1);
+            // code for the grabbing mechanism
+           // StrafeRobot(TURN_SPEED, -40, 0);
+           // Wait(1);
+            // code for the grabbing mechanism
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
