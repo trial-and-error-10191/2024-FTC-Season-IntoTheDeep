@@ -165,30 +165,22 @@ public class AutoBasketSpike extends LinearOpMode {
 
             driveStraight(TURN_SPEED, 35, 0);
             Wait(0.2);
-            arm.ExtendAutoArm(arm.maxExtendPos);
-            Wait(1);
+            arm.ExtendAutoArm(3775);
             claw.OpenClaw();
             Wait(0.4);
             driveStraight(TURN_SPEED, -8, 0);
-            // Wait(0.5);
-            arm.ExtendAutoArm(-3000);
+            arm.ExtendAutoArm(0);
             Wait(0.3);
             driveStraight(TURN_SPEED, -7, 0);
-            // Wait(1);
             StrafeRobot(TURN_SPEED, 6, 0);
-            // Wait(1);
             turnToHeading(TURN_SPEED, -88.0);
-            // Wait(1);
             driveStraight(TURN_SPEED, 62, -88.0);
-            // Wait(1);
             turnToHeading(TURN_SPEED, 180.0);
-            // Wait(1);
             driveStraight(TURN_SPEED, 13, 180.0);
             Wait(1);
             // Code for arm goes here
             Wait(0.2);
             arm.armRotateAuto(-1500);
-            Wait(0.2);
             arm.armRotateAuto(-2000);
             Wait(4);
             // This is where code for raising the arm to get a lvl. 1 ascent
