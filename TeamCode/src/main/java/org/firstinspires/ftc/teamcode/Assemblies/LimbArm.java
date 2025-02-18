@@ -156,6 +156,7 @@ public int LimbExtendCount() {
             telemetry.addData("LifeExtension", limbExtend.getCurrentPosition() );
             telemetry.update();
             spoolServo.setPower(isUp ? 0.9 : -0.9);
+            telemetry.addData("SpoolServoValue", "%1.2f", spoolServo.getPower());
         }
         spoolServo.setPower(0);
     }
@@ -167,11 +168,11 @@ public int LimbExtendCount() {
         limbRotate.setPower(Speed);
     }
     public void armRotateAuto(int rotateAuto) { // Allows the arm to rotate in autonomous
-        if (rotateAuto < maxRotatePos) {
-            rotateAuto = maxRotatePos;
-        }
+//        if (rotateAuto < maxRotatePos) {
+//            rotateAuto = maxRotatePos;
+//        }
         limbRotate.setTargetPosition(rotateAuto);
-
+        telemetry.addData("Rotation Encoders", "%d", limbRotate.getCurrentPosition());
     }
     public void goUpToHighNet(boolean goUp) {
         if (goUp) {
