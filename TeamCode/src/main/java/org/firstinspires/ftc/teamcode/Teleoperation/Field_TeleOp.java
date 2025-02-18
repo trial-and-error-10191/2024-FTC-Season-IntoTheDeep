@@ -52,7 +52,7 @@ public class Field_TeleOp extends LinearOpMode {
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
-        imu.resetYaw();
+//        imu.resetYaw();
 
         waitForStart();
         robot.limbArm.initRotateByPower();
@@ -105,6 +105,7 @@ public class Field_TeleOp extends LinearOpMode {
             robot.updateState(gamepad1);
             robot.moveClaw(gamepad2, robot.limbArm.LimbExtendCount());
 
+
             // Makes the limb arm extend/contract, and gives the option to have precise movement
             if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
                 gamepad2.left_stick_y = 0;
@@ -123,6 +124,7 @@ public class Field_TeleOp extends LinearOpMode {
 
             telemetry.addData("Extend Encoder Count: d%", robot.limbArm.limbExtend.getCurrentPosition());
             telemetry.addData("angles", "%4.2f", angles);
+            telemetry.addData("Claw Rotation", "%1.2f", robot.sampleClaw.servoRotation.getPosition());
             telemetry.update();
         }
     }

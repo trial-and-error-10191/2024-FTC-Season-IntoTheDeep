@@ -116,13 +116,11 @@ public int LimbExtendCount() {
         if (Math.abs(turn) > 0.05f) {
             rotatePower = turn;
         }
-        // Guard against rotating too far forward
+        rotatePos = limbRotate.getCurrentPosition();
 
+        // Guard against rotating too far forward
         if (limbRotate.getCurrentPosition() <= maxRotatePos && turn < 0) {
             rotatePower = 0;
-        }
-        else if (rotatePos >= -200 && rotatePower > 0) {
-            rotatePower *= 0.5f;
         }
         // Guard against rotating too far backward
         else if (turn >= 0 && !limitRotate.getState()) {
@@ -130,7 +128,12 @@ public int LimbExtendCount() {
             limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
+        else if (rotatePos >= -200 && rotatePower > 0) {
+            rotatePower *= 0.5f;
+        }
         limbRotate.setPower(rotatePower);
+        telemetry.addData("Rotate Encoders", "%d", limbRotate.getCurrentPosition());
+        telemetry.addData("Rotate Limit", "%b", !limitRotate.getState());
     }
 
     public void initRotateByPower() {

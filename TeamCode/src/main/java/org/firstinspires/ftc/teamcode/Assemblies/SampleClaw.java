@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Assemblies;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -20,7 +22,7 @@ public class SampleClaw {
     // Define class members
     public Servo servoClamp;
     public Servo servoExtend;
-    Servo servoRotation;
+    public Servo servoRotation;
 
     private enum ClawState {
         MANUAL,
@@ -68,7 +70,6 @@ public class SampleClaw {
                 extendPosition = MIN_POS;
             }
         }
-
         servoExtend.setPosition(extendPosition);
     }
 
@@ -125,7 +126,7 @@ public class SampleClaw {
         double servoAngle = 180 - Theta;
         double requiredServoPosistion = (servoAngle * 0.0041) - 0.2;
         servoExtend.setPosition(requiredServoPosistion);
-        servoRotation.setPosition(0.7);
+        servoRotation.setPosition(0.52); // was 0.7
     }
 
     public void updateState(Gamepad gamepad, int rotationPosition) {
@@ -143,24 +144,24 @@ public class SampleClaw {
         }
     }
 
-        public void move (Gamepad gamepad2, double rotationPosition){
-if (state == ClawState.MANUAL) {
-    // Makes the claw open/close
-               clawClamp(gamepad2.a);
-               // Makes the claw extend/contract
-               clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
-               // Makes the claw rotate
-               clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
-} else if (state == ClawState.SAMPLE_HUNTING) {
-    PositionServoDown(rotationPosition);
-    clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
-    clawClamp(gamepad2.a);
-} else if (state == ClawState.SPECIMEN_HUNTING){
-    PositionServoHorizontal(rotationPosition);
-    clawClamp(gamepad2.a);
-}
+    public void move (Gamepad gamepad2, double rotationPosition){
+        if (state == ClawState.MANUAL) {
+            // Makes the claw open/close
+            clawClamp(gamepad2.a);
+            // Makes the claw extend/contract
+            clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
+            // Makes the claw rotate
+            clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
+        } else if (state == ClawState.SAMPLE_HUNTING) {
+            PositionServoDown(rotationPosition);
+            clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
+            clawClamp(gamepad2.a);
+        } else if (state == ClawState.SPECIMEN_HUNTING){
+            PositionServoHorizontal(rotationPosition);
+            clawClamp(gamepad2.a);
         }
     }
+}
 
 
 
