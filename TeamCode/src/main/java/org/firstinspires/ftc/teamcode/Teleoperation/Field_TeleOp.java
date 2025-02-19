@@ -96,13 +96,14 @@ public class Field_TeleOp extends LinearOpMode {
                 rightBackPower /= max;
             }
 
+            double sensitivity = 0.65;
             // The next four lines gives the calculated power to each motor.
-            leftFrontDrive.setPower(leftFrontPower);
-            rightFrontDrive.setPower(rightFrontPower);
-            leftBackDrive.setPower(leftBackPower);
-            rightBackDrive.setPower(rightBackPower);
+            leftFrontDrive.setPower(leftFrontPower * sensitivity);
+            rightFrontDrive.setPower(rightFrontPower * sensitivity);
+            leftBackDrive.setPower(leftBackPower * sensitivity);
+            rightBackDrive.setPower(rightBackPower * sensitivity);
 
-            robot.updateState(gamepad1);
+            robot.updateState(gamepad2);
             robot.moveClaw(gamepad2, robot.limbArm.LimbExtendCount());
 
 
