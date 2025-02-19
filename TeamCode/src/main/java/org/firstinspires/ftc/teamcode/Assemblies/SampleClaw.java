@@ -145,9 +145,6 @@ public class SampleClaw {
                 state = ClawState.SPECIMEN_HUNTING;
         }
     }
-    public void autoSpecimen() {
-        state = ClawState.SPECIMEN_HUNTING;
-    }
 
     public void move (Gamepad gamepad2, double rotationPosition){
         if (state == ClawState.MANUAL) {

@@ -186,29 +186,18 @@ public class AdvancedAutoObservationRung extends LinearOpMode {
         arm.armRotateAuto(-10);
         driveStraight(TURN_SPEED, -4, 0);
         StrafeRobot(TURN_SPEED, 35, 0);
-        arm.armRotateAuto(-1558);
+        arm.armRotateAuto(-1858);
+        claw.ExtendClaw(0.55); // higher# is higher claw pos
         driveStraight(TURN_SPEED, 22, 0);
         turnToHeading(TURN_SPEED, 180);
         StrafeRobot(TURN_SPEED, -13, 180);
         driveStraight(TURN_SPEED, 47, 180);
-        claw.autoSpecimen();
-        arm.ExtendAutoArm(221);
-        Wait(3);
+        arm.ExtendAutoArm(300);
+        Wait(1);
         claw.CloseClaw();
         Wait(1);
         arm.armRotateAuto(-100);
-//        StrafeRobot(TURN_SPEED, 30, 180);
-//        Wait(1);
-//        turnToHeading(TURN_SPEED, 0);
-//        arm.ExtendAutoArm(1542);
-//        Wait(1);
-//        claw.RotateClaw(0.7);
-//        arm.armRotateAuto(-1123);
-//        claw.ExtendClaw(0.65);
-//        Wait(1.5);
-//        driveStraight(TURN_SPEED, 25, 0);
-//        Wait(3);
-//        claw.OpenClaw();
+        Wait(1);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

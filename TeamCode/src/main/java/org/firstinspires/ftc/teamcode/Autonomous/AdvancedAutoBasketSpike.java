@@ -169,33 +169,36 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
         turnToHeading(TURN_SPEED, 90);
         driveStraight(TURN_SPEED, 31, 92);
         turnToHeading(TURN_SPEED, 110);
-        arm.ExtendAutoArm(arm.maxExtendPos);
+        arm.ExtendAutoArm(arm.maxExtendPos - 250);
         arm.armRotateAuto(-189);
         claw.ExtendClaw(0.3);
         Wait(1.5);
         claw.OpenClaw();
+        // Start second sample
         driveStraight(TURN_SPEED, -5, -90);
         turnToHeading(TURN_SPEED, 0);
         arm.ExtendAutoArm(2282);
-        driveStraight(TURN_SPEED, 11, 2);
-        arm.armRotateAuto(-2227);
+        driveStraight(TURN_SPEED, 12, 2);
+        arm.armRotateAuto(-2235); //(-2227);
         Wait(2);
         claw.ExtendClaw(0.3);
-        Wait(1.5);
-        claw.CloseClaw();
+        Wait(2.5);
         claw.CloseClaw();
         Wait(1.2);
-         // Path to place second sample
+        claw.CloseClaw();
+        // Place 2nd sample
         arm.armRotateAuto(-180);
         Wait(1);
-        driveStraight(TURN_SPEED, -11, 0);
-        turnToHeading(TURN_SPEED, 90);
+        driveStraight(TURN_SPEED, -12, 0);
+        StrafeRobot(TURN_SPEED, 2, 0);
         turnToHeading(TURN_SPEED, 115);
         arm.ExtendAutoArm(arm.maxExtendPos);
-        arm.armRotateAuto(-189);
+        arm.armRotateAuto(-289);
         claw.ExtendClaw(0.3);
         Wait(1.5);
         claw.OpenClaw();
+        Wait(0.5);
+        arm.armRotateAuto(-189);
         arm.ExtendAutoArm(0);
 
         telemetry.addData("Path", "Complete");
