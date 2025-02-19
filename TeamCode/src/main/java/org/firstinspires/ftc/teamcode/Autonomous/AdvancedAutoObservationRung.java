@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -56,7 +57,7 @@ public class AdvancedAutoObservationRung extends LinearOpMode {
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
     static final double DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
-    static final double TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
+    static final double TURN_SPEED              = 0.6;     // Max turn speed to limit turn rate.
     static final double HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
     // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
@@ -168,50 +169,46 @@ public class AdvancedAutoObservationRung extends LinearOpMode {
          //          Add a sleep(2000) after any step to keep the telemetry data visible for review
          // BEGIN AUTO CODE */
 
-            claw.CloseClaw();
-            claw.ExtendClaw(0.53);
-            arm.ExtendAutoArm(1860);
-            driveStraight(TURN_SPEED, 3, 0);
-            Wait(0.2);
-            StrafeRobot(TURN_SPEED, -10, 0);
-            Wait(0.2);
-            arm.armRotateAuto(-1250);
-            Wait(1);
-            claw.RotateClaw(0.7);
-            driveStraight(TURN_SPEED, 20, 0);
-            Wait(3);
-            claw.OpenClaw();
-            Wait(0.4);
-            arm.ExtendAutoArm(0);
-            Wait(0.2);
-            arm.armRotateAuto(0);
-            Wait(1);
-            driveStraight(TURN_SPEED, -10, 0);
-            Wait(1);
-            StrafeRobot(TURN_SPEED, 20, 0);
-            Wait(1);
-            driveStraight(TURN_SPEED, 30, 0);
-            Wait(1);
-            StrafeRobot(TURN_SPEED, 20, 0);
-            Wait(1);
-            turnToHeading(TURN_SPEED, 180);
-            Wait(1);
-            driveStraight(TURN_SPEED, 40, 180);
-            Wait(1);
-            arm.armRotateAuto(-1300);
-            Wait(1);
-            claw.CloseClaw();
-            Wait(1);
-            arm.armRotateAuto(-100);
-            StrafeRobot(TURN_SPEED, -30, 180);
-            Wait(1);
-            turnToHeading(TURN_SPEED, 0);
-            arm.armRotateAuto(-1250);
-            Wait(1);
-            claw.RotateClaw(0.7);
-            driveStraight(TURN_SPEED, 20, 0);
-            Wait(3);
-            claw.OpenClaw();
+        claw.CloseClaw();
+        claw.ExtendClaw(0.54);
+        arm.ExtendAutoArm(1542);
+        StrafeRobot(TURN_SPEED, -5, 0);
+        arm.armRotateAuto(-1103);
+        claw.ExtendClaw(0.65);
+        Wait(1.5);
+        driveStraight(TURN_SPEED, 28, 0);
+        Wait(1.5);
+        claw.OpenClaw();
+        Wait(0.1);
+        claw.RotateClaw(0.5);
+        arm.ExtendAutoArm(0);
+        Wait(0.2);
+        arm.armRotateAuto(-10);
+        driveStraight(TURN_SPEED, -4, 0);
+        StrafeRobot(TURN_SPEED, 35, 0);
+        arm.armRotateAuto(-1558);
+        driveStraight(TURN_SPEED, 22, 0);
+        turnToHeading(TURN_SPEED, 180);
+        StrafeRobot(TURN_SPEED, -13, 180);
+        driveStraight(TURN_SPEED, 47, 180);
+        claw.autoSpecimen();
+        arm.ExtendAutoArm(221);
+        Wait(3);
+        claw.CloseClaw();
+        Wait(1);
+        arm.armRotateAuto(-100);
+//        StrafeRobot(TURN_SPEED, 30, 180);
+//        Wait(1);
+//        turnToHeading(TURN_SPEED, 0);
+//        arm.ExtendAutoArm(1542);
+//        Wait(1);
+//        claw.RotateClaw(0.7);
+//        arm.armRotateAuto(-1123);
+//        claw.ExtendClaw(0.65);
+//        Wait(1.5);
+//        driveStraight(TURN_SPEED, 25, 0);
+//        Wait(3);
+//        claw.OpenClaw();
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

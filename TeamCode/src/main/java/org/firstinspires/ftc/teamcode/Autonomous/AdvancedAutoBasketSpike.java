@@ -53,7 +53,7 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
     static final double DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
-    static final double TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
+    static final double TURN_SPEED              = 0.8;     // Max turn speed to limit turn rate.
     static final double HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
     // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
@@ -167,8 +167,9 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
         // Path to place first sample
         driveStraight(TURN_SPEED, 2, 0);
         turnToHeading(TURN_SPEED, 90);
-        arm.ExtendAutoArm(arm.maxExtendPos);
         driveStraight(TURN_SPEED, 31, 92);
+        turnToHeading(TURN_SPEED, 110);
+        arm.ExtendAutoArm(arm.maxExtendPos);
         arm.armRotateAuto(-189);
         claw.ExtendClaw(0.3);
         Wait(1.5);
@@ -176,23 +177,26 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
         driveStraight(TURN_SPEED, -5, -90);
         turnToHeading(TURN_SPEED, 0);
         arm.ExtendAutoArm(2282);
-        driveStraight(TURN_SPEED, 15, 2);
-        arm.armRotateAuto(-2230);
-        Wait(3.5);
-        claw.ExtendClaw(0.2);
-        Wait(1);
+        driveStraight(TURN_SPEED, 11, 2);
+        arm.armRotateAuto(-2227);
+        Wait(2);
+        claw.ExtendClaw(0.3);
+        Wait(1.5);
         claw.CloseClaw();
-        Wait(1);
+        claw.CloseClaw();
+        Wait(1.2);
          // Path to place second sample
-        arm.armRotateAuto(-189);
+        arm.armRotateAuto(-180);
         Wait(1);
-        driveStraight(TURN_SPEED, -15, 0);
+        driveStraight(TURN_SPEED, -11, 0);
         turnToHeading(TURN_SPEED, 90);
-        driveStraight(TURN_SPEED, 5, 90);
+        turnToHeading(TURN_SPEED, 115);
         arm.ExtendAutoArm(arm.maxExtendPos);
+        arm.armRotateAuto(-189);
         claw.ExtendClaw(0.3);
         Wait(1.5);
         claw.OpenClaw();
+        arm.ExtendAutoArm(0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class SampleClaw {
     boolean ClawOpen = false;
     boolean lastInput = false;
@@ -142,6 +144,9 @@ public class SampleClaw {
         if (gamepad.b) {
                 state = ClawState.SPECIMEN_HUNTING;
         }
+    }
+    public void autoSpecimen() {
+        state = ClawState.SPECIMEN_HUNTING;
     }
 
     public void move (Gamepad gamepad2, double rotationPosition){

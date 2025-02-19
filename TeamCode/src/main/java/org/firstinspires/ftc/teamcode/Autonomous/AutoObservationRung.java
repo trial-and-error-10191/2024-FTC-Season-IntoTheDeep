@@ -168,25 +168,24 @@ public class AutoObservationRung extends LinearOpMode {
         // BEGIN AUTO CODE */
 
         claw.CloseClaw();
-        claw.ExtendClaw(0.53);
-        arm.ExtendAutoArm(1860);
+        claw.ExtendClaw(0.54);
+        arm.ExtendAutoArm(1542);
         driveStraight(TURN_SPEED, 3, 0);
-        Wait(0.2);
-        StrafeRobot(TURN_SPEED, -10, 0);
-        Wait(0.2);
-        arm.armRotateAuto(-1250);
-        Wait(1);
-        claw.RotateClaw(0.7);
-        driveStraight(TURN_SPEED, 20, 0);
-        Wait(3);
+        StrafeRobot(TURN_SPEED, -12, 0);
+        arm.armRotateAuto(-1123);
+        claw.ExtendClaw(0.65);
+        Wait(1.5);
+        driveStraight(TURN_SPEED, 25, 0);
+        Wait(1.5);
         claw.OpenClaw();
         Wait(0.4);
+        claw.RotateClaw(0.5);
         arm.ExtendAutoArm(0);
         Wait(0.2);
-        arm.armRotateAuto(0);
+        arm.armRotateAuto(-10);
         Wait(1);
-        driveStraight(TURN_SPEED, -23, 0);
-        Wait(1);
+        driveStraight(TURN_SPEED, -25, 0);
+        Wait(0.5);
         StrafeRobot(TURN_SPEED, 44, 0);
 
         telemetry.addData("Path", "Complete");
