@@ -167,16 +167,16 @@ public class AutoFirstAscent extends LinearOpMode {
          *  Add a sleep(2000) after any step to keep the telemetry data visible for review
          *  BEGIN AUTO CODE */
 
-        StrafeRobot(TURN_SPEED, -6, 0);
-        driveStraight(TURN_SPEED, 62, 0);
-        arm.armRotateAuto(-1750);
+        driveStraight(TURN_SPEED, 2, 0);
+        StrafeRobot(TURN_SPEED, -20, 0);
+        driveStraight(TURN_SPEED, 54, 0);
+        arm.armRotateAuto(-2000);
+        Wait(0.5);
         turnToHeading(TURN_SPEED, -90);
         driveStraight(TURN_SPEED, 10, -90);
-        arm.AutoExtendMotor(-600);
-        arm.armRotateAuto(-1900);
-        arm.armRotateAuto(-50);
-        arm.AutoExtendMotor(500);
-        arm.armRotateAuto(100);
+        arm.AutoExtendMotor(2200);
+        arm.armRotateAuto(-1000);
+        Wait(0.5);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();

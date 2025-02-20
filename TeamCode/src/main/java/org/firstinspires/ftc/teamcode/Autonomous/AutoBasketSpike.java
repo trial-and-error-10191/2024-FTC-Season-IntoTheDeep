@@ -183,8 +183,10 @@ public class AutoBasketSpike extends LinearOpMode {
         turnToHeading(TURN_SPEED, 180.0);
         driveStraight(TURN_SPEED, 13, 180.0);
         Wait(1);
+        // more code for arm goes here
         arm.armRotateAuto(-1500);
         arm.armRotateAuto(-2000);
+        // more code for arm goes here
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
