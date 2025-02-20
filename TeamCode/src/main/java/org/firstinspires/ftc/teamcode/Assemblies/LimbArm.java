@@ -169,9 +169,6 @@ public int LimbExtendCount() {
         limbRotate.setPower(Speed);
     }
     public void armRotateAuto(int rotateAuto) { // Allows the arm to rotate in autonomous
-//        if (rotateAuto < maxRotatePos) {
-//            rotateAuto = maxRotatePos;
-//        }
         limbRotate.setTargetPosition(rotateAuto);
         telemetry.addData("Rotation Encoders", "%d", limbRotate.getCurrentPosition());
     }
