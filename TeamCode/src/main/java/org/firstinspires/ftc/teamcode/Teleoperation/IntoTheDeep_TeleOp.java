@@ -82,7 +82,7 @@
                        robot.sampleClaw.servoClamp.getPosition());
                telemetry.addData("Claw servo (Extend)", "%4.2f",
                        robot.sampleClaw.servoExtend.getPosition());
-               telemetry.addData("Extend Encoder Count: d%", robot.limbArm.limbExtend.getCurrentPosition());
+               telemetry.addData("Extend Encoder Count: ","d%", robot.limbArm.limbExtend.getCurrentPosition());
                telemetry.addData("Extend Target: d%", robot.limbArm.limbExtend.getTargetPosition());
                telemetry.addData("", "");
                telemetry.addData("Rotation Encoder Count: ", "%d", robot.limbArm.limbRotate.getCurrentPosition());
