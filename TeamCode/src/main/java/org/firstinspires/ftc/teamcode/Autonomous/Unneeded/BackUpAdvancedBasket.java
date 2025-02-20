@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Unneeded;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -14,7 +15,8 @@ import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @Autonomous(name="AdvancedAutoBasketSpike", group="Robot")
-public class AdvancedAutoBasketSpike extends LinearOpMode {
+@Disabled
+public class BackUpAdvancedBasket extends LinearOpMode {
 
     /* Declare OpMode members. */
     LimbArm arm;
@@ -53,7 +55,7 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
     static final double DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
-    static final double TURN_SPEED              = 0.7;     // Max turn speed to limit turn rate.
+    static final double TURN_SPEED              = 0.8;     // Max turn speed to limit turn rate.
     static final double HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
     // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
@@ -178,8 +180,8 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
         driveStraight(TURN_SPEED, -5, -90);
         turnToHeading(TURN_SPEED, 0);
         arm.ExtendAutoArm(2282);
-        driveStraight(TURN_SPEED, 11.5, 2);
-        arm.armRotateAuto(-2235);
+        driveStraight(TURN_SPEED, 11, 2);
+        arm.armRotateAuto(-2235); //(-2227);
         Wait(2);
         claw.ExtendClaw(0.3);
         Wait(2.5);
@@ -189,11 +191,11 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
         // Place 2nd sample
         arm.armRotateAuto(-180);
         Wait(1);
-        driveStraight(TURN_SPEED, -11.5, 0);
+        driveStraight(TURN_SPEED, -11, 0);
         StrafeRobot(TURN_SPEED, 2, 0);
         turnToHeading(TURN_SPEED, 115);
-        arm.ExtendAutoArm(2382);
-        arm.armRotateAuto(-589); // -289
+        arm.ExtendAutoArm(arm.maxExtendPos);
+        arm.armRotateAuto(-289);
         claw.ExtendClaw(0.3);
         Wait(1.5);
         claw.OpenClaw();
@@ -554,4 +556,4 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
             // doesn't need anything
         } // end of while loop
     } // end of public void Wait
-} // end of public class
+}
