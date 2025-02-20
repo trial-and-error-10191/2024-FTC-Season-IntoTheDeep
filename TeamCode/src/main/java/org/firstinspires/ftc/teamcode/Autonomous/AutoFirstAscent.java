@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -18,53 +19,51 @@ import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 public class AutoFirstAscent extends LinearOpMode {
 
     /* Declare OpMode members. */
-    private DcMotor leftFrontDrive   = null;
-    private DcMotor rightFrontDrive = null;
-    private DcMotor rightBackDrive = null;
-    private DcMotor leftBackDrive = null;
-    private IMU imu         = null;
-    private final ElapsedTime Time = new ElapsedTime();
     LimbArm arm;
     SampleClaw claw;
-    // Control/Expansion Hub IMU
-
-    private double          headingError  = 0;
+    private DcMotor leftFrontDrive   = null;
+    private DcMotor rightFrontDrive  = null;
+    private DcMotor rightBackDrive   = null;
+    private DcMotor leftBackDrive    = null;
+    private IMU     imu              = null;
+    private final ElapsedTime Time   = new ElapsedTime();
 
     // These variable are declared here (as class members) so they can be updated in various methods,
     // but still be displayed by sendTelemetry()
-    private double  targetHeading = 0;
-    private double  driveSpeed    = 0;
-    private double  turnSpeed     = 0;
-    private double  leftSpeed     = 0;
-    private double  rightSpeed    = 0;
-    private int     leftFrontTarget    = 0;
-    private int leftBackTarget = 0;
-    private int rightBackTarget = 0;
-    private int rightFrontTarget = 0;
+    private double headingError   = 0;
+    private double targetHeading  = 0;
+    private double driveSpeed     = 0;
+    private double turnSpeed      = 0;
+    private double leftSpeed      = 0;
+    private double rightSpeed     = 0;
+    private int leftFrontTarget   = 0;
+    private int leftBackTarget    = 0;
+    private int rightBackTarget   = 0;
+    private int rightFrontTarget  = 0;
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
     // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
-    static final double     COUNTS_PER_MOTOR_REV    = 753.2 ;   // eg: GoBILDA 312 RPM Yellow Jacket
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
-    static final double     WHEEL_DIAMETER_INCHES   = 3.5 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    static final double COUNTS_PER_MOTOR_REV    = 753.2 ;   // GoBILDA 223 RPM 52003 Yellow Jacket Series
+    static final double DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double WHEEL_DIAMETER_INCHES   = 3.5 ;     // For figuring circumference
+    static final double COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
-    static final double     DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
-    static final double     TURN_SPEED              = 0.5;     // Max turn speed to limit turn rate.
-    static final double     HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
+    static final double DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
+    static final double TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
+    static final double HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
     // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
     // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
     // Increase these numbers if the heading does not correct strongly enough (eg: a heavy robot or using tracks)
     // Decrease these numbers if the heading does not settle on the correct value (eg: very agile robot with omni wheels)
-    static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable.
-    static final double     P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable.
+    static final double P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable.
+    static final double P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable.
 
     public void Orientations() {
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -73,6 +72,7 @@ public class AutoFirstAscent extends LinearOpMode {
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
         Wait(0.1);
     }
+
     public void flip(String FirstLocation, String SecondLocation) {
         // The input is expected to be L or R for the first value and F or B for the second value
         if (FirstLocation.equals("L")) {
@@ -113,9 +113,8 @@ public class AutoFirstAscent extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
-        arm = new LimbArm(hardwareMap, telemetry);
         claw = new SampleClaw(hardwareMap);
+        arm = new LimbArm(hardwareMap, telemetry);
 
         // Initialize the drive system variables.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
@@ -162,8 +161,11 @@ public class AutoFirstAscent extends LinearOpMode {
             telemetry.update();
         } // end of while loop
 
-        // Set the encoders for closed loop speed control, and reset the heading.
-        // BEGIN AUTO CODE
+        /** Set the encoders for closed loop speed control, and reset the heading.
+         *  Notes:   Reverse movement is obtained by setting a negative distance (not speed)
+         *  holdHeading() is used after turns to let the heading stabilize
+         *  Add a sleep(2000) after any step to keep the telemetry data visible for review
+         *  BEGIN AUTO CODE */
 
         StrafeRobot(TURN_SPEED, -6, 0);
         driveStraight(TURN_SPEED, 62, 0);
@@ -176,13 +178,6 @@ public class AutoFirstAscent extends LinearOpMode {
         arm.AutoExtendMotor(500);
         arm.armRotateAuto(100);
 
-
-        // 0 for heading is whatever the robot's original position is. 90 goes to the left of 0, and negative 90 goes to the right of the 0.
-        // Lastly, 180 goes the exact opposite of where 0 is.
-        // Step through each leg of the path,
-        // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
-        //          holdHeading() is used after turns to let the heading stabilize
-        //          Add a sleep(2000) after any step to keep the telemetry data visible for review
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // Pause to display last telemetry message.
@@ -464,7 +459,7 @@ public class AutoFirstAscent extends LinearOpMode {
             rightSpeed /= max;
         } // end of if statement
 
-        leftFrontDrive.setPower(leftSpeed * 0.85);
+        leftFrontDrive.setPower(leftSpeed * 0.7);
         rightFrontDrive.setPower(rightSpeed);
         leftBackDrive.setPower(leftSpeed);
         rightBackDrive.setPower(rightSpeed);
@@ -517,7 +512,8 @@ public class AutoFirstAscent extends LinearOpMode {
 
         telemetry.addData("Heading- Target : Current", "%5.2f : %5.0f", targetHeading, getHeading());
         telemetry.addData("Error  : Steer Pwr",  "%5.1f : %5.1f", headingError, turnSpeed);
-        telemetry.addData("Wheel Speeds L : R", "%5.2f : %5.2f", leftSpeed, rightSpeed);
+        telemetry.addData("Front Wheel Speeds L : R", "%5.2f : %5.2f", leftFrontDrive.getPower(), rightFrontDrive.getPower());
+        telemetry.addData("Back Wheel Speeds L : R", "%5.2f : %5.2f", rightBackDrive.getPower(), leftBackDrive.getPower());
         telemetry.update();
 
     } // end of private void sendTelemetry
@@ -536,4 +532,3 @@ public class AutoFirstAscent extends LinearOpMode {
         } // end of while loop
     } // end of public void Wait
 } // end of public class
-

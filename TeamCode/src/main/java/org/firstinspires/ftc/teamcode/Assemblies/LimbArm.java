@@ -116,13 +116,11 @@ public int LimbExtendCount() {
         if (Math.abs(turn) > 0.05f) {
             rotatePower = turn;
         }
-        // Guard against rotating too far forward
+        rotatePos = limbRotate.getCurrentPosition();
 
+        // Guard against rotating too far forward
         if (limbRotate.getCurrentPosition() <= maxRotatePos && turn < 0) {
             rotatePower = 0;
-        }
-        else if (rotatePos >= -200 && rotatePower > 0) {
-            rotatePower *= 0.5f;
         }
         // Guard against rotating too far backward
         else if (turn >= 0 && !limitRotate.getState()) {
@@ -130,7 +128,12 @@ public int LimbExtendCount() {
             limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
+        else if (rotatePos >= -200 && rotatePower > 0) {
+            rotatePower *= 0.5f;
+        }
         limbRotate.setPower(rotatePower);
+        telemetry.addData("Rotate Encoders", "%d", limbRotate.getCurrentPosition());
+        telemetry.addData("Rotate Limit", "%b", !limitRotate.getState());
     }
 
     public void initRotateByPower() {
@@ -151,8 +154,10 @@ public int LimbExtendCount() {
         while (limbExtend.isBusy()) {
             telemetry.addData("isBusy", spoolServo.getPower() );
             telemetry.addData("LifeExtension", limbExtend.getCurrentPosition() );
+            telemetry.addData("LiftRotation: ", limbRotate.getCurrentPosition() );
+            spoolServo.setPower(isUp ? 1 : -1);
+            telemetry.addData("SpoolServoValue", "%1.2f", spoolServo.getPower());
             telemetry.update();
-            spoolServo.setPower(isUp ? 0.9 : -0.9);
         }
         spoolServo.setPower(0);
     }
@@ -164,11 +169,11 @@ public int LimbExtendCount() {
         limbRotate.setPower(Speed);
     }
     public void armRotateAuto(int rotateAuto) { // Allows the arm to rotate in autonomous
-        if (rotateAuto < maxRotatePos) {
-            rotateAuto = maxRotatePos;
-        }
+//        if (rotateAuto < maxRotatePos) {
+//            rotateAuto = maxRotatePos;
+//        }
         limbRotate.setTargetPosition(rotateAuto);
-
+        telemetry.addData("Rotation Encoders", "%d", limbRotate.getCurrentPosition());
     }
     public void goUpToHighNet(boolean goUp) {
         if (goUp) {

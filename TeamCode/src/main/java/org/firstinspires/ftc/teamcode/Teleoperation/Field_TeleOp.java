@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Teleoperation;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -52,7 +54,7 @@ public class Field_TeleOp extends LinearOpMode {
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
-        imu.resetYaw();
+//        imu.resetYaw();
 
         waitForStart();
         robot.limbArm.initRotateByPower();
@@ -96,14 +98,16 @@ public class Field_TeleOp extends LinearOpMode {
                 rightBackPower /= max;
             }
 
+            double sensitivity = 0.65;
             // The next four lines gives the calculated power to each motor.
-            leftFrontDrive.setPower(leftFrontPower);
-            rightFrontDrive.setPower(rightFrontPower);
-            leftBackDrive.setPower(leftBackPower);
-            rightBackDrive.setPower(rightBackPower);
+            leftFrontDrive.setPower(leftFrontPower * sensitivity);
+            rightFrontDrive.setPower(rightFrontPower * sensitivity);
+            leftBackDrive.setPower(leftBackPower * sensitivity);
+            rightBackDrive.setPower(rightBackPower * sensitivity);
 
-            robot.updateState(gamepad1);
+            robot.updateState(gamepad2);
             robot.moveClaw(gamepad2, robot.limbArm.LimbExtendCount());
+
 
             // Makes the limb arm extend/contract, and gives the option to have precise movement
             if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
@@ -123,6 +127,8 @@ public class Field_TeleOp extends LinearOpMode {
 
             telemetry.addData("Extend Encoder Count: d%", robot.limbArm.limbExtend.getCurrentPosition());
             telemetry.addData("angles", "%4.2f", angles);
+            telemetry.addData("Claw Rotation", "%1.2f", robot.sampleClaw.servoRotation.getPosition());
+            telemetry.addData("Flip claw", "%f", robot.sampleClaw.servoExtend.getPosition());
             telemetry.update();
         }
     }
