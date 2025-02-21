@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.Assemblies;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class SampleClaw {
     boolean ClawOpen = false;
@@ -11,16 +15,16 @@ public class SampleClaw {
     static double INCREMENT = 0.01;     // amount to slew servo each CYCLE_MS cycle
     static final double MAX_POS = 1.0;     // Maximum rotational position
     static final double MIN_POS = 0.0;     // Minimum rotational position
-    static final double openPos = 0.5;    // servo position for open claw
-    static final double closePos = 1.0;     // servo position for closed claw
+    static final double openPos = 0.8;    // servo position for open claw
+    static final double closePos = 0.47;     // servo position for closed claw
     double rotatePosition = 0.5;                  // Start at halfway position
     double extendPosition = 0.8;                  // Start at halfway position
 
 
     // Define class members
     public Servo servoClamp;
-    Servo servoExtend;
-    Servo servoRotation;
+    public Servo servoExtend;
+    public Servo servoRotation;
 
     private enum ClawState {
         MANUAL,
@@ -68,7 +72,6 @@ public class SampleClaw {
                 extendPosition = MIN_POS;
             }
         }
-
         servoExtend.setPosition(extendPosition);
     }
 
@@ -125,7 +128,7 @@ public class SampleClaw {
         double servoAngle = 180 - Theta;
         double requiredServoPosistion = (servoAngle * 0.0041) - 0.2;
         servoExtend.setPosition(requiredServoPosistion);
-        servoRotation.setPosition(0.7);
+        servoRotation.setPosition(0.52); // was 0.7
     }
 
     public void updateState(Gamepad gamepad, int rotationPosition) {
@@ -143,24 +146,24 @@ public class SampleClaw {
         }
     }
 
-        public void move (Gamepad gamepad2, double rotationPosition){
-if (state == ClawState.MANUAL) {
-    // Makes the claw open/close
-               clawClamp(gamepad2.a);
-               // Makes the claw extend/contract
-               clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
-               // Makes the claw rotate
-               clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
-} else if (state == ClawState.SAMPLE_HUNTING) {
-    PositionServoDown(rotationPosition);
-    clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
-    clawClamp(gamepad2.a);
-} else if (state == ClawState.SPECIMEN_HUNTING){
-    PositionServoHorizontal(rotationPosition);
-    clawClamp(gamepad2.a);
-}
+    public void move (Gamepad gamepad2, double rotationPosition){
+        if (state == ClawState.MANUAL) {
+            // Makes the claw open/close
+            clawClamp(gamepad2.a);
+            // Makes the claw extend/contract
+            clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
+            // Makes the claw rotate
+            clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
+        } else if (state == ClawState.SAMPLE_HUNTING) {
+            PositionServoDown(rotationPosition);
+            clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
+            clawClamp(gamepad2.a);
+        } else if (state == ClawState.SPECIMEN_HUNTING){
+            PositionServoHorizontal(rotationPosition);
+            clawClamp(gamepad2.a);
         }
     }
+}
 
 
 
