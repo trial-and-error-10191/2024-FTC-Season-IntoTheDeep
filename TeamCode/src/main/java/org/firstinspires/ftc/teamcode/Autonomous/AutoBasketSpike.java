@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @Autonomous(name="AutoBasketSpike", group="Robot")
-//@Disabled
+@Disabled
 public class AutoBasketSpike extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -167,26 +167,35 @@ public class AutoBasketSpike extends LinearOpMode {
          *  Add a sleep(2000) after any step to keep the telemetry data visible for review
          *  BEGIN AUTO CODE */
 
-        driveStraight(TURN_SPEED, 35, 0);
+        driveStraight(TURN_SPEED, 2, 0);
+        Wait(0.20);
+        turnToHeading(TURN_SPEED, 90);
+        StrafeRobot(DRIVE_SPEED, -6, 90);
         Wait(0.2);
+        driveStraight(TURN_SPEED, 35, 90);
+        Wait(0.2);
+        claw.ExtendClaw(0.3);
         arm.ExtendAutoArm(arm.maxExtendPos);
+        arm.armRotateAuto(-200);
         Wait(1);
         claw.OpenClaw();
         Wait(0.4);
-        driveStraight(TURN_SPEED, -8, 0);
-        arm.ExtendAutoArm(-3000);
+        driveStraight(TURN_SPEED, -8, 90);
+        Wait(0.2);
+        arm.ExtendAutoArm(0);
         Wait(0.3);
-        driveStraight(TURN_SPEED, -7, 0);
-        StrafeRobot(TURN_SPEED, 6, 0);
-        turnToHeading(TURN_SPEED, -88.0);
-        driveStraight(TURN_SPEED, 62, -88.0);
-        turnToHeading(TURN_SPEED, 180.0);
-        driveStraight(TURN_SPEED, 13, 180.0);
+        turnToHeading(TURN_SPEED, 0);
+        Wait(0.2);
+        driveStraight(TURN_SPEED, 45, 0);
+        Wait(0.2);
+        turnToHeading(TURN_SPEED, -90);
         Wait(1);
-        // more code for arm goes here
+        driveStraight(TURN_SPEED, 20, -90);
+        arm.ExtendAutoArm(arm.maxExtendPos - 1000);
+        Wait(0.5);
         arm.armRotateAuto(-1500);
-        arm.armRotateAuto(-2000);
-        // more code for arm goes here
+        Wait(0.5);
+      //  arm.armRotateAuto(-2000);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
