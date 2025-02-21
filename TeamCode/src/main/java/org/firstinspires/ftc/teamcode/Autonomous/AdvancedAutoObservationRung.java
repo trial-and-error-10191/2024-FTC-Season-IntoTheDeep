@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 
 @Autonomous(name="AdvancedAutoObservationRung", group="Robot")
-//@Disabled
+@Disabled
 public class AdvancedAutoObservationRung extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -173,9 +173,9 @@ public class AdvancedAutoObservationRung extends LinearOpMode {
         claw.ExtendClaw(0.54);
         arm.ExtendAutoArm(1542);
         StrafeRobot(TURN_SPEED, -5, 0);
-        arm.armRotateAuto(-1103);
+        arm.armRotateAuto(-1203);
         claw.ExtendClaw(0.65);
-        Wait(1.5);
+        Wait(2.5);
         driveStraight(TURN_SPEED, 28, 0);
         Wait(1.5);
         claw.OpenClaw();

@@ -53,9 +53,6 @@ public class Field_TeleOp extends LinearOpMode {
         // This sample expects the IMU to be in a REV Hub and named "imu".
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
-
-//        imu.resetYaw();
-
         waitForStart();
         robot.limbArm.initRotateByPower();
 

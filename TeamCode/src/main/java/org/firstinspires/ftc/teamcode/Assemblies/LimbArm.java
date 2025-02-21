@@ -13,7 +13,7 @@ public class LimbArm {
     public DcMotor limbRotate;             // DC motors for lift arm
     CRServo spoolServo;                         // Servo that hold wires for lift
     public final double EXTEND_POWER = 0.5;                      // Motor power for lift extension
-    public final double ROTATE_POWER = 0.5;                     // Motor power for lift rotation
+    public final double ROTATE_POWER = 0.75;                     // Motor power for lift rotation
     int extensionLimit = 3780;                     // Limit for extension
     public final int maxExtendPos = 3780;             // Encoder counter max for lift extension
     int maxRotatePos = -2356;                  // max encoder counter for lift rotation
