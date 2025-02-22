@@ -20,4 +20,8 @@ public class SampleAndSpecimenManipulator {
         arm.update(gamepad);
         claw.update(gamepad);
     }
+
+    public void UpdateState() {
+        arm.UpdateState();
+    }
 }

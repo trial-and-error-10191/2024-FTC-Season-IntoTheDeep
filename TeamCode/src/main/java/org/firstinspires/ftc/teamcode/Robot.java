@@ -61,4 +61,8 @@ public class Robot {
     public void turnToHeading(double angle) {
         driveTrain.turnToHeading(MAX_TURN_SPEED, angle);
     }
+
+    public void UpdateState() {
+        manipulator.UpdateState();
+    }
 }

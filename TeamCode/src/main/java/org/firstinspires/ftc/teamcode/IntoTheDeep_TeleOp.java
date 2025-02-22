@@ -43,6 +43,7 @@ public class IntoTheDeep_TeleOp extends LinearOpMode {
             }
 
             //robot.driveByPower(gamepad);
+            robot.UpdateState();
             robot.update(gamepad);
 
             // Provides telemetry for all motors, servos, and sensors.
