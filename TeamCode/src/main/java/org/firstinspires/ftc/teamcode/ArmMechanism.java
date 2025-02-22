@@ -55,28 +55,36 @@ public class ArmMechanism {
 
 
     public void UpdateState() {
-        if (extendMotor.getCurrentPosition() >= extensionMaxEncoderCount) {
+        if (LiftIsOverExtended()) {
             extensionState = ExtensionState.RETRACT_ONLY;
-        } else if (extensionLowerLimitSwitch.isPressed()) {
+        } else if (LiftIsOverRetracted()) {
             extensionState = ExtensionState.EXTEND_ONLY;
         } else {
             extensionState = ExtensionState.MANUAL;
         }
 
-        if (ArmOverRotated()) {
+        if (ArmIsOverRotated()) {
             rotationState = RotationState.UP_ONLY;
-        } else if (ArmUpright()) {
+        } else if (ArmIsUpright()) {
             rotationState = RotationState.DOWN_ONLY;
         } else {
             rotationState = RotationState.MANUAL;
         }
     }
 
-    private boolean ArmOverRotated() {
+    private boolean LiftIsOverExtended() {
+        return extendMotor.getCurrentPosition() >= extensionMaxEncoderCount;
+    }
+
+    private boolean LiftIsOverRetracted() {
+        return extensionLowerLimitSwitch.isPressed();
+    }
+
+    private boolean ArmIsOverRotated() {
         return rotateMotor.getCurrentPosition() <= rotationMaxEncoderCount;
     }
 
-    private boolean ArmUpright() {
+    private boolean ArmIsUpright() {
         return rotationLowerLimitSwitch.isPressed();
     }
 
