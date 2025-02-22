@@ -27,6 +27,12 @@ public class ArmMechanism {
     private final int rotationMaxEncoderCount = 10000;
     private final int ROTATION_INCREMENT = 10;
     private final double ROTATION_SPEED = 0.2;
+    private enum RotationState {
+        MANUAL,
+        UP_ONLY,
+        DOWN_ONLY
+    }
+    private RotationState rotationState = RotationState.MANUAL;
 
     private final Telemetry telemetry;
 
@@ -56,14 +62,30 @@ public class ArmMechanism {
         } else {
             extensionState = ExtensionState.MANUAL;
         }
+
+        if (ArmOverRotated()) {
+            rotationState = RotationState.UP_ONLY;
+        } else if (ArmUpright()) {
+            rotationState = RotationState.DOWN_ONLY;
+        } else {
+            rotationState = RotationState.MANUAL;
+        }
+    }
+
+    private boolean ArmOverRotated() {
+        return rotateMotor.getCurrentPosition() <= rotationMaxEncoderCount;
+    }
+
+    private boolean ArmUpright() {
+        return rotationLowerLimitSwitch.isPressed();
     }
 
     public void update(Gamepad gamepad) {
-        extendLift(gamepad);
-        rotateArm(gamepad);
+        updateLift(gamepad);
+        updateArm(gamepad);
     }
 
-    private void extendLift(Gamepad gamepad) {
+    private void updateLift(Gamepad gamepad) {
         // left stick y to drive lift extension
         float liftExtensionSpeed = -gamepad.left_stick_y;
         if (Math.abs(liftExtensionSpeed) <= DEADZONE) {
@@ -101,33 +123,43 @@ public class ArmMechanism {
         extendMotor.setPower(EXTENSION_SPEED);
     }
 
-    private void rotateArm(Gamepad gamepad) {
-        // dpad right/left to rotate arm down/up
-        // Determine where driver is telling motor to go
-        boolean raisingArm = gamepad.dpad_left;
-        boolean loweringArm = gamepad.dpad_right;
-
-        if (raisingArm) { // If going up, guard against rotating beyond "vertical" limit
-            if (rotationLowerLimitSwitch.isPressed()) {
-                rotateMotor.setPower(0.0);
-                rotateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            } else {
-                int targetPosition = rotateMotor.getCurrentPosition() - ROTATION_INCREMENT;
-                rotateMotor.setTargetPosition(targetPosition);
-                rotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rotateMotor.setPower(ROTATION_SPEED);
-            }
-        } else if (loweringArm) { // If going down, guard against lowering too far
-            if (rotateMotor.getCurrentPosition() >= rotationMaxEncoderCount) {
-                rotateMotor.setPower(0.0);
-                rotateMotor.setTargetPosition(rotationMaxEncoderCount);
-                rotateMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            } else {
-                int targetPosition = rotateMotor.getCurrentPosition() + ROTATION_INCREMENT;
-                rotateMotor.setTargetPosition(targetPosition);
-                rotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rotateMotor.setPower(ROTATION_SPEED);
-            }
+    private void updateArm(Gamepad gamepad) {
+        // right stick y to drive arm rotation
+        float armRotationSpeed = -gamepad.right_stick_y;
+        if (Math.abs(armRotationSpeed) <= DEADZONE) {
+            armRotationSpeed = 0.0f;
         }
+        boolean rotatingDown = armRotationSpeed > 0.0f;
+        boolean rotatingUp = armRotationSpeed < 0.0f;
+
+        switch (rotationState) {
+            case MANUAL:
+                RotateArm(armRotationSpeed);
+                break;
+
+            case DOWN_ONLY:
+                if (rotatingDown) {
+                    RotateArm(armRotationSpeed);
+                } else {// arm is vertical, stop rotation and reset encoders
+                    rotateMotor.setPower(0.0);
+                    rotateMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                }
+                break;
+
+            case UP_ONLY:
+                if (rotatingUp) {
+                    RotateArm(armRotationSpeed);
+                } else {// arm is rotated too far, return to max rotate position
+                    rotateMotor.setTargetPosition(rotationMaxEncoderCount);
+                }
+                break;
+        }
+    }
+
+    private void RotateArm(float armRotationSpeed) {
+        int targetPosition = rotateMotor.getCurrentPosition() + (int)(armRotationSpeed * ROTATION_INCREMENT);
+        rotateMotor.setTargetPosition(targetPosition);
+        rotateMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rotateMotor.setPower(ROTATION_SPEED);
     }
 }
