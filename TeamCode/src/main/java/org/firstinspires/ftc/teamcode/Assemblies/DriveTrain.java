@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode.Assemblies;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -44,6 +45,16 @@ public class DriveTrain {
     private double headingError = 0;
     private double extensionPowerReductionIntensity = 7560;
     private int CurrentLiftCounts = 0;
+    double angles = 0;
+
+    private enum TurnState {
+        MANUAL,
+        FORWARD,
+        BACKWARD;
+    }
+
+    DriveTrain.TurnState state;
+
     // All subsystems should have a hardware function that labels all of the hardware required of it.
     public DriveTrain(HardwareMap hwMap, Telemetry telemetry) {
 
@@ -53,6 +64,7 @@ public class DriveTrain {
         leftBackDrive = hwMap.get(DcMotor.class, "leftBack");
         rightFrontDrive = hwMap.get(DcMotor.class, "rightFront");
         rightBackDrive = hwMap.get(DcMotor.class, "rightBack");
+        state = TurnState.MANUAL;
 
         // Initializes motor directions:
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -295,11 +307,83 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
         // Stop all motion;
         moveRobot(0, 0);
     }
+    public void fieldControl(Gamepad gamepad, boolean turnStop) {
+        double leftFrontPower = 0;
+        double rightFrontPower = 0;
+        double leftBackPower = 0;
+        double rightBackPower = 0;
+        double deadzone = 0.05;
 
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        angles = -orientation.getYaw(AngleUnit.RADIANS);
+
+        double fieldStrafe = gamepad.left_stick_x;
+        double fieldForward = -gamepad.left_stick_y;
+        double fieldTurn = gamepad.right_stick_x;
+
+        double robotForward = fieldForward * Math.cos(angles) + fieldStrafe * Math.sin(angles);
+        double robotStrafe = fieldStrafe * Math.cos(angles) - fieldForward * Math.sin(angles);
+        double robotTurn = fieldTurn;
+
+        if (turnStop) {
+            robotTurn = 0;
+        }
+        if (Math.abs(robotForward) > deadzone || Math.abs(robotStrafe) > deadzone || Math.abs(robotTurn) > deadzone) {
+            leftFrontPower = robotForward + robotStrafe + robotTurn;
+            rightFrontPower = robotForward - robotStrafe - robotTurn;
+            leftBackPower = robotForward - robotStrafe + robotTurn;
+            rightBackPower = robotForward + robotStrafe - robotTurn;
+        }
+
+        double max;
+
+        // All code below this comment normalizes the values so no wheel power exceeds 100%.
+        max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+        if (max > 1.0) {
+            leftFrontPower /= max; // leftFrontPower = leftFrontPower / max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        double sensitivity = 0.65;
+        // The next four lines gives the calculated power to each motor.
+        leftFrontDrive.setPower(leftFrontPower * sensitivity);
+        rightFrontDrive.setPower(rightFrontPower * sensitivity);
+        leftBackDrive.setPower(leftBackPower * sensitivity);
+        rightBackDrive.setPower(rightBackPower * sensitivity);
+    }
     public double getHeading() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
 
-
+    public void updateState(Gamepad gamepad, int turnPosition) {
+        // based on gamepad and rotation position, set claw state
+        boolean isUp = turnPosition > -90;
+        if (gamepad.right_bumper) {
+            state = DriveTrain.TurnState.MANUAL;
+        }
+        if (gamepad.dpad_up) {
+            if (!isUp)
+                state = TurnState.FORWARD;
+        }
+        if (gamepad.dpad_down) {
+            state = TurnState.BACKWARD;
+        }
+    }
+    public void move (Gamepad gamepad1){
+        if (state == DriveTrain.TurnState.MANUAL) {
+            fieldControl(gamepad1, false);
+        }
+        else if (state == DriveTrain.TurnState.FORWARD) {
+            fieldControl(gamepad1, true);
+        }
+        else if (state == DriveTrain.TurnState.BACKWARD) {
+            fieldControl(gamepad1, true);
+        }
+    }
 }

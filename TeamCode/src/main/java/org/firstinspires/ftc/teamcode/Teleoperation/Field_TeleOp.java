@@ -120,7 +120,10 @@ public class Field_TeleOp extends LinearOpMode {
             //robot.limbArm.armRotate(gamepad2.right_stick_y);
             robot.limbArm.rotateByPower(-gamepad2.right_stick_y);
             // Spool correction stuff
-            robot.limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
+            robot.limbArm.spoolCorrection(gamepad2.dpad_up, gamepad2.dpad_down);
+            robot.driveTrain.setStraight(gamepad1.dpad_up);
+            robot.driveTrain.setBackward(gamepad1.dpad_down);
+            robot.driveTrain.letTurn(gamepad1.right_bumper);
 
             telemetry.addData("Extend Encoder Count: d%", robot.limbArm.limbExtend.getCurrentPosition());
             telemetry.addData("angles", "%4.2f", angles);
