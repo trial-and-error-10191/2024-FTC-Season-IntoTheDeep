@@ -50,7 +50,8 @@ public class DriveTrain {
     private enum TurnState {
         MANUAL,
         FORWARD,
-        BACKWARD;
+        BACKWARD,
+        RIGHT;
     }
 
     DriveTrain.TurnState state;
@@ -372,6 +373,9 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
         if (gamepad.dpad_down) {
             state = TurnState.BACKWARD;
         }
+        if (gamepad.left_bumper) {
+            state = TurnState.RIGHT;
+        }
     }
     public void move (Gamepad gamepad1){
         if (state == DriveTrain.TurnState.MANUAL) {
@@ -383,6 +387,10 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
         }
         else if (state == DriveTrain.TurnState.BACKWARD) {
             turnToHeading(TURN_SPEED, 180);
+            fieldControl(gamepad1, true);
+        }
+        else if (state == DriveTrain.TurnState.RIGHT) {
+            turnToHeading(TURN_SPEED, 90);
             fieldControl(gamepad1, true);
         }
     }

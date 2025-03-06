@@ -30,4 +30,7 @@ public class Robot {
     public void moveClaw(Gamepad gamepad, double rotationPosition) {
         sampleClaw.move(gamepad, rotationPosition);
     }
+    public void sampleFind(Gamepad gamepad) {
+
+    }
 }
