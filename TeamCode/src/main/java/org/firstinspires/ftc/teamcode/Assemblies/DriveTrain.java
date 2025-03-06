@@ -361,15 +361,13 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
         return orientation.getYaw(AngleUnit.DEGREES);
     }
 
-    public void updateState(Gamepad gamepad, int turnPosition) {
+    public void updateState(Gamepad gamepad) {
         // based on gamepad and rotation position, set claw state
-        boolean isUp = turnPosition > -90;
         if (gamepad.right_bumper) {
             state = DriveTrain.TurnState.MANUAL;
         }
         if (gamepad.dpad_up) {
-            if (!isUp)
-                state = TurnState.FORWARD;
+            state = TurnState.FORWARD;
         }
         if (gamepad.dpad_down) {
             state = TurnState.BACKWARD;
@@ -380,9 +378,11 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
             fieldControl(gamepad1, false);
         }
         else if (state == DriveTrain.TurnState.FORWARD) {
+            turnToHeading(TURN_SPEED, 0);
             fieldControl(gamepad1, true);
         }
         else if (state == DriveTrain.TurnState.BACKWARD) {
+            turnToHeading(TURN_SPEED, 180);
             fieldControl(gamepad1, true);
         }
     }

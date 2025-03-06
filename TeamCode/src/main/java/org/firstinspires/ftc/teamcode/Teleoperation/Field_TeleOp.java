@@ -58,53 +58,9 @@ public class Field_TeleOp extends LinearOpMode {
 
         double deadzone = 0.05;
         while (opModeIsActive()) {
-            YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-            angles = -orientation.getYaw(AngleUnit.RADIANS);
-
-            double fieldStrafe = gamepad1.left_stick_x;
-            double fieldForward = -gamepad1.left_stick_y;
-            double fieldTurn = gamepad1.right_stick_x;
-
-            double robotForward = fieldForward * Math.cos(angles) + fieldStrafe * Math.sin(angles);
-            double robotStrafe = fieldStrafe * Math.cos(angles) - fieldForward * Math.sin(angles);
-            double robotTurn = fieldTurn;
-
-            double leftFrontPower = 0;
-            double rightFrontPower = 0;
-            double leftBackPower = 0;
-            double rightBackPower = 0;
-
-            if (Math.abs(robotForward) > deadzone || Math.abs(robotStrafe) > deadzone || Math.abs(robotTurn) > deadzone) {
-                leftFrontPower = robotForward + robotStrafe + robotTurn;
-                rightFrontPower = robotForward - robotStrafe - robotTurn;
-                leftBackPower = robotForward - robotStrafe + robotTurn;
-                rightBackPower = robotForward + robotStrafe - robotTurn;
-            }
-
-            double max;
-
-            // All code below this comment normalizes the values so no wheel power exceeds 100%.
-            max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-            max = Math.max(max, Math.abs(leftBackPower));
-            max = Math.max(max, Math.abs(rightBackPower));
-
-            if (max > 1.0) {
-                leftFrontPower /= max; // leftFrontPower = leftFrontPower / max;
-                rightFrontPower /= max;
-                leftBackPower /= max;
-                rightBackPower /= max;
-            }
-
-            double sensitivity = 0.65;
-            // The next four lines gives the calculated power to each motor.
-            leftFrontDrive.setPower(leftFrontPower * sensitivity);
-            rightFrontDrive.setPower(rightFrontPower * sensitivity);
-            leftBackDrive.setPower(leftBackPower * sensitivity);
-            rightBackDrive.setPower(rightBackPower * sensitivity);
-
             robot.updateState(gamepad2);
+            robot.driveTrain.updateState(gamepad1);
             robot.moveClaw(gamepad2, robot.limbArm.LimbExtendCount());
-
 
             // Makes the limb arm extend/contract, and gives the option to have precise movement
             if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
