@@ -9,28 +9,54 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Teleoperation.Field_TeleOp;
 
 public class Robot {
-    public Field_TeleOp fieldTeleOp;
+
+    private enum SampleFinder {
+        MANUAL,
+        SAMPLE_HUNT;
+    }
+
+    Robot.SampleFinder state;
+
     public DriveTrain driveTrain;
-    //public AscentMechanism ascentMechanism;
     public SampleClaw sampleClaw;
     public LimbArm limbArm;
     // This combines all the subsystems.
     public Robot(HardwareMap hwMap, Telemetry telemetry) {
-        fieldTeleOp = new Field_TeleOp();
         driveTrain = new DriveTrain(hwMap, telemetry);
-   //     ascentMechanism = new AscentMechanism(hwMap);
         sampleClaw = new SampleClaw(hwMap);
         limbArm = new LimbArm(hwMap, telemetry);
     }
 
     public void updateState(Gamepad gamepad) {
         sampleClaw.updateState(gamepad, limbArm.limbRotate.getCurrentPosition());
+        if (gamepad.y) {
+            state = SampleFinder.MANUAL;
+            driveTrain.setModeMANUAL();
+            sampleClaw.setModeMANUAL();
+            limbArm.setModeMANUAL();
+        }
+        if (gamepad.a) {
+            state = SampleFinder.SAMPLE_HUNT;
+        }
     }
 
     public void moveClaw(Gamepad gamepad, double rotationPosition) {
         sampleClaw.move(gamepad, rotationPosition);
     }
-    public void sampleFind(Gamepad gamepad) {
+    public void setMove(Gamepad gamepad1, Gamepad gamepad2) {
+        if (state == SampleFinder.MANUAL) {
+            driveTrain.move(gamepad1);
+            sampleClaw.move(gamepad2, limbArm.rotatePosition());
+            limbArm.move(gamepad2);
+        }
+        else if (state == SampleFinder.SAMPLE_HUNT) {
 
+        }
+    }
+    public boolean doesManual() { // Sets up a return statement for telemetry reasons
+        if (state == SampleFinder.MANUAL) {
+            return true;
+        }
+        return false;
     }
 }

@@ -26,6 +26,10 @@ public class SampleClaw {
     public Servo servoExtend;
     public Servo servoRotation;
 
+    public void setModeMANUAL() {
+        state = ClawState.MANUAL;
+    }
+
     private enum ClawState {
         MANUAL,
         SAMPLE_HUNTING,

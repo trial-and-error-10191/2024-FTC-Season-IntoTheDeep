@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Assemblies;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -23,6 +24,13 @@ public class LimbArm {
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
     private final int EXTENSION_RATE = 160;
     private final int ROTATION_RATE = 40;
+
+    private enum LimbState {
+        MANUAL;
+    }
+
+    LimbArm.LimbState state;
+
 public int LimbExtendCount() {
     return limbRotate.getCurrentPosition();
 }
@@ -34,6 +42,7 @@ public int LimbExtendCount() {
         limbExtend.setTargetPosition(targetPosition);
         limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         limbExtend.setPower(EXTEND_POWER);
+        state = LimbArm.LimbState.MANUAL;
 
         limbRotate = hwMap.get(DcMotor.class, "limbRotate");
         limbRotate.setDirection(DcMotor.Direction.FORWARD);
@@ -189,5 +198,24 @@ public int LimbExtendCount() {
             limbRotate.setTargetPosition(0);
             limbExtend.setTargetPosition(3000);
         }
+    }
+    public int rotatePosition() {
+        rotatePos = limbRotate.getCurrentPosition();
+        return rotatePos;
+    }
+    public void updateState(Gamepad gamepad) {
+        // based on gamepad and rotation position, set claw state
+        if (gamepad.y) {
+            state = LimbState.MANUAL;
+        }
+    }
+    public void move (Gamepad gamepad2){
+        if (state == LimbArm.LimbState.MANUAL) {
+            RunMotor(-gamepad2.left_stick_y);
+            rotateByPower(-gamepad2.right_stick_y);
+        }
+    }
+    public void setModeMANUAL() {
+        state = LimbState.MANUAL;
     }
 }

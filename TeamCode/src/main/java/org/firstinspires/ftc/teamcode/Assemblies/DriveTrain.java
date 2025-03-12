@@ -4,7 +4,6 @@
 package org.firstinspires.ftc.teamcode.Assemblies;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -47,11 +46,15 @@ public class DriveTrain {
     private int CurrentLiftCounts = 0;
     double angles = 0;
 
+    public void setModeMANUAL() {
+        state = TurnState.MANUAL;
+    }
+
     private enum TurnState {
         MANUAL,
         FORWARD,
         BACKWARD,
-        RIGHT;
+        LEFT;
     }
 
     DriveTrain.TurnState state;
@@ -374,7 +377,7 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
             state = TurnState.BACKWARD;
         }
         if (gamepad.left_bumper) {
-            state = TurnState.RIGHT;
+            state = TurnState.LEFT;
         }
     }
     public void move (Gamepad gamepad1){
@@ -389,8 +392,8 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
             turnToHeading(TURN_SPEED, 180);
             fieldControl(gamepad1, true);
         }
-        else if (state == DriveTrain.TurnState.RIGHT) {
-            turnToHeading(TURN_SPEED, 90);
+        else if (state == DriveTrain.TurnState.LEFT) {
+            turnToHeading(TURN_SPEED, -90);
             fieldControl(gamepad1, true);
         }
     }
