@@ -30,7 +30,7 @@ public class SampleClaw {
         state = ClawState.MANUAL;
     }
 
-    private enum ClawState {
+    public enum ClawState {
         MANUAL,
         SAMPLE_HUNTING,
         SPECIMEN_HUNTING;

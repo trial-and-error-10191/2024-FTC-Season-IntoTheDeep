@@ -50,7 +50,7 @@ public class DriveTrain {
         state = TurnState.MANUAL;
     }
 
-    private enum TurnState {
+    public enum TurnState {
         MANUAL,
         FORWARD,
         BACKWARD,

@@ -50,7 +50,10 @@ public class Robot {
             limbArm.move(gamepad2);
         }
         else if (state == SampleFinder.SAMPLE_HUNT) {
-
+            sampleClaw.state = SampleClaw.ClawState.SAMPLE_HUNTING;
+            driveTrain.state = DriveTrain.TurnState.LEFT;
+            limbArm.RunMotor(-gamepad2.left_stick_y);
+            limbArm.rotateByPower(-gamepad2.right_stick_y * 0.5f);
         }
     }
     public boolean doesManual() { // Sets up a return statement for telemetry reasons
