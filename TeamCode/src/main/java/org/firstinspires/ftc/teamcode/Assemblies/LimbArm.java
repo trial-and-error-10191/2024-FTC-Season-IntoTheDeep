@@ -26,7 +26,8 @@ public class LimbArm {
     private final int ROTATION_RATE = 40;
 
     private enum LimbState {
-        MANUAL;
+        MANUAL,
+        SAMPLE_PICK_UP;
     }
 
     LimbArm.LimbState state;
@@ -147,8 +148,15 @@ public int LimbExtendCount() {
 
     public void initRotateByPower() {
         limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        limbRotate.setPower(0);
     }
 
+    public void rotationPosition(int encoderCount) {
+        limbRotate.setPower(ROTATE_POWER);
+        limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        limbRotate.setTargetPosition(encoderCount);
+        limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
     public void ExtendAutoArm(int Counts) {
         if (Counts < 0) {
             limbExtend.setTargetPosition(0);
@@ -208,11 +216,21 @@ public int LimbExtendCount() {
         if (gamepad.y) {
             state = LimbState.MANUAL;
         }
+        if (gamepad.a) {
+            state = LimbState.SAMPLE_PICK_UP;
+        }
     }
     public void move (Gamepad gamepad2){
         if (state == LimbArm.LimbState.MANUAL) {
             RunMotor(-gamepad2.left_stick_y);
             rotateByPower(-gamepad2.right_stick_y);
+        }
+        if (state == LimbState.SAMPLE_PICK_UP) {
+            RunMotor(-gamepad2.left_stick_y);
+            rotateByPower(-gamepad2.right_stick_y * 0.5f); // -2087
+            if (limbRotate.getCurrentPosition() > -2087) {
+                limbRotate.setTargetPosition(-2087);
+            }
         }
     }
     public void setModeMANUAL() {
