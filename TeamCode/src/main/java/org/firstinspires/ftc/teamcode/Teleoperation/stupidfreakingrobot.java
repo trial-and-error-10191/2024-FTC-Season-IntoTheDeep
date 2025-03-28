@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Assemblies.Robot;
 
 // This file is the main TeleOp file.
 
-@TeleOp(name = "IntoTheDeep TeleOp", group = "LinearOpMode")
+@TeleOp(name = "SmallWheels", group = "LinearOpMode")
 public class stupidfreakingrobot extends LinearOpMode {
 
     @Override
