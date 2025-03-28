@@ -300,6 +300,11 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
-
+public void Small_Wheels() {
+    leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+    leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+    rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+    rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+}
 
 }

@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Teleoperation.Field_TeleOp;
 
 public class Robot {
+  //  public AscentMechanism ascentMechanism;
     public Field_TeleOp fieldTeleOp;
     public DriveTrain driveTrain;
     //public AscentMechanism ascentMechanism;
@@ -18,7 +19,8 @@ public class Robot {
     public Robot(HardwareMap hwMap, Telemetry telemetry) {
         fieldTeleOp = new Field_TeleOp();
         driveTrain = new DriveTrain(hwMap, telemetry);
-   //     ascentMechanism = new AscentMechanism(hwMap);
+        // comment out all the ascent mechanism shtuff if it errors
+      // ascentMechanism = new AscentMechanism(hwMap);
         sampleClaw = new SampleClaw(hwMap);
         limbArm = new LimbArm(hwMap, telemetry);
     }
