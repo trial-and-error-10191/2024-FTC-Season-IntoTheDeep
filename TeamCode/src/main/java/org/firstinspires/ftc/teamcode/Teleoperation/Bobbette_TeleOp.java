@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Teleoperation;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -12,8 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Assemblies.Robot;
 
-@TeleOp (name = "Bessie", group = "LinearOpMode")
-public class Bessie_TeleOp extends LinearOpMode {
+@TeleOp (name = "Bobbette", group = "LinearOpMode")
+public class Bobbette_TeleOp extends LinearOpMode {
     public DcMotor leftFrontDrive = null;
     public DcMotor leftBackDrive = null;
     public DcMotor rightFrontDrive = null;
@@ -94,22 +92,18 @@ public class Bessie_TeleOp extends LinearOpMode {
                 rightBackPower /= max;
             }
 
-            double sensitivity = 0.65;
+            double sensitivity1 = 0.65;
+            double sensitivity2 = 0.5;
             // The next four lines gives the calculated power to each motor.
-            leftFrontDrive.setPower(leftFrontPower * sensitivity);
-            rightFrontDrive.setPower(rightFrontPower * sensitivity);
-            leftBackDrive.setPower(leftBackPower * sensitivity);
-            rightBackDrive.setPower(rightBackPower * sensitivity);
-
-            //robot.bessieClaw.clawClamp(gamepad2.a);
+            leftFrontDrive.setPower(leftFrontPower * sensitivity2);
+            rightFrontDrive.setPower(rightFrontPower * sensitivity1);
+            leftBackDrive.setPower(leftBackPower * sensitivity1);
+            rightBackDrive.setPower(rightBackPower * sensitivity2);
 
             // Makes the limb arm extend/contract, and gives the option to have precise movement
             if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
                 gamepad2.left_stick_y = 0;
             }
-            robot.bessieLimbArm.RunMotor(-gamepad2.left_stick_y);
-
-            telemetry.addData("Extend Encoder Count: d%", robot.bessieLimbArm.limbExtend.getCurrentPosition());
             telemetry.addData("angles", "%4.2f", angles);
             telemetry.update();
         }
