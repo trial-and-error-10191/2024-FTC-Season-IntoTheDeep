@@ -1,33 +1,21 @@
 // This file is a system file.
 package org.firstinspires.ftc.teamcode.Assemblies;
 
-
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Teleoperation.Field_TeleOp;
+import org.firstinspires.ftc.teamcode.Teleoperation.Bessie_TeleOp;
 
 public class Robot {
-    public Field_TeleOp fieldTeleOp;
+    public Bessie_TeleOp bessieTeleOp;
     public DriveTrain driveTrain;
-    //public AscentMechanism ascentMechanism;
-    public SampleClaw sampleClaw;
-    public LimbArm limbArm;
+   // public BessieClaw bessieClaw;
+    public BessieLimbArm bessieLimbArm;
     // This combines all the subsystems.
     public Robot(HardwareMap hwMap, Telemetry telemetry) {
-        fieldTeleOp = new Field_TeleOp();
+        bessieTeleOp = new Bessie_TeleOp();
         driveTrain = new DriveTrain(hwMap, telemetry);
-   //     ascentMechanism = new AscentMechanism(hwMap);
-        sampleClaw = new SampleClaw(hwMap);
-        limbArm = new LimbArm(hwMap, telemetry);
-    }
-
-    public void updateState(Gamepad gamepad) {
-        sampleClaw.updateState(gamepad, limbArm.limbRotate.getCurrentPosition());
-    }
-
-    public void moveClaw(Gamepad gamepad, double rotationPosition) {
-        sampleClaw.move(gamepad, rotationPosition);
+        //bessieClaw = new BessieClaw(hwMap);
+        bessieLimbArm = new BessieLimbArm(hwMap, telemetry);
     }
 }

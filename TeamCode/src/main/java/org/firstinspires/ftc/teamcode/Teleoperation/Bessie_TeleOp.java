@@ -12,8 +12,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Assemblies.Robot;
 
-@TeleOp (name = "Field oriented controls", group = "LinearOpMode")
-public class Field_TeleOp extends LinearOpMode {
+@TeleOp (name = "Bessie", group = "LinearOpMode")
+public class Bessie_TeleOp extends LinearOpMode {
     public DcMotor leftFrontDrive = null;
     public DcMotor leftBackDrive = null;
     public DcMotor rightFrontDrive = null;
@@ -54,7 +54,6 @@ public class Field_TeleOp extends LinearOpMode {
         imu = hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
         waitForStart();
-        robot.limbArm.initRotateByPower();
 
         double deadzone = 0.05;
         while (opModeIsActive()) {
@@ -102,31 +101,18 @@ public class Field_TeleOp extends LinearOpMode {
             leftBackDrive.setPower(leftBackPower * sensitivity);
             rightBackDrive.setPower(rightBackPower * sensitivity);
 
-            robot.updateState(gamepad2);
-            robot.moveClaw(gamepad2, robot.limbArm.LimbExtendCount());
-
+            //robot.bessieClaw.clawClamp(gamepad2.a);
 
             // Makes the limb arm extend/contract, and gives the option to have precise movement
             if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
                 gamepad2.left_stick_y = 0;
             }
-            robot.limbArm.RunMotor(-gamepad2.left_stick_y);
+            robot.bessieLimbArm.RunMotor(-gamepad2.left_stick_y);
 
-            // Makes the limb arm rotate
-            if (gamepad2.right_stick_x < 0.05 && gamepad2.right_stick_x > -0.05) { // Makes sure there's no drifting
-                gamepad2.right_stick_x = 0;
-            }
-            //robot.driveTrain.LiftHandle(robot.limbArm.limbExtend.getCurrentPosition());
-            //robot.limbArm.armRotate(gamepad2.right_stick_y);
-            robot.limbArm.rotateByPower(-gamepad2.right_stick_y);
-            // Spool correction stuff
-            robot.limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
-
-            telemetry.addData("Extend Encoder Count: d%", robot.limbArm.limbExtend.getCurrentPosition());
+            telemetry.addData("Extend Encoder Count: d%", robot.bessieLimbArm.limbExtend.getCurrentPosition());
             telemetry.addData("angles", "%4.2f", angles);
-            telemetry.addData("Claw Rotation", "%1.2f", robot.sampleClaw.servoRotation.getPosition());
-            telemetry.addData("Flip claw", "%f", robot.sampleClaw.servoExtend.getPosition());
             telemetry.update();
         }
     }
+
 }
