@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.Assemblies.Robot;
 
 @TeleOp (name = "Bobbette", group = "LinearOpMode")
 public class Bobbette_TeleOp extends LinearOpMode {
@@ -20,12 +19,7 @@ public class Bobbette_TeleOp extends LinearOpMode {
 
     double angles = 0;
 
-    double initYaw;
-    double adjustedYaw;
-
     public void runOpMode() {
-        // Initiates the robots system and subsystems!
-        Robot robot = new Robot(hardwareMap, telemetry);
 
         leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
@@ -100,13 +94,8 @@ public class Bobbette_TeleOp extends LinearOpMode {
             leftBackDrive.setPower(leftBackPower * sensitivity1);
             rightBackDrive.setPower(rightBackPower * sensitivity2);
 
-            // Makes the limb arm extend/contract, and gives the option to have precise movement
-            if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
-                gamepad2.left_stick_y = 0;
-            }
             telemetry.addData("angles", "%4.2f", angles);
             telemetry.update();
         }
     }
-
 }
