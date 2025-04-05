@@ -1,116 +1,32 @@
 package org.firstinspires.ftc.teamcode.Teleoperation;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Assemblies.Robot;
 
-@TeleOp (name = "Bessie", group = "LinearOpMode")
+@TeleOp (name = "Bessie_TeleOp", group = "LinearOpMode")
 public class Bessie_TeleOp extends LinearOpMode {
-    public DcMotor leftFrontDrive = null;
-    public DcMotor leftBackDrive = null;
-    public DcMotor rightFrontDrive = null;
-    public DcMotor rightBackDrive = null;
-    public IMU imu = null;
-
-    double angles = 0;
-
-    double initYaw;
-    double adjustedYaw;
 
     public void runOpMode() {
         // Initiates the robots system and subsystems!
         Robot robot = new Robot(hardwareMap, telemetry);
+        telemetry.addData("Status", "Waiting for Start");
+        telemetry.update();
 
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
-
-        // Initializes motor directions:
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-
-        /* The next two lines define Hub orientation.
-         * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
-         *
-         * To Do:  EDIT these two lines to match YOUR mounting configuration.
-         */
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
-        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
-        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-
-        // Now initialize the IMU with this mounting orientation
-        // This sample expects the IMU to be in a REV Hub and named "imu".
-        imu = hardwareMap.get(IMU.class, "imu");
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
         waitForStart();
 
-        double deadzone = 0.05;
         while (opModeIsActive()) {
-            YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-            angles = -orientation.getYaw(AngleUnit.RADIANS);
+            robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            robot.lift.toggleLEDs(gamepad1.x);
+            robot.lift.moveUp(gamepad2.right_trigger);
+            robot.lift.moveDown(gamepad2.left_trigger);
+            robot.claw.open(gamepad1.right_bumper);
+            robot.claw.close(gamepad1.left_bumper);
 
-            double fieldStrafe = gamepad1.left_stick_x;
-            double fieldForward = -gamepad1.left_stick_y;
-            double fieldTurn = gamepad1.right_stick_x;
-
-            double robotForward = fieldForward * Math.cos(angles) + fieldStrafe * Math.sin(angles);
-            double robotStrafe = fieldStrafe * Math.cos(angles) - fieldForward * Math.sin(angles);
-            double robotTurn = fieldTurn;
-
-            double leftFrontPower = 0;
-            double rightFrontPower = 0;
-            double leftBackPower = 0;
-            double rightBackPower = 0;
-
-            if (Math.abs(robotForward) > deadzone || Math.abs(robotStrafe) > deadzone || Math.abs(robotTurn) > deadzone) {
-                leftFrontPower = robotForward + robotStrafe + robotTurn;
-                rightFrontPower = robotForward - robotStrafe - robotTurn;
-                leftBackPower = robotForward - robotStrafe + robotTurn;
-                rightBackPower = robotForward + robotStrafe - robotTurn;
-            }
-
-            double max;
-
-            // All code below this comment normalizes the values so no wheel power exceeds 100%.
-            max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-            max = Math.max(max, Math.abs(leftBackPower));
-            max = Math.max(max, Math.abs(rightBackPower));
-
-            if (max > 1.0) {
-                leftFrontPower /= max; // leftFrontPower = leftFrontPower / max;
-                rightFrontPower /= max;
-                leftBackPower /= max;
-                rightBackPower /= max;
-            }
-
-            double sensitivity = 0.65;
-            // The next four lines gives the calculated power to each motor.
-            leftFrontDrive.setPower(leftFrontPower * sensitivity);
-            rightFrontDrive.setPower(rightFrontPower * sensitivity);
-            leftBackDrive.setPower(leftBackPower * sensitivity);
-            rightBackDrive.setPower(rightBackPower * sensitivity);
-
-            //robot.bessieClaw.clawClamp(gamepad2.a);
-
-            // Makes the limb arm extend/contract, and gives the option to have precise movement
-            if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
-                gamepad2.left_stick_y = 0;
-            }
-            robot.bessieLimbArm.RunMotor(-gamepad2.left_stick_y);
-
-            telemetry.addData("Extend Encoder Count: d%", robot.bessieLimbArm.limbExtend.getCurrentPosition());
-            telemetry.addData("angles", "%4.2f", angles);
+            // Provides telemetry for all motors, servos, and sensors.
+            robot.driveTrain.motorTelemetry();
+            robot.lift.liftTelemetry();
+            robot.claw.clawTelemetry();
             telemetry.update();
         }
     }
