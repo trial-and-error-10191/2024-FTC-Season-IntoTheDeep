@@ -4,23 +4,22 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Lift {
 
-    public DcMotor liftMotor1;
-    public DcMotor liftMotor2;
-    public DigitalChannel limitSwitch;
-    public DigitalChannel sensorTouch;
-    public DigitalChannel redLED;
-    public DigitalChannel greenLED;
+    public DcMotor liftMotor1;              // expansion port 2
+    public DcMotor liftMotor2;              // expansion port 3
+    public DigitalChannel limitSwitch;      //
+    public DigitalChannel sensorTouch;      //
+    public DigitalChannel redLED;           // control hub digital slot
+    public DigitalChannel greenLED;         // control hub digital slot
     public ElapsedTime runtime = new ElapsedTime();
     boolean toggle = false;
     Telemetry telemetry;
 
     public Lift(HardwareMap hwMap, Telemetry telemetry) {
-        // Set up LEDs in robot's handles
+        // Set up LEDs in robot's handles & power switch
         redLED = hwMap.get(DigitalChannel.class, "redLED");
         greenLED = hwMap.get(DigitalChannel.class, "greenLED");
         redLED.setMode(DigitalChannel.Mode.OUTPUT);
@@ -61,15 +60,15 @@ public class Lift {
     }
 
     public void moveUp(float gamepad){
-        dualLift(-gamepad);
-        if (!limitSwitch.getState() && -gamepad > 0.0) {
+        dualLift(gamepad);
+        if (!limitSwitch.getState() && gamepad > 0.0) {
             dualLift(0.0);
         }
     }
 
     public void moveDown(float gamepad){
         dualLift(-gamepad);
-        if(!sensorTouch.getState() && -gamepad < 0.0) {
+        if(!sensorTouch.getState() && gamepad < 0.0) {
             dualLift(0.0);
         }
     }
@@ -79,11 +78,6 @@ public class Lift {
         telemetry.addData("Limit Switch", "%b", limitSwitch.getState());
         telemetry.addData("Touch Sensor", "%b", sensorTouch.getState());
         telemetry.addData("Lift Motors", "%5.2f, %5.2f", liftMotor1.getPower(), liftMotor2.getPower());
-//        telemetry.update();
     }
-
-
-
-
 
 }

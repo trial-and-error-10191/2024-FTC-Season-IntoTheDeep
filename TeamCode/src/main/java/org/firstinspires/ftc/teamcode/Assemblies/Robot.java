@@ -15,4 +15,5 @@ public class Robot {
         lift = new Lift(hwMap, telemetry);
         claw = new Claw(hwMap, telemetry);
     }
+
 }

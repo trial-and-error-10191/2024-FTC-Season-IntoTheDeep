@@ -19,14 +19,13 @@ public class DriveTrain {
     Telemetry telemetry;
 
     // All subsystems should have a hardware function that labels all of the hardware required of it.
-
     public DriveTrain(HardwareMap hwMap, Telemetry telemetry) {
 
         // Initializes motor names:
-        leftFrontDrive = hwMap.get(DcMotor.class, "leftFront");
-        leftBackDrive = hwMap.get(DcMotor.class, "leftBack");
-        rightFrontDrive = hwMap.get(DcMotor.class, "rightFront");
-        rightBackDrive = hwMap.get(DcMotor.class, "rightBack");
+        leftFrontDrive = hwMap.get(DcMotor.class, "leftFront");     // control hub port 0?
+        leftBackDrive = hwMap.get(DcMotor.class, "leftBack");       // control hub port 1?
+        rightFrontDrive = hwMap.get(DcMotor.class, "rightFront");   // control hub port 2?
+        rightBackDrive = hwMap.get(DcMotor.class, "rightBack");     // control hub port 3?
 
         // Initializes motor directions:
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -41,7 +40,7 @@ public class DriveTrain {
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
         imu = hwMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
-//        imu.resetYaw();    // resets robots heading - commented out so it doesn't throw off field oriented controls
+        imu.resetYaw();          // resets robots heading
         this.telemetry = telemetry;
     }
 
@@ -49,6 +48,7 @@ public class DriveTrain {
     public void drive(double axial, double lateral, double yaw) {
         double deadzone = 0.05;           // deadzone in joystick drift
         double sensitivity = 0.65;        // initializes sensitivity
+        double max;                       // use for max power to wheels
 
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         angles = -orientation.getYaw(AngleUnit.RADIANS);
@@ -68,15 +68,13 @@ public class DriveTrain {
             rightBackPower = robotForward + robotStrafe - yaw;
         }
 
-        double max;
-
         // All code below this comment normalizes the values so no wheel power exceeds 100%.
         max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
         max = Math.max(max, Math.abs(leftBackPower));
         max = Math.max(max, Math.abs(rightBackPower));
 
         if (max > 1.0) {
-            leftFrontPower /= max; // leftFrontPower = leftFrontPower / max;
+            leftFrontPower /= max;
             rightFrontPower /= max;
             leftBackPower /= max;
             rightBackPower /= max;
@@ -96,6 +94,6 @@ public class DriveTrain {
         telemetry.addData("LeftBack Motor: ", "%4.2f", leftBackDrive.getPower());
         telemetry.addData("RightBack Motor: ", "%4.2f", rightBackDrive.getPower());
         telemetry.addData("angles", "%4.2f", angles);
-//        telemetry.update();
     }
+
 }

@@ -13,8 +13,8 @@ public class Claw {
     boolean clawOpen = true;
 
     public Claw(HardwareMap hwMap, Telemetry telemetry) {
-        rightServo = hwMap.get(Servo.class,"rightservo");
-        leftServo  = hwMap.get(Servo.class,"leftservo");
+        rightServo = hwMap.get(Servo.class,"rightservo");    // expansion servo slot 2?
+        leftServo  = hwMap.get(Servo.class,"leftservo");     // expansion servo slot 3?
         rightServo.setPosition(servoPosition);
         leftServo.setPosition(1.0);
         this.telemetry = telemetry;
@@ -37,7 +37,7 @@ public class Claw {
     }
 
     public void clawTelemetry() {
-        telemetry.addData("Limit Switch", "%b", clawOpen);
+        telemetry.addData("ClawOpen", "%b", clawOpen);
     }
 
 }
