@@ -25,7 +25,7 @@ public class LimbArm {
     private final int EXTENSION_RATE = 160;
     private final int ROTATION_RATE = 40;
 
-    private enum LimbState {
+    public enum LimbState {
         MANUAL,
         SAMPLE_PICK_UP;
     }
@@ -224,16 +224,17 @@ public int LimbExtendCount() {
         if (state == LimbArm.LimbState.MANUAL) {
             RunMotor(-gamepad2.left_stick_y);
             rotateByPower(-gamepad2.right_stick_y);
+            maxRotatePos = -2356;
         }
         if (state == LimbState.SAMPLE_PICK_UP) {
             RunMotor(-gamepad2.left_stick_y);
             rotateByPower(-gamepad2.right_stick_y * 0.5f); // -2087
-            if (limbRotate.getCurrentPosition() > -2087) {
-                limbRotate.setTargetPosition(-2087);
-            }
+            maxRotatePos = -1000;
+            limbRotate.setTargetPosition(-988); //-2086
         }
     }
     public void setModeMANUAL() {
         state = LimbState.MANUAL;
+        state = LimbState.SAMPLE_PICK_UP;
     }
 }
