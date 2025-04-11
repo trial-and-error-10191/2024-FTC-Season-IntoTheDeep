@@ -10,34 +10,35 @@ public class Claw {
     Servo leftServo;
     Telemetry telemetry;
     double servoPosition = 0.0;
-    boolean clawOpen = true;
+    boolean clawOpen = false;
+    boolean lastInput = false;
 
     public Claw(HardwareMap hwMap, Telemetry telemetry) {
-        rightServo = hwMap.get(Servo.class,"rightservo");    // expansion servo slot 2?
-        leftServo  = hwMap.get(Servo.class,"leftservo");     // expansion servo slot 3?
+        rightServo = hwMap.get(Servo.class,"rightservo");    // expansion servo slot 1?
+        leftServo  = hwMap.get(Servo.class,"leftservo");     // expansion servo slot 2?
         rightServo.setPosition(servoPosition);
         leftServo.setPosition(1.0);
         this.telemetry = telemetry;
     }
 
     public void open(boolean gamepad) {
-        if (gamepad) {
-            rightServo.setPosition(1.0);
-            leftServo.setPosition(0.0);
-            clawOpen = true;
+        if (!lastInput && gamepad) {
+            clawOpen = !clawOpen;
+            if (clawOpen) {
+                rightServo.setPosition(1.0);
+                leftServo.setPosition(0.0);
+            } else {
+                rightServo.setPosition(1.0);
+                leftServo.setPosition(0.0);
+            }
         }
-    }
-
-    public void close(boolean gamepad){
-        if (gamepad) {
-            rightServo.setPosition(0.0);
-            leftServo.setPosition(1.0);
-            clawOpen = false;
-        }
+        lastInput = gamepad;
     }
 
     public void clawTelemetry() {
         telemetry.addData("ClawOpen", "%b", clawOpen);
+        telemetry.addData("rightServoPos", "%4.2f", rightServo.getPosition());
+        telemetry.addData("leftServoPos", "%4.2f", leftServo.getPosition());
     }
 
 }

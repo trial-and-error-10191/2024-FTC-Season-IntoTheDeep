@@ -22,10 +22,10 @@ public class DriveTrain {
     public DriveTrain(HardwareMap hwMap, Telemetry telemetry) {
 
         // Initializes motor names:
-        leftFrontDrive = hwMap.get(DcMotor.class, "leftFront");     // control hub port 0?
-        leftBackDrive = hwMap.get(DcMotor.class, "leftBack");       // control hub port 1?
-        rightFrontDrive = hwMap.get(DcMotor.class, "rightFront");   // control hub port 2?
-        rightBackDrive = hwMap.get(DcMotor.class, "rightBack");     // control hub port 3?
+        leftFrontDrive = hwMap.get(DcMotor.class, "leftFront");     // control hub port 0
+        leftBackDrive = hwMap.get(DcMotor.class, "leftBack");       // control hub port 2
+        rightFrontDrive = hwMap.get(DcMotor.class, "rightFront");   // control hub port 1
+        rightBackDrive = hwMap.get(DcMotor.class, "rightBack");     // control hub port 3
 
         // Initializes motor directions:
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);

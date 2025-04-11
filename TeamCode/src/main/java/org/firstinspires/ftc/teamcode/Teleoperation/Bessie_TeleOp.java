@@ -16,17 +16,18 @@ public class Bessie_TeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            robot.driveTrain.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            robot.lift.toggleLEDs(gamepad1.x);
-            robot.lift.moveUp(gamepad1.right_trigger);
-            robot.lift.moveDown(gamepad1.left_trigger);
-            robot.claw.open(gamepad1.right_bumper);
-            robot.claw.close(gamepad1.left_bumper);
+            robot.lift.toggleOn(gamepad1.a);
+            robot.lift.toggleOff(gamepad1.b);
+//            robot.driveTrain.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+//            robot.lift.toggleLEDs(gamepad1.x);
+//            robot.lift.moveUp(gamepad1.right_trigger);
+//            robot.lift.moveDown(gamepad1.left_trigger);
+//            robot.claw.open(gamepad1.a);
 
             // Provides telemetry for all motors, servos, and sensors.
-            robot.driveTrain.motorTelemetry();
+//            robot.driveTrain.motorTelemetry();
             robot.lift.liftTelemetry();
-            robot.claw.clawTelemetry();
+//            robot.claw.clawTelemetry();
             telemetry.update();
         }
     }
