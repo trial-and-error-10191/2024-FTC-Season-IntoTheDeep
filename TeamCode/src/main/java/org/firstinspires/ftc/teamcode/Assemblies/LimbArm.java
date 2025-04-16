@@ -106,21 +106,6 @@ public int LimbExtendCount() {
         }
     }
 
-    public void armRotate(float turn) {
-//        if (limbExtend.getCurrentPosition() > extensionLimit) {
-//            targetPosition = extensionLimit;
-//            limbExtend.setTargetPosition(targetPosition);
-//        }
-        //if (turn != 0) {
-        if (Math.abs(turn) >= 0.05f) {
-            rotatePos = limbRotate.getCurrentPosition() + (int) (turn * ROTATION_RATE);
-        }
-        if (rotatePos < maxRotatePos) {
-            rotatePos = maxRotatePos;
-        }
-        limbRotate.setTargetPosition(rotatePos);
-    }
-
     public void rotateByPower(float turn) {
         float rotatePower = 0.0f;
         if (Math.abs(turn) > 0.05f) {
@@ -157,6 +142,7 @@ public int LimbExtendCount() {
         limbRotate.setTargetPosition(encoderCount);
         limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
     public void ExtendAutoArm(int Counts) {
         if (Counts < 0) {
             limbExtend.setTargetPosition(0);
@@ -222,11 +208,13 @@ public int LimbExtendCount() {
     }
     public void move (Gamepad gamepad2){
         if (state == LimbArm.LimbState.MANUAL) {
+            limitRotate.getState();
             RunMotor(-gamepad2.left_stick_y);
             rotateByPower(-gamepad2.right_stick_y);
             maxRotatePos = -2356;
         }
         if (state == LimbState.SAMPLE_PICK_UP) {
+            limitRotate.getState();
             RunMotor(-gamepad2.left_stick_y);
             rotateByPower(-gamepad2.right_stick_y * 0.5f); // -2087
             maxRotatePos = -1000;

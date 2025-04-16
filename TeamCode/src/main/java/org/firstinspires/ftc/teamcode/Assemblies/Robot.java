@@ -38,7 +38,7 @@ public class Robot {
         }
         if (gamepad.a) {
             state = ROBOT_HUNTER.SAMPLE_HUNT;
-            sampleClaw.state = SampleClaw.ClawState.SAMPLE_HUNTING;
+            //sampleClaw.state = SampleClaw.ClawState.SAMPLE_HUNTING;
             driveTrain.state = DriveTrain.TurnState.RIGHT;
             limbArm.state = LimbArm.LimbState.SAMPLE_PICK_UP;
         }
@@ -55,6 +55,7 @@ public class Robot {
             limbArm.maxRotatePos = -2356;
         }
         else if (state == ROBOT_HUNTER.SAMPLE_HUNT) {
+            limbArm.limitRotate.getState();
             limbArm.rotationPosition(-988); // -2086
             driveTrain.turnToHeading(DriveTrain.TURN_SPEED, -90);
             driveTrain.fieldControl(gamepad1, true);
