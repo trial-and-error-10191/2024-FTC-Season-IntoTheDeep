@@ -1,10 +1,8 @@
 // This file is a system file.
 package org.firstinspires.ftc.teamcode.Assemblies;
 
-
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot {
@@ -38,7 +36,7 @@ public class Robot {
         }
         if (gamepad.a) {
             state = ROBOT_HUNTER.SAMPLE_HUNT;
-            //sampleClaw.state = SampleClaw.ClawState.SAMPLE_HUNTING;
+            sampleClaw.state = SampleClaw.ClawState.SAMPLE_HUNTING;
             driveTrain.state = DriveTrain.TurnState.RIGHT;
             limbArm.state = LimbArm.LimbState.SAMPLE_PICK_UP;
         }
@@ -55,15 +53,14 @@ public class Robot {
             limbArm.maxRotatePos = -2356;
         }
         else if (state == ROBOT_HUNTER.SAMPLE_HUNT) {
-            limbArm.limitRotate.getState();
-            limbArm.rotationPosition(-988); // -2086
+            if (limbArm.limbRotate.getCurrentPosition() < -1000 && limbArm.limbRotate.getCurrentPosition() >= 0) {
+                limbArm.limbRotate.setTargetPosition(-988);
+            }
+            limbArm.move(gamepad2);
             driveTrain.turnToHeading(DriveTrain.TURN_SPEED, -90);
-            driveTrain.fieldControl(gamepad1, true);
-            sampleClaw.PositionServoDown(limbArm.limbRotate.getCurrentPosition());
-            sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.y);
-            sampleClaw.clawClamp(gamepad2.a);
-            limbArm.RunMotor(-gamepad2.left_stick_y);
-            limbArm.rotateByPower(-gamepad2.right_stick_y * 0.5f);
+            driveTrain.move(gamepad1);
+//            sampleClaw.move(gamepad2, limbArm.limbRotate.getCurrentPosition());
+//            sampleClaw.clawClamp(gamepad2.a);
         }
     }
     public boolean doesManual() { // Sets up a return statement for telemetry reasons

@@ -57,7 +57,7 @@ public class DriveTrain {
         RIGHT;
     }
 
-    DriveTrain.TurnState state;
+    public DriveTrain.TurnState state;
 
     // All subsystems should have a hardware function that labels all of the hardware required of it.
     public DriveTrain(HardwareMap hwMap, Telemetry telemetry) {

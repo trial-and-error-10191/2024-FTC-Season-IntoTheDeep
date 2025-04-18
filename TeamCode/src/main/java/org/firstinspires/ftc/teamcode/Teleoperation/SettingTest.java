@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Assemblies.Robot;
+import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 @TeleOp (name = "SettingTest", group = "LinearOpMode")
 public class SettingTest extends LinearOpMode {
@@ -20,6 +21,9 @@ public class SettingTest extends LinearOpMode {
             robot.setMove(gamepad1, gamepad2);
 
             telemetry.addData("Manual", "%b", robot.doesManual());
+            telemetry.addData("ClawManual", robot.sampleClaw.state);
+            telemetry.addData("LiftManual", robot.limbArm.state);
+            telemetry.addData("DriveManual", robot.driveTrain.state);
             telemetry.update();
         }
     }

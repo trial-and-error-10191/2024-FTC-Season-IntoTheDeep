@@ -30,7 +30,7 @@ public class LimbArm {
         SAMPLE_PICK_UP;
     }
 
-    LimbArm.LimbState state;
+    public LimbArm.LimbState state;
 
 public int LimbExtendCount() {
     return limbRotate.getCurrentPosition();
@@ -218,11 +218,9 @@ public int LimbExtendCount() {
             RunMotor(-gamepad2.left_stick_y);
             rotateByPower(-gamepad2.right_stick_y * 0.5f); // -2087
             maxRotatePos = -1000;
-            limbRotate.setTargetPosition(-988); //-2086
         }
     }
     public void setModeMANUAL() {
         state = LimbState.MANUAL;
-        state = LimbState.SAMPLE_PICK_UP;
     }
 }

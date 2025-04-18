@@ -36,7 +36,7 @@ public class SampleClaw {
         SPECIMEN_HUNTING;
     }
 
-    ClawState state;
+    public ClawState state;
 
     public SampleClaw(HardwareMap hwMap) {
         // initiates servo name
