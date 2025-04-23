@@ -15,7 +15,7 @@ public class DriveTrain {
 
     DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
     double angles  = 0;        // ini angles for field oriented controls
-    public IMU imu;            // ini imu for field oriented controls
+    private IMU imu;            // ini imu for field oriented controls
     Telemetry telemetry;
 
     // All subsystems should have a hardware function that labels all of the hardware required of it.

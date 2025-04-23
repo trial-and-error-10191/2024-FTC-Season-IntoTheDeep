@@ -8,7 +8,9 @@ public class Claw {
     // Set up variables
     Servo rightServo;
     Servo leftServo;
+
     Telemetry telemetry;
+
     double servoPosition = 0.0;
     boolean clawOpen = false;
     boolean lastInput = false;
