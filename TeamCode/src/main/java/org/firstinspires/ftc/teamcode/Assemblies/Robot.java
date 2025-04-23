@@ -63,7 +63,7 @@ public class Robot {
                 limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 limbArm.limbRotate.setPower(limbArm.ROTATE_POWER);
             }
-            limbArm.move(gamepad2);
+            //limbArm.move(gamepad2);
             driveTrain.turnToHeading(DriveTrain.TURN_SPEED, -90);
             driveTrain.move(gamepad1);
 //            sampleClaw.move(gamepad2, limbArm.limbRotate.getCurrentPosition());
