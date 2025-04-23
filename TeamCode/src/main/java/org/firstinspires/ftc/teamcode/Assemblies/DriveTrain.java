@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class DriveTrain {
 
     DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
-    double angles  = 0;        // ini angles for field oriented controls
+    double angles  = 0;         // ini angles for field oriented controls
     private IMU imu;            // ini imu for field oriented controls
     Telemetry telemetry;
 

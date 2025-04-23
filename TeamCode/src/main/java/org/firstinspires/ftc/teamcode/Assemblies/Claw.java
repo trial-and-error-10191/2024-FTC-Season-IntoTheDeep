@@ -6,9 +6,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Claw {
     // Set up variables
-    Servo rightServo;
-    Servo leftServo;
-
+    Servo rightServo, leftServo;
     Telemetry telemetry;
 
     double servoPosition = 0.0;
