@@ -27,7 +27,8 @@ public class LimbArm {
 
     public enum LimbState {
         MANUAL,
-        SAMPLE_PICK_UP;
+        SAMPLE_PICK_UP,
+        SPECIMEN_HANG
     }
 
     public LimbArm.LimbState state;
@@ -95,7 +96,6 @@ public int LimbExtendCount() {
         }
         telemetry.addData("SpoolPower", "%4.2f", spoolServo.getPower());
     }
-
     public void extendLimit() {
         int rotatePos = limbRotate.getCurrentPosition();
         if (rotatePos <= 0 && rotatePos > -849) {                  // This one reaches to the corner of our reach
@@ -105,7 +105,6 @@ public int LimbExtendCount() {
             extensionLimit = 2282;
         }
     }
-
     public void rotateByPower(float turn) {
         float rotatePower = 0.0f;
         if (Math.abs(turn) > 0.05f) {
@@ -130,19 +129,16 @@ public int LimbExtendCount() {
         telemetry.addData("Rotate Encoders", "%d", limbRotate.getCurrentPosition());
         telemetry.addData("Rotate Limit", "%b", !limitRotate.getState());
     }
-
     public void initRotateByPower() {
         limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         limbRotate.setPower(0);
     }
-
     public void rotationPosition(int encoderCount) {
         limbRotate.setPower(ROTATE_POWER);
         limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         limbRotate.setTargetPosition(encoderCount);
         limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
     public void ExtendAutoArm(int Counts) {
         if (Counts < 0) {
             limbExtend.setTargetPosition(0);
@@ -164,7 +160,6 @@ public int LimbExtendCount() {
         }
         spoolServo.setPower(0);
     }
-
     public void auto_armRotate(double Speed, int Counts) {
         limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -205,6 +200,9 @@ public int LimbExtendCount() {
         if (gamepad.a) {
             state = LimbState.SAMPLE_PICK_UP;
         }
+        if (gamepad.b) {
+            state = LimbState.SAMPLE_PICK_UP;
+        }
     }
     public void move (Gamepad gamepad2){
         if (state == LimbArm.LimbState.MANUAL) {
@@ -216,7 +214,13 @@ public int LimbExtendCount() {
         if (state == LimbState.SAMPLE_PICK_UP) {
             limitRotate.getState();
             RunMotor(-gamepad2.left_stick_y);
-            rotateByPower(-gamepad2.right_stick_y * 0.5f); // -2087
+            rotateByPower(-gamepad2.right_stick_y * 0.5f);
+            maxRotatePos = -1000;
+        }
+        if (state == LimbState.SPECIMEN_HANG) {
+            limitRotate.getState();
+            RunMotor(-gamepad2.left_stick_y);
+            rotateByPower(-gamepad2.right_stick_y * 0.5f);
             maxRotatePos = -1000;
         }
     }

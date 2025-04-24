@@ -54,7 +54,7 @@ public class DriveTrain {
         MANUAL,
         FORWARD,
         BACKWARD,
-        RIGHT;
+        RIGHT
     }
 
     public DriveTrain.TurnState state;

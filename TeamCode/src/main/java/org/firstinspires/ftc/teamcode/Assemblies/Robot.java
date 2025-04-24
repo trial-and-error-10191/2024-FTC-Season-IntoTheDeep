@@ -7,13 +7,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Autonomous.AdvancedAutoBasketSpike;
 
 public class Robot {
 
     public enum ROBOT_HUNTER {
         MANUAL,
-        SAMPLE_HUNT;
+        SAMPLE_HUNT,
+        SPECIMEN_HUNT
     }
 
     Robot.ROBOT_HUNTER state;
@@ -44,6 +44,12 @@ public class Robot {
             driveTrain.state = DriveTrain.TurnState.RIGHT;
             limbArm.state = LimbArm.LimbState.SAMPLE_PICK_UP;
         }
+        if (gamepad.b) {
+            state = ROBOT_HUNTER.SPECIMEN_HUNT;
+            sampleClaw.state = SampleClaw.ClawState.SPECIMEN_HUNTING;
+            driveTrain.state = DriveTrain.TurnState.FORWARD;
+            limbArm.state = LimbArm.LimbState.SPECIMEN_HANG;
+        }
     }
 
     public void moveClaw(Gamepad gamepad, double rotationPosition) {
@@ -57,14 +63,25 @@ public class Robot {
             limbArm.maxRotatePos = -2356;
         }
         else if (state == ROBOT_HUNTER.SAMPLE_HUNT) {
-            if (limbArm.limbRotate.getCurrentPosition() < -1000 || limbArm.limbRotate.getCurrentPosition() >= 0) {
+            if (limbArm.limbRotate.getCurrentPosition() > -2000) {
+                limbArm.limbRotate.setTargetPosition(-2288);
+                Wait(2);
+                limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                limbArm.limbRotate.setPower(limbArm.ROTATE_POWER);
+            }
+            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, -90);
+            driveTrain.move(gamepad1);
+//            sampleClaw.move(gamepad2, limbArm.limbRotate.getCurrentPosition());
+//            sampleClaw.clawClamp(gamepad2.a);
+        }
+        else if (state == ROBOT_HUNTER.SPECIMEN_HUNT) {
+            if (limbArm.limbRotate.getCurrentPosition() < -1000) {
                 limbArm.limbRotate.setTargetPosition(-988);
                 Wait(2);
                 limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 limbArm.limbRotate.setPower(limbArm.ROTATE_POWER);
             }
-            //limbArm.move(gamepad2);
-            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, -90);
+            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 0);
             driveTrain.move(gamepad1);
 //            sampleClaw.move(gamepad2, limbArm.limbRotate.getCurrentPosition());
 //            sampleClaw.clawClamp(gamepad2.a);

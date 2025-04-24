@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.Assemblies;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class SampleClaw {
     boolean ClawOpen = false;
@@ -33,7 +29,7 @@ public class SampleClaw {
     public enum ClawState {
         MANUAL,
         SAMPLE_HUNTING,
-        SPECIMEN_HUNTING;
+        SPECIMEN_HUNTING
     }
 
     public ClawState state;
