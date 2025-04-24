@@ -1,15 +1,11 @@
 package org.firstinspires.ftc.teamcode.Teleoperation;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Assemblies.Robot;
 
 @TeleOp (name = "Field oriented controls", group = "LinearOpMode")
@@ -21,9 +17,6 @@ public class Field_TeleOp extends LinearOpMode {
     public IMU imu = null;
 
     double angles = 0;
-
-    double initYaw;
-    double adjustedYaw;
 
     public void runOpMode() {
         // Initiates the robots system and subsystems!
@@ -56,12 +49,7 @@ public class Field_TeleOp extends LinearOpMode {
         waitForStart();
         robot.limbArm.initRotateByPower();
 
-        double deadzone = 0.05;
         while (opModeIsActive()) {
-            robot.updateState(gamepad2);
-            robot.driveTrain.updateState(gamepad1);
-            robot.moveClaw(gamepad2, robot.limbArm.LimbExtendCount());
-
             // Makes the limb arm extend/contract, and gives the option to have precise movement
             if (gamepad2.left_stick_y < 0.05 && gamepad2.left_stick_y > -0.05) {   // Makes sure there's no drifting
                 gamepad2.left_stick_y = 0;
@@ -72,12 +60,13 @@ public class Field_TeleOp extends LinearOpMode {
             if (gamepad2.right_stick_x < 0.05 && gamepad2.right_stick_x > -0.05) { // Makes sure there's no drifting
                 gamepad2.right_stick_x = 0;
             }
-            //robot.driveTrain.LiftHandle(robot.limbArm.limbExtend.getCurrentPosition());
-            //robot.limbArm.armRotate(gamepad2.right_stick_y);
             robot.limbArm.rotateByPower(-gamepad2.right_stick_y);
             // Spool correction stuff
             robot.limbArm.spoolCorrection(gamepad2.dpad_up, gamepad2.dpad_down);
             robot.driveTrain.move(gamepad1);
+            robot.sampleClaw.clawClamp(gamepad2.a);
+            robot.sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger, gamepad2.b);
+            robot.sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper, gamepad2.y);
 
             telemetry.addData("Extend Encoder Count: d%", robot.limbArm.limbExtend.getCurrentPosition());
             telemetry.addData("angles", "%4.2f", angles);

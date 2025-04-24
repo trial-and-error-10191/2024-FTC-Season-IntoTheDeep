@@ -29,7 +29,6 @@ public class DriveTrain {
     static final double WHEEL_DIAMETER_INCHES = 3.5;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double DRIVE_SPEED = 1;
     static final double TURN_SPEED = 0.5;
     static final double HEADING_THRESHOLD = 5.0;
     static final double P_TURN_GAIN = 0.02;     // Larger is more responsive, but also less stable.
@@ -244,7 +243,6 @@ telemetry.addData("LeftSpeed",leftSpeed); telemetry.addData("RightSpeed",rightSp
 
 
     private void sendTelemetry(boolean straight) {
-
         if (straight) {
             telemetry.addData("Motion", "Drive Straight");
             telemetry.addData("Target Pos L:R", "%7d:%7d", leftTarget, rightTarget);
