@@ -14,8 +14,8 @@ public class Claw {
     boolean lastInput = false;
 
     public Claw(HardwareMap hwMap, Telemetry telemetry) {
-        rightServo = hwMap.get(Servo.class,"rightservo");    // expansion servo slot 1?
-        leftServo  = hwMap.get(Servo.class,"leftservo");     // expansion servo slot 2?
+        rightServo = hwMap.get(Servo.class,"rightservo");    // expansion servo slot 2
+        leftServo  = hwMap.get(Servo.class,"leftservo");     // expansion servo slot 1
         rightServo.setPosition(servoPosition);
         leftServo.setPosition(1.0);
         this.telemetry = telemetry;
@@ -23,13 +23,14 @@ public class Claw {
 
     public void open(boolean gamepad) {
         if (!lastInput && gamepad) {
-            clawOpen = !clawOpen;
             if (clawOpen) {
                 rightServo.setPosition(1.0);
                 leftServo.setPosition(0.0);
+                clawOpen = !clawOpen;
             } else {
-                rightServo.setPosition(1.0);
-                leftServo.setPosition(0.0);
+                rightServo.setPosition(0.0);
+                leftServo.setPosition(1.0);
+                clawOpen = true;
             }
         }
         lastInput = gamepad;

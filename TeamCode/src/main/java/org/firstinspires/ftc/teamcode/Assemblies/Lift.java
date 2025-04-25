@@ -13,7 +13,7 @@ public class Lift {
     DcMotor liftMotor1;              // expansion port 3
     DcMotor liftMotor2;              // expansion port 2
 
-    DigitalChannel limitSwitch;      // control hub digital slot 5-4
+    DigitalChannel limitSwitch;      // control hub digital slot 5
     //DistanceSensor sensorRange;      // sensor under claw mech
     DigitalChannel sensorTouch;      // expansion digital slot 5
     DigitalChannel redLED;           // control hub digital slot 6
