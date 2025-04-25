@@ -23,7 +23,7 @@ public class LimbArm {
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
     private final int EXTENSION_RATE = 160;
-    private final int ROTATION_RATE = 40;
+//    private final int ROTATION_RATE = 40;
 
     public enum LimbState {
         MANUAL,
