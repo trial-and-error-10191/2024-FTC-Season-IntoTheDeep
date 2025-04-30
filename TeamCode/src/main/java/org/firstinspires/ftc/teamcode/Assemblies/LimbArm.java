@@ -225,6 +225,7 @@ public int LimbExtendCount() {
         }
     }
     public void setModeMANUAL() {
+        limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         state = LimbState.MANUAL;
     }
 }

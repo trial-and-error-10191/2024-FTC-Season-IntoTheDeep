@@ -44,12 +44,12 @@ public class Robot {
             driveTrain.state = DriveTrain.TurnState.RIGHT;
             limbArm.state = LimbArm.LimbState.SAMPLE_PICK_UP;
         }
-//        if (gamepad.b) {
-//            state = ROBOT_HUNTER.SPECIMEN_PLACE;
-//            sampleClaw.state = SampleClaw.ClawState.SPECIMEN_HUNTING;
-//            driveTrain.state = DriveTrain.TurnState.FORWARD;
-//            limbArm.state = LimbArm.LimbState.SPECIMEN_HANG;
-//        }
+        if (gamepad.b) {
+            state = ROBOT_HUNTER.SPECIMEN_PLACE;
+            sampleClaw.state = SampleClaw.ClawState.SPECIMEN_HUNTING;
+            driveTrain.state = DriveTrain.TurnState.FORWARD;
+            limbArm.state = LimbArm.LimbState.SPECIMEN_HANG;
+        }
     }
 
     public void moveClaw(Gamepad gamepad, double rotationPosition) {
@@ -65,32 +65,35 @@ public class Robot {
         else if (state == ROBOT_HUNTER.SAMPLE_HUNT) {
             if (limbArm.limbRotate.getCurrentPosition() > -2000) {
                 limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                limbArm.limbRotate.setTargetPosition(-2288);
+                limbArm.limbRotate.setTargetPosition(-2080);
                 limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                limbArm.limbRotate.setPower(limbArm.ROTATE_POWER);
+                limbArm.limbRotate.setPower(limbArm.ROTATE_POWER * 0.5);
                 Wait(3);
             }
-            //limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            //limbArm.limbRotate.setPower(limbArm.ROTATE_POWER * 0.5);
+            limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             driveTrain.turnToHeading(DriveTrain.TURN_SPEED, -90);
             driveTrain.move(gamepad1);
             limbArm.RunMotor(-gamepad2.left_stick_y);
             limbArm.rotateByPower(-gamepad2.right_stick_y);
-//            sampleClaw.move(gamepad2, limbArm.limbRotate.getCurrentPosition());
-//            sampleClaw.clawClamp(gamepad2.a);
+            sampleClaw.move(gamepad2, limbArm.limbRotate.getCurrentPosition());
+            sampleClaw.clawClamp(gamepad2.a);
         }
-//        else if (state == ROBOT_HUNTER.SPECIMEN_PLACE) {
-//            if (limbArm.limbRotate.getCurrentPosition() < -1000) {
-//                limbArm.limbRotate.setTargetPosition(-988);
-//                Wait(2);
-//                limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                limbArm.limbRotate.setPower(limbArm.ROTATE_POWER);
-//            }
-//            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 0);
-//            driveTrain.move(gamepad1);
-//            sampleClaw.move(gamepad2, limbArm.limbRotate.getCurrentPosition());
-//            sampleClaw.clawClamp(gamepad2.a);
-//        }
+        else if (state == ROBOT_HUNTER.SPECIMEN_PLACE) {
+            if (limbArm.limbRotate.getCurrentPosition() < -1100) {
+                limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                limbArm.limbRotate.setTargetPosition(-988);
+                limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                limbArm.limbRotate.setPower(limbArm.ROTATE_POWER * 0.5);
+                Wait(3);
+            }
+            limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 0);
+            driveTrain.move(gamepad1);
+            limbArm.RunMotor(-gamepad2.left_stick_y);
+            limbArm.rotateByPower(-gamepad2.right_stick_y);
+            sampleClaw.move(gamepad2, limbArm.limbRotate.getCurrentPosition());
+            sampleClaw.clawClamp(gamepad2.a);
+        }
     }
     public boolean doesManual() { // Sets up a return statement for telemetry reasons
         return state == ROBOT_HUNTER.MANUAL;
