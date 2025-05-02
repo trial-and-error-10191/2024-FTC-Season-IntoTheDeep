@@ -13,7 +13,8 @@ public class Robot {
     public enum ROBOT_HUNTER {
         MANUAL,
         SAMPLE_HUNT,
-        SPECIMEN_PLACE
+        SPECIMEN_PLACE,
+        SPECIMEN_GRAB
     }
 
     Robot.ROBOT_HUNTER state;
@@ -49,6 +50,12 @@ public class Robot {
             sampleClaw.state = SampleClaw.ClawState.SPECIMEN_HUNTING;
             driveTrain.state = DriveTrain.TurnState.FORWARD;
             limbArm.state = LimbArm.LimbState.SPECIMEN_HANG;
+        }
+        if (gamepad.x) {
+            state = ROBOT_HUNTER.SPECIMEN_GRAB;
+            sampleClaw.state = SampleClaw.ClawState.SPECIMEN_HUNTING;
+            driveTrain.state = DriveTrain.TurnState.BACKWARD;
+            limbArm.state = LimbArm.LimbState.SPECIMEN_GRAB;
         }
     }
 
@@ -88,6 +95,22 @@ public class Robot {
             }
             limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 0);
+            driveTrain.move(gamepad1);
+            limbArm.RunMotor(-gamepad2.left_stick_y);
+            limbArm.rotateByPower(-gamepad2.right_stick_y);
+            sampleClaw.move(gamepad2, limbArm.limbRotate.getCurrentPosition());
+            sampleClaw.clawClamp(gamepad2.a);
+        }
+        else if (state == ROBOT_HUNTER.SPECIMEN_GRAB) {
+            if (limbArm.limbRotate.getCurrentPosition() < -1880 || limbArm.limbRotate.getCurrentPosition() > -500) {
+                limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                limbArm.limbRotate.setTargetPosition(-1730);
+                limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                limbArm.limbRotate.setPower(limbArm.ROTATE_POWER * 0.5);
+                Wait(3);
+            }
+            limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 180);
             driveTrain.move(gamepad1);
             limbArm.RunMotor(-gamepad2.left_stick_y);
             limbArm.rotateByPower(-gamepad2.right_stick_y);

@@ -28,7 +28,8 @@ public class LimbArm {
     public enum LimbState {
         MANUAL,
         SAMPLE_PICK_UP,
-        SPECIMEN_HANG
+        SPECIMEN_HANG,
+        SPECIMEN_GRAB
     }
 
     public LimbArm.LimbState state;
@@ -201,7 +202,10 @@ public int LimbExtendCount() {
             state = LimbState.SAMPLE_PICK_UP;
         }
         if (gamepad.b) {
-            state = LimbState.SAMPLE_PICK_UP;
+            state = LimbState.SPECIMEN_HANG;
+        }
+        if (gamepad.x) {
+            state = LimbState.SPECIMEN_GRAB;
         }
     }
     public void move (Gamepad gamepad2){
@@ -218,6 +222,12 @@ public int LimbExtendCount() {
             maxRotatePos = -1000;
         }
         if (state == LimbState.SPECIMEN_HANG) {
+            limitRotate.getState();
+            RunMotor(-gamepad2.left_stick_y);
+            rotateByPower(-gamepad2.right_stick_y * 0.5f);
+            maxRotatePos = -1000;
+        }
+        if (state == LimbState.SPECIMEN_GRAB) {
             limitRotate.getState();
             RunMotor(-gamepad2.left_stick_y);
             rotateByPower(-gamepad2.right_stick_y * 0.5f);
