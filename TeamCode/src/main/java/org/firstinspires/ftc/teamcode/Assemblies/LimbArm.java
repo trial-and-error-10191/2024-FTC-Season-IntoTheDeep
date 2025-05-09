@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -28,6 +29,7 @@ public class LimbArm {
     public enum LimbState {
         MANUAL,
         SAMPLE_PICK_UP,
+        SAMPLE_PLACE,
         SPECIMEN_HANG,
         SPECIMEN_GRAB
     }
@@ -208,8 +210,15 @@ public int LimbExtendCount() {
             state = LimbState.SPECIMEN_GRAB;
         }
     }
+    public void updateState2(Gamepad gamepad2) {
+        if (gamepad2.b) {
+            state = LimbState.SAMPLE_PLACE;
+        }
+        telemetry.addData("Manual", doesLimbManual());
+    }
     public void move (Gamepad gamepad2){
         if (state == LimbArm.LimbState.MANUAL) {
+            limbExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             limitRotate.getState();
             RunMotor(-gamepad2.left_stick_y);
             rotateByPower(-gamepad2.right_stick_y);
@@ -234,8 +243,46 @@ public int LimbExtendCount() {
             maxRotatePos = -1000;
         }
     }
+    public void move2 (Gamepad gamepad2) {
+        if (state == LimbArm.LimbState.MANUAL) {
+            limbExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            limitRotate.getState();
+            RunMotor(-gamepad2.left_stick_y);
+            rotateByPower(-gamepad2.right_stick_y);
+            maxRotatePos = -2356;
+        }
+        if (state == LimbState.SAMPLE_PLACE) {
+            limitRotate.getState();
+            if (limbExtend.getCurrentPosition() < maxExtendPos) {
+                limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                limbExtend.setTargetPosition(maxExtendPos);
+                limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Wait(3);
+            }
+            if (limbRotate.getCurrentPosition() < -250) {
+                limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                limbRotate.setTargetPosition(0);
+                limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                limbRotate.setPower(ROTATE_POWER * 0.5);
+                Wait(3);
+            }
+            limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rotateByPower(-gamepad2.right_stick_y);
+            spoolCorrection(gamepad2.dpad_up, gamepad2.dpad_down);
+        }
+    }
     public void setModeMANUAL() {
         limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         state = LimbState.MANUAL;
+    }
+    public void Wait(double seconds) {
+        ElapsedTime Time   = new ElapsedTime();
+        Time.reset();
+        while (Time.milliseconds()  < seconds * 1000) {
+            // doesn't need anything
+        } // end of while loop
+    }
+    public boolean doesLimbManual() { // Sets up a return statement for telemetry reasons
+        return state == LimbState.MANUAL;
     }
 }
