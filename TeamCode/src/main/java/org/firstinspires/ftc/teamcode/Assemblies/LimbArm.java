@@ -195,7 +195,7 @@ public int LimbExtendCount() {
         rotatePos = limbRotate.getCurrentPosition();
         return rotatePos;
     }
-    public void updateState(Gamepad gamepad) {
+    public void updateState(Gamepad gamepad, Gamepad gamepad2) {
         // based on gamepad and rotation position, set claw state
         if (gamepad.y) {
             state = LimbState.MANUAL;
@@ -209,8 +209,6 @@ public int LimbExtendCount() {
         if (gamepad.x) {
             state = LimbState.SPECIMEN_GRAB;
         }
-    }
-    public void updateState2(Gamepad gamepad2) {
         if (gamepad2.b) {
             state = LimbState.SAMPLE_PLACE;
         }
@@ -242,35 +240,35 @@ public int LimbExtendCount() {
             rotateByPower(-gamepad2.right_stick_y * 0.5f);
             maxRotatePos = -1000;
         }
+//        if (state == LimbState.SAMPLE_PLACE) {
+//            limitRotate.getState();
+//            if (limbExtend.getCurrentPosition() < maxExtendPos) {
+//                limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                limbExtend.setTargetPosition(maxExtendPos);
+//                limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                Wait(3);
+//            }
+//            if (limbRotate.getCurrentPosition() < -250) {
+//                limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                limbRotate.setTargetPosition(0);
+//                limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                limbRotate.setPower(ROTATE_POWER * 0.5);
+//                Wait(3);
+//            }
+//            limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            rotateByPower(-gamepad2.right_stick_y);
+//            spoolCorrection(gamepad2.dpad_up, gamepad2.dpad_down);
+//        }
     }
-    public void move2 (Gamepad gamepad2) {
-        if (state == LimbArm.LimbState.MANUAL) {
-            limbExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            limitRotate.getState();
-            RunMotor(-gamepad2.left_stick_y);
-            rotateByPower(-gamepad2.right_stick_y);
-            maxRotatePos = -2356;
-        }
-        if (state == LimbState.SAMPLE_PLACE) {
-            limitRotate.getState();
-            if (limbExtend.getCurrentPosition() < maxExtendPos) {
-                limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                limbExtend.setTargetPosition(maxExtendPos);
-                limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Wait(3);
-            }
-            if (limbRotate.getCurrentPosition() < -250) {
-                limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                limbRotate.setTargetPosition(0);
-                limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                limbRotate.setPower(ROTATE_POWER * 0.5);
-                Wait(3);
-            }
-            limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            rotateByPower(-gamepad2.right_stick_y);
-            spoolCorrection(gamepad2.dpad_up, gamepad2.dpad_down);
-        }
-    }
+//    public void move2 (Gamepad gamepad2) {
+//        if (state == LimbArm.LimbState.MANUAL) {
+//            limbExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            limitRotate.getState();
+//            RunMotor(-gamepad2.left_stick_y);
+//            rotateByPower(-gamepad2.right_stick_y);
+//            maxRotatePos = -2356;
+//        }
+//    }
     public void setModeMANUAL() {
         limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         state = LimbState.MANUAL;

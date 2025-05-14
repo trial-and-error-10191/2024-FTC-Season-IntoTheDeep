@@ -38,24 +38,31 @@ public class Robot {
             driveTrain.setModeMANUAL();
             sampleClaw.setModeMANUAL();
             limbArm.setModeMANUAL();
+            limbArm.maxRotatePos = -2356;
         }
         if (gamepad.a) {
             state = ROBOT_HUNTER.SAMPLE_HUNT;
             sampleClaw.state = SampleClaw.ClawState.SAMPLE_HUNTING;
             driveTrain.state = DriveTrain.TurnState.RIGHT;
             limbArm.state = LimbArm.LimbState.SAMPLE_PICK_UP;
+            limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, -90);
         }
         if (gamepad.b) {
             state = ROBOT_HUNTER.SPECIMEN_PLACE;
             sampleClaw.state = SampleClaw.ClawState.SPECIMEN_HUNTING;
             driveTrain.state = DriveTrain.TurnState.FORWARD;
             limbArm.state = LimbArm.LimbState.SPECIMEN_HANG;
+            limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 0);
         }
         if (gamepad.x) {
             state = ROBOT_HUNTER.SPECIMEN_GRAB;
             sampleClaw.state = SampleClaw.ClawState.SPECIMEN_HUNTING;
             driveTrain.state = DriveTrain.TurnState.BACKWARD;
             limbArm.state = LimbArm.LimbState.SPECIMEN_GRAB;
+            limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 180);
         }
     }
 
@@ -67,7 +74,6 @@ public class Robot {
             driveTrain.move(gamepad1);
             sampleClaw.move(gamepad2, limbArm.rotatePosition());
             limbArm.move(gamepad2);
-            limbArm.maxRotatePos = -2356;
         }
         else if (state == ROBOT_HUNTER.SAMPLE_HUNT) {
             if (limbArm.limbRotate.getCurrentPosition() > -2000) {
@@ -76,9 +82,8 @@ public class Robot {
                 limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 limbArm.limbRotate.setPower(limbArm.ROTATE_POWER * 0.5);
                 Wait(3);
+                limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
-            limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, -90);
             driveTrain.move(gamepad1);
             limbArm.RunMotor(-gamepad2.left_stick_y);
             limbArm.rotateByPower(-gamepad2.right_stick_y);
@@ -92,9 +97,8 @@ public class Robot {
                 limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 limbArm.limbRotate.setPower(limbArm.ROTATE_POWER * 0.5);
                 Wait(3);
+                limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
-            limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 0);
             driveTrain.move(gamepad1);
             limbArm.RunMotor(-gamepad2.left_stick_y);
             limbArm.rotateByPower(-gamepad2.right_stick_y);
@@ -108,9 +112,8 @@ public class Robot {
                 limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 limbArm.limbRotate.setPower(limbArm.ROTATE_POWER * 0.5);
                 Wait(3);
+                limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
-            limbArm.limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            driveTrain.turnToHeading(DriveTrain.TURN_SPEED, 180);
             driveTrain.move(gamepad1);
             limbArm.RunMotor(-gamepad2.left_stick_y);
             limbArm.rotateByPower(-gamepad2.right_stick_y);
