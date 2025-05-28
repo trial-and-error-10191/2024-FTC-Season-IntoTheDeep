@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.OldPaths;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -11,59 +9,55 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
-import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
-@Autonomous(name="AutoObservationRung", group="Robot")
-//@Disabled
-public class AutoObservationRung extends LinearOpMode {
+abstract public class AutoBase extends LinearOpMode {
 
-    /* Declare OpMode members. */
-    LimbArm arm;
-    SampleClaw claw;
-    private DcMotor leftFrontDrive   = null;
-    private DcMotor rightFrontDrive  = null;
-    private DcMotor rightBackDrive   = null;
-    private DcMotor leftBackDrive    = null;
-    private IMU     imu              = null;
+    /* Declare drive motors. */
+    private DcMotor leftFrontDrive = null;
+    private DcMotor rightFrontDrive = null;
+    private DcMotor rightBackDrive = null;
+    private DcMotor leftBackDrive = null;
+    private IMU imu = null;
     private final ElapsedTime Time   = new ElapsedTime();
 
     // These variable are declared here (as class members) so they can be updated in various methods,
     // but still be displayed by sendTelemetry()
-    private double headingError   = 0;
-    private double targetHeading  = 0;
-    private double driveSpeed     = 0;
-    private double turnSpeed      = 0;
-    private double leftSpeed      = 0;
-    private double rightSpeed     = 0;
-    private int leftFrontTarget   = 0;
-    private int leftBackTarget    = 0;
-    private int rightBackTarget   = 0;
-    private int rightFrontTarget  = 0;
+    private double headingError = 0;
+    private double targetHeading = 0;
+    private double driveSpeed = 0;
+    private double turnSpeed = 0;
+    private double leftSpeed = 0;
+    private double rightSpeed = 0;
+    private int leftFrontTarget = 0;
+    private int leftBackTarget = 0;
+    private int rightBackTarget = 0;
+    private int rightFrontTarget = 0;
+
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
     // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
-    static final double COUNTS_PER_MOTOR_REV    = 753.2 ;   // GoBILDA 223 RPM 52003 Yellow Jacket Series
-    static final double DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
-    static final double WHEEL_DIAMETER_INCHES   = 3.5 ;     // For figuring circumference
-    static final double COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    static final double COUNTS_PER_MOTOR_REV = 753.2;   // GoBILDA 223 RPM 52003 Yellow Jacket Series
+    static final double DRIVE_GEAR_REDUCTION = 1.0;     // No External Gearing.
+    static final double WHEEL_DIAMETER_INCHES = 3.5;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
-    static final double DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
-    static final double TURN_SPEED              = 0.4;     // Max turn speed to limit turn rate.
-    static final double HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
+//    static final double DRIVE_SPEED = 0.7;     // Max driving speed for better distance accuracy.
+    static final double TURN_SPEED = 0.7;     // Max turn speed to limit turn rate.
+//    static final double HEADING_THRESHOLD = 2.0;    // How close must the heading get to the target before moving to next step.
+
     // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
     // We define one value when Turning (larger errors), and the other is used when Driving straight (smaller errors).
     // Increase these numbers if the heading does not correct strongly enough (eg: a heavy robot or using tracks)
     // Decrease these numbers if the heading does not settle on the correct value (eg: very agile robot with omni wheels)
-    static final double P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable.
-    static final double P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable.
+    static final double P_TURN_GAIN = 0.02;     // Larger is more responsive, but also less stable.
+    static final double P_DRIVE_GAIN = 0.03;     // Larger is more responsive, but also less stable.
 
     public void Orientations() {
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -71,6 +65,11 @@ public class AutoObservationRung extends LinearOpMode {
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
         Wait(0.1);
+    }
+
+    public void updateTelemetry() {
+        telemetry.addData(">","Robot Heading = %4.0f",getHeading());
+        telemetry.update();
     }
 
     public void flip(String FirstLocation, String SecondLocation) {
@@ -89,8 +88,7 @@ public class AutoObservationRung extends LinearOpMode {
                     leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
                 }
             }
-        }
-        else {
+        } else {
             if (SecondLocation.equals("F")) {
                 if (rightFrontDrive.getDirection() == DcMotor.Direction.REVERSE) {
                     rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -111,13 +109,30 @@ public class AutoObservationRung extends LinearOpMode {
         Wait(0.1);
     }
 
-    @Override
-    public void runOpMode() {
-        claw = new SampleClaw(hardwareMap);
-        arm = new LimbArm(hardwareMap, telemetry);
+    /**
+     * Use a Proportional Controller to determine how much steering correction is required.
+     *
+     * @param desiredHeading        The desired absolute heading (relative to last heading reset)
+     * @param proportionalGain      Gain factor applied to heading error to obtain turning power.
+     * @return                      Turning power needed to get to required heading.
+     */
+    public double getSteeringCorrection(double desiredHeading, double proportionalGain) {
+        targetHeading = desiredHeading;  // Save for telemetry
 
+        // Determine the heading current error
+        headingError = targetHeading - getHeading();
+
+        // Normalize the error to be within +/- 180 degrees
+        while (headingError > 180)  headingError -= 360;
+        while (headingError <= -180) headingError += 360;
+
+        // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
+        return Range.clip(headingError * proportionalGain, -1, 1);
+    } // end of public double getSteeringCorrection
+
+    public void runOpMode() {
         // Initialize the drive system variables.
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
@@ -131,7 +146,7 @@ public class AutoObservationRung extends LinearOpMode {
          * To Do:  EDIT these two lines to match YOUR mounting configuration.
          */
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
-        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
         // Now initialize the IMU with this mounting orientation
@@ -153,45 +168,8 @@ public class AutoObservationRung extends LinearOpMode {
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
+    }
 
-        // Wait for the game to start (Display Gyro value while waiting)
-
-        while (opModeInInit()) {
-            telemetry.addData(">", "Robot Heading = %4.0f", getHeading());
-            telemetry.update();
-        } // end of while loop
-
-        /** Set the encoders for closed loop speed control, and reset the heading.
-        // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
-        //          holdHeading() is used after turns to let the heading stabilize
-        //          Add a sleep(2000) after any step to keep the telemetry data visible for review
-        // BEGIN AUTO CODE */
-
-        claw.CloseClaw();
-        claw.ExtendClaw(0.54);
-        arm.ExtendAutoArm(1542);
-        driveStraight(TURN_SPEED, 3, 0);
-        StrafeRobot(TURN_SPEED, -12, 0);
-        arm.armRotateAuto(-1123);
-        claw.ExtendClaw(0.65);
-        Wait(1.5);
-        driveStraight(TURN_SPEED, 25, 0);
-        Wait(1.5);
-        claw.OpenClaw();
-        Wait(0.4);
-        claw.RotateClaw(0.5);
-        arm.ExtendAutoArm(0);
-        Wait(0.2);
-        arm.armRotateAuto(-10);
-        Wait(1);
-        driveStraight(TURN_SPEED, -25, 0);
-        Wait(0.5);
-        StrafeRobot(TURN_SPEED, 44, 0);
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);  // Pause to display last telemetry message.
-    } // end of public void runOpMode
 
     /*
      * ====================================================================================================
@@ -260,8 +238,7 @@ public class AutoObservationRung extends LinearOpMode {
                 moveRobot(driveSpeed, turnSpeed);
 
                 // Display drive status for the driver.
-                sendTelemetry(true);
-            } // end of while loop
+                sendTelemetry(true);} // end of while loop
 
             // Stop all motion & Turn off RUN_TO_POSITION
             moveRobot(0, 0);
@@ -271,6 +248,7 @@ public class AutoObservationRung extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } // end of if statement
     } // end of public void driveStraight
+
     public void StrafeRobot(double maxDriveSpeed, double distance, double heading) {
         Orientations();
         if (distance > 0) {
@@ -361,6 +339,7 @@ public class AutoObservationRung extends LinearOpMode {
      *              0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
      *              If a relative angle is required, add/subtract from current heading.
      */
+
     public void turnToHeading(double maxTurnSpeed, double heading) {
         //  Orientations();
         double TempThreshold = 1;
@@ -387,6 +366,7 @@ public class AutoObservationRung extends LinearOpMode {
         // Stop all motion;
         moveRobot(0, 0);
     } // end of public void turnToHeading
+
 
     /**
      *  Obtain & hold a heading for a finite amount of time
@@ -427,26 +407,6 @@ public class AutoObservationRung extends LinearOpMode {
 
     // **********  LOW Level driving functions.  ********************
 
-    /**
-     * Use a Proportional Controller to determine how much steering correction is required.
-     *
-     * @param desiredHeading        The desired absolute heading (relative to last heading reset)
-     * @param proportionalGain      Gain factor applied to heading error to obtain turning power.
-     * @return                      Turning power needed to get to required heading.
-     */
-    public double getSteeringCorrection(double desiredHeading, double proportionalGain) {
-        targetHeading = desiredHeading;  // Save for telemetry
-
-        // Determine the heading current error
-        headingError = targetHeading - getHeading();
-
-        // Normalize the error to be within +/- 180 degrees
-        while (headingError > 180)  headingError -= 360;
-        while (headingError <= -180) headingError += 360;
-
-        // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
-        return Range.clip(headingError * proportionalGain, -1, 1);
-    } // end of public double getSteeringCorrection
 
     /**
      * Take separate drive (fwd/rev) and turn (right/left) requests,
@@ -475,29 +435,10 @@ public class AutoObservationRung extends LinearOpMode {
     } // end of public void moveRobot
 
     public void RotateRoboto(double drive, double turn, Boolean isLeft ) {
-//        driveSpeed = drive;     // save this value as a class member so it can be used by telemetry.
-//        turnSpeed  = turn;      // save this value as a class member so it can be used by telemetry.
-//        leftSpeed  = drive - turn;
-//        rightSpeed = drive + turn;
         leftFrontDrive.setPower(drive + ((isLeft ? 1 : -1) * turn));
         rightFrontDrive.setPower(drive + ((isLeft ? 1 : -1) * turn));
         leftBackDrive.setPower(drive + ((isLeft ? -1 : 1) * turn));
         rightBackDrive.setPower(drive + ((isLeft ? -1 : 1) * turn));
-
-        // Scale speeds down if either one exceeds +/- 1.0;
-//        double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-//        if (max > 1.0)
-//        {
-//            leftSpeed /= max;
-//            rightSpeed /= max;
-//        }
-
-
-
-//        leftFrontDrive.setPower((isLeft ? -1 : 1) * leftSpeed);
-//        rightFrontDrive.setPower((isLeft ? 1 : -1) * rightSpeed);
-//        leftBackDrive.setPower((isLeft ? 1 : -1) * leftSpeed);
-//        rightBackDrive.setPower((isLeft ? -1 : 1) * rightSpeed);
     }
 
     /**
@@ -526,6 +467,7 @@ public class AutoObservationRung extends LinearOpMode {
         telemetry.update();
 
     } // end of private void sendTelemetry
+
     /**
      * read the Robot heading directly from the IMU (in degrees)
      */
@@ -540,4 +482,4 @@ public class AutoObservationRung extends LinearOpMode {
             // doesn't need anything
         } // end of while loop
     } // end of public void Wait
-} // end of public class
+}

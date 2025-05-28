@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.OldPaths;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -14,9 +13,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
-@Autonomous(name="AutoObservationPark", group="Robot")
+@Autonomous(name="AutoObservationRung", group="Robot")
 //@Disabled
-public class AutoObvervationPark extends LinearOpMode {
+public class AutoObservationRung extends LinearOpMode {
 
     /* Declare OpMode members. */
     LimbArm arm;
@@ -162,18 +161,35 @@ public class AutoObvervationPark extends LinearOpMode {
         } // end of while loop
 
         /** Set the encoders for closed loop speed control, and reset the heading.
-         *  Notes:   Reverse movement is obtained by setting a negative distance (not speed)
-         *  holdHeading() is used after turns to let the heading stabilize
-         *  Add a sleep(2000) after any step to keep the telemetry data visible for review
-         *  BEGIN AUTO CODE */
+        // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
+        //          holdHeading() is used after turns to let the heading stabilize
+        //          Add a sleep(2000) after any step to keep the telemetry data visible for review
+        // BEGIN AUTO CODE */
 
-        StrafeRobot(TURN_SPEED, 38, 0);
+        claw.CloseClaw();
+        claw.ExtendClaw(0.54);
+        arm.ExtendAutoArm(1542);
+        driveStraight(TURN_SPEED, 3, 0);
+        StrafeRobot(TURN_SPEED, -12, 0);
+        arm.armRotateAuto(-1123);
+        claw.ExtendClaw(0.65);
+        Wait(1.5);
+        driveStraight(TURN_SPEED, 25, 0);
+        Wait(1.5);
+        claw.OpenClaw();
+        Wait(0.4);
+        claw.RotateClaw(0.5);
+        arm.ExtendAutoArm(0);
+        Wait(0.2);
+        arm.armRotateAuto(-10);
         Wait(1);
+        driveStraight(TURN_SPEED, -25, 0);
+        Wait(0.5);
+        StrafeRobot(TURN_SPEED, 44, 0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // Pause to display last telemetry message.
-
     } // end of public void runOpMode
 
     /*

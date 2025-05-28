@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.OldPaths;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -13,8 +14,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
-@Autonomous(name="AdvancedAutoBasketSpike", group="Robot")
-public class AdvancedAutoBasketSpike extends LinearOpMode {
+
+@Autonomous(name="AdvancedAutoObservationRung", group="Robot")
+@Disabled
+public class AdvancedAutoObservationRung extends LinearOpMode {
 
     /* Declare OpMode members. */
     LimbArm arm;
@@ -53,7 +56,7 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
     // These constants define the desired driving/control characteristics
     // They can/should be tweaked to suit the specific robot drive train.
     static final double DRIVE_SPEED             = 0.7;     // Max driving speed for better distance accuracy.
-    static final double TURN_SPEED              = 0.7;     // Max turn speed to limit turn rate.
+    static final double TURN_SPEED              = 0.6;     // Max turn speed to limit turn rate.
     static final double HEADING_THRESHOLD       = 2.0 ;    // How close must the heading get to the target before moving to next step.
     // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
@@ -160,51 +163,44 @@ public class AdvancedAutoBasketSpike extends LinearOpMode {
         } // end of while loop
 
         /** Set the encoders for closed loop speed control, and reset the heading.
-         *  Notes:   Reverse movement is obtained by setting a negative distance (not speed)
-         *  holdHeading() is used after turns to let the heading stabilize
-         *  Add a sleep(2000) after any step to keep the telemetry data visible for review
-         *  BEGIN AUTO CODE */
-        // Path to place first sample
-        driveStraight(TURN_SPEED, 2, 0);
-        turnToHeading(TURN_SPEED, 90);
-        driveStraight(TURN_SPEED, 31, 92);
-        turnToHeading(TURN_SPEED, 110);
-        arm.ExtendAutoArm(arm.maxExtendPos - 250);
-        arm.armRotateAuto(-189);
-        claw.ExtendClaw(0.3);
-        Wait(1.5);
-        claw.OpenClaw();
-        // Start second sample
-        driveStraight(TURN_SPEED, -5, -90);
-        turnToHeading(TURN_SPEED, 0);
-        arm.ExtendAutoArm(2282);
-        driveStraight(TURN_SPEED, 11.5, 2);
-        arm.armRotateAuto(-2235);
-        Wait(2);
-        claw.ExtendClaw(0.3);
+         // Notes:   Reverse movement is obtained by setting a negative distance (not speed)
+         //          holdHeading() is used after turns to let the heading stabilize
+         //          Add a sleep(2000) after any step to keep the telemetry data visible for review
+         // BEGIN AUTO CODE */
+
+        claw.CloseClaw();
+        claw.ExtendClaw(0.54);
+        arm.ExtendAutoArm(1542);
+        StrafeRobot(TURN_SPEED, -5, 0);
+        arm.armRotateAuto(-1203);
+        claw.ExtendClaw(0.65);
         Wait(2.5);
-        claw.CloseClaw();
-        Wait(1.2);
-        claw.CloseClaw();
-        // Place 2nd sample
-        arm.armRotateAuto(-180);
-        Wait(1);
-        driveStraight(TURN_SPEED, -11.5, 0);
-        StrafeRobot(TURN_SPEED, 2, 0);
-        turnToHeading(TURN_SPEED, 115);
-        arm.ExtendAutoArm(2382);
-        arm.armRotateAuto(-589); // -289
-        claw.ExtendClaw(0.3);
+        driveStraight(TURN_SPEED, 28, 0);
         Wait(1.5);
         claw.OpenClaw();
-        Wait(0.5);
-        arm.armRotateAuto(-189);
+        Wait(0.1);
+        claw.RotateClaw(0.5);
         arm.ExtendAutoArm(0);
+        Wait(0.2);
+        arm.armRotateAuto(-10);
+        driveStraight(TURN_SPEED, -4, 0);
+        StrafeRobot(TURN_SPEED, 35, 0);
+        arm.armRotateAuto(-1858);
+        claw.ExtendClaw(0.55); // higher# is higher claw pos
+        driveStraight(TURN_SPEED, 22, 0);
+        turnToHeading(TURN_SPEED, 180);
+        StrafeRobot(TURN_SPEED, -13, 180);
+        driveStraight(TURN_SPEED, 47, 180);
+        arm.ExtendAutoArm(300);
+        Wait(1);
+        claw.CloseClaw();
+        Wait(1);
+        arm.armRotateAuto(-100);
+        Wait(1);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);  // Pause to display last telemetry message.
-
     } // end of public void runOpMode
 
     /*
