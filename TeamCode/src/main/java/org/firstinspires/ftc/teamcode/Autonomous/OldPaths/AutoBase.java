@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
+import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 abstract public class AutoBase extends LinearOpMode {
 
@@ -32,24 +34,20 @@ abstract public class AutoBase extends LinearOpMode {
     private int leftBackTarget = 0;
     private int rightBackTarget = 0;
     private int rightFrontTarget = 0;
+    static final double SPEED = 0.7;     // Turn speed for autonomous
 
-    // Calculate the COUNTS_PER_INCH for your specific drive train.
-    // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
-    // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
-    // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
-    // This is gearing DOWN for less speed and more torque.
-    // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
+    /** Calculate the COUNTS_PER_INCH for your specific drive train.
+     * This NEEDS to be changed for each robot.
+     * Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
+     * For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
+     * For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
+     * This is gearing DOWN for less speed and more torque.
+     * For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation. **/
     static final double COUNTS_PER_MOTOR_REV = 753.2;   // GoBILDA 223 RPM 52003 Yellow Jacket Series
     static final double DRIVE_GEAR_REDUCTION = 1.0;     // No External Gearing.
     static final double WHEEL_DIAMETER_INCHES = 3.5;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-
-    // These constants define the desired driving/control characteristics
-    // They can/should be tweaked to suit the specific robot drive train.
-//    static final double DRIVE_SPEED = 0.7;     // Max driving speed for better distance accuracy.
-    static final double TURN_SPEED = 0.7;     // Max turn speed to limit turn rate.
-//    static final double HEADING_THRESHOLD = 2.0;    // How close must the heading get to the target before moving to next step.
 
     // Requiring more accuracy (a smaller number) will often make the turn take longer to get into the final position.
     // Define the Proportional control coefficient (or GAIN) for "heading control".
@@ -59,7 +57,7 @@ abstract public class AutoBase extends LinearOpMode {
     static final double P_TURN_GAIN = 0.02;     // Larger is more responsive, but also less stable.
     static final double P_DRIVE_GAIN = 0.03;     // Larger is more responsive, but also less stable.
 
-    public void Orientations() {
+    public void Orientations() { // This sets the directions on the motors.
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -67,11 +65,7 @@ abstract public class AutoBase extends LinearOpMode {
         Wait(0.1);
     }
 
-    public void updateTelemetry() {
-        telemetry.addData(">","Robot Heading = %4.0f",getHeading());
-        telemetry.update();
-    }
-
+    // This function is used to flip the wheel's orientation so it can strafe when told to.
     public void flip(String FirstLocation, String SecondLocation) {
         // The input is expected to be L or R for the first value and F or B for the second value
         if (FirstLocation.equals("L")) {
@@ -109,44 +103,21 @@ abstract public class AutoBase extends LinearOpMode {
         Wait(0.1);
     }
 
-    /**
-     * Use a Proportional Controller to determine how much steering correction is required.
-     *
-     * @param desiredHeading        The desired absolute heading (relative to last heading reset)
-     * @param proportionalGain      Gain factor applied to heading error to obtain turning power.
-     * @return                      Turning power needed to get to required heading.
-     */
-    public double getSteeringCorrection(double desiredHeading, double proportionalGain) {
-        targetHeading = desiredHeading;  // Save for telemetry
-
-        // Determine the heading current error
-        headingError = targetHeading - getHeading();
-
-        // Normalize the error to be within +/- 180 degrees
-        while (headingError > 180)  headingError -= 360;
-        while (headingError <= -180) headingError += 360;
-
-        // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
-        return Range.clip(headingError * proportionalGain, -1, 1);
-    } // end of public double getSteeringCorrection
-
-    public void runOpMode() {
-        // Initialize the drive system variables.
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
+    public void autoSettings() {
+        // Initialize the drive system variables. Sets them up for the drive hub.
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
-        // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
-        // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flip
-        Orientations();
-        /* The next two lines define Hub orientation.
-         * The Default Orientation (shown) is when a hub is mounted horizontally with the printed logo pointing UP and the USB port pointing FORWARD.
-         *
-         * To Do:  EDIT these two lines to match YOUR mounting configuration.
-         */
+
+        Orientations();  // sets standard motor orientations
+
+        /** The next two lines define Hub orientation.
+         * The Default Orientation (shown) is when a hub is mounted horizontally with the printed
+         *     logo pointing UP and the USB port pointing FORWARD.
+         * To Do:  EDIT these two lines to match YOUR mounting configuration. **/
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
-        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
         // Now initialize the IMU with this mounting orientation
@@ -168,17 +139,16 @@ abstract public class AutoBase extends LinearOpMode {
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
+
+        // Wait for the game to start (Display Gyro value while waiting)
+        while (opModeInInit()) {
+            telemetry.addData(">", "Robot Heading = %4.0f", getHeading());
+            telemetry.update();
+        } // end of while loop
+
+
     }
 
-
-    /*
-     * ====================================================================================================
-     * Driving "Helper" functions are below this line.
-     * These provide the high and low level methods that handle driving straight and turning.
-     * ====================================================================================================
-     */
-
-    // **********  HIGH Level driving functions.  ********************
     /**
      *  Drive in a straight line, on a fixed compass heading (angle), based on encoder counts.
      *  Move will stop if either of these conditions occur:
@@ -407,6 +377,26 @@ abstract public class AutoBase extends LinearOpMode {
 
     // **********  LOW Level driving functions.  ********************
 
+    /**
+     * Use a Proportional Controller to determine how much steering correction is required.
+     *
+     * @param desiredHeading        The desired absolute heading (relative to last heading reset)
+     * @param proportionalGain      Gain factor applied to heading error to obtain turning power.
+     * @return                      Turning power needed to get to required heading.
+     */
+    public double getSteeringCorrection(double desiredHeading, double proportionalGain) {
+        targetHeading = desiredHeading;  // Save for telemetry
+
+        // Determine the heading current error
+        headingError = targetHeading - getHeading();
+
+        // Normalize the error to be within +/- 180 degrees
+        while (headingError > 180)  headingError -= 360;
+        while (headingError <= -180) headingError += 360;
+
+        // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
+        return Range.clip(headingError * proportionalGain, -1, 1);
+    } // end of public double getSteeringCorrection
 
     /**
      * Take separate drive (fwd/rev) and turn (right/left) requests,
