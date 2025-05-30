@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 abstract public class AutoBase extends LinearOpMode {
 
     /* Declare drive motors. */
+    LimbArm arm;
+    SampleClaw claw;
     private DcMotor leftFrontDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
@@ -104,6 +106,9 @@ abstract public class AutoBase extends LinearOpMode {
     }
 
     public void autoSettings() {
+        claw = new SampleClaw(hardwareMap);
+        arm = new LimbArm(hardwareMap, telemetry);
+
         // Initialize the drive system variables. Sets them up for the drive hub.
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
