@@ -155,7 +155,7 @@ public int LimbExtendCount() {
             telemetry.addData("isBusy", spoolServo.getPower() );
             telemetry.addData("LifeExtension", limbExtend.getCurrentPosition() );
             telemetry.addData("LiftRotation: ", limbRotate.getCurrentPosition() );
-            spoolServo.setPower(isUp ? 2 : -2);
+            spoolServo.setPower(isUp ? -1 : 1);
             telemetry.addData("SpoolServoValue", "%1.2f", spoolServo.getPower());
             telemetry.update();
         }
