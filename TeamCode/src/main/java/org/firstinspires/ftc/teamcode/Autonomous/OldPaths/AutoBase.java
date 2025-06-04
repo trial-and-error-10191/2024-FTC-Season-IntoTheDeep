@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Assemblies.LimbArm;
 import org.firstinspires.ftc.teamcode.Assemblies.SampleClaw;
 
 abstract public class AutoBase extends LinearOpMode {
+    /** If using this as an extension, put autoSettings(); at the start of your runOpMode for it to work.
 
     /* Declare drive motors. */
     LimbArm arm;

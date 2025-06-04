@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class AutoTest extends AutoBase {
     @Override
     public void runOpMode() {
+        autoSettings();
         driveStraight(SPEED, 2, 0);
         turnToHeading(SPEED, 90);
         driveStraight(SPEED, 31, 92);
