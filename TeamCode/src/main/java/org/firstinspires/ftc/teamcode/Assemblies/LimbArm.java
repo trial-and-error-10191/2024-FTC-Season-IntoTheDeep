@@ -152,14 +152,18 @@ public int LimbExtendCount() {
         limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         boolean isUp = ((Counts - limbExtend.getCurrentPosition()) > 0);
         while (limbExtend.isBusy()) {
-            telemetry.addData("isBusy", spoolServo.getPower() );
-            telemetry.addData("LifeExtension", limbExtend.getCurrentPosition() );
-            telemetry.addData("LiftRotation: ", limbRotate.getCurrentPosition() );
-            spoolServo.setPower(isUp ? -1 : 1);
-            telemetry.addData("SpoolServoValue", "%1.2f", spoolServo.getPower());
-            telemetry.update();
+            spoolServo.setPower(isUp ? 1 : -1);
+//            telemetry.addData("isBusy", spoolServo.getPower() );
+//            telemetry.addData("LifeExtension", limbExtend.getCurrentPosition() );
+//            telemetry.addData("LiftRotation: ", limbRotate.getCurrentPosition() );
+//            telemetry.addData("SpoolServoValue", "%1.2f", spoolServo.getPower());
+//            telemetry.update();
         }
         spoolServo.setPower(0);
+    }
+
+    public void autoSpool(double SpoolSpeed) {
+        spoolServo.setPower(SpoolSpeed);
     }
 
     public void auto_armRotate(double Speed, int Counts) {
