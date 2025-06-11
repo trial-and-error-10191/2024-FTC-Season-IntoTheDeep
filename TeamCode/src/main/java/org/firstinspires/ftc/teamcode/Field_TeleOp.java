@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Teleoperation;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
