@@ -9,7 +9,7 @@ public class AutoObsRung extends AutoBase {
         autoSettings();
         claw.CloseClaw();
         claw.ExtendClaw(0.54);
-        arm.ExtendAutoArm(1542);
+        arm.ExtendAutoArm(1442);
         driveStraight(SPEED, 3, 0);
         StrafeRobot(SPEED, -12, 0);
         arm.armRotateAuto(-1123);
