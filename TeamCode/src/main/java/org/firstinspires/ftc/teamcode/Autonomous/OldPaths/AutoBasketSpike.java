@@ -6,11 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class AutoBasketSpike extends AutoBase {
     @Override
     public void runOpMode() {
+        autoSettings();
         driveStraight(SPEED, 2, 0);
         Wait(0.20);
         turnToHeading(SPEED, 90);
-        StrafeRobot(SPEED, -6, 90);
-        Wait(0.2);
+        StrafeRobot(SPEED, -5, 90);
+        Wait(0.1);
         driveStraight(SPEED, 35, 90);
         Wait(0.2);
         claw.ExtendClaw(0.3);
@@ -21,7 +22,7 @@ public class AutoBasketSpike extends AutoBase {
         Wait(0.4);
         driveStraight(SPEED, -8, 90);
         Wait(0.2);
-        arm.ExtendAutoArm(0);
+        arm.ExtendAutoArm(10);
         Wait(0.3);
         turnToHeading(SPEED, 0);
         Wait(0.2);

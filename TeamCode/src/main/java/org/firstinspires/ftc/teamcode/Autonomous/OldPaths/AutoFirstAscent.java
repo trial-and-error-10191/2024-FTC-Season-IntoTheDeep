@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class AutoFirstAscent extends AutoBase {
     @Override
     public void runOpMode() {
+        autoSettings();
         driveStraight(SPEED, 2, 0);
         StrafeRobot(SPEED, -20, 0);
         driveStraight(SPEED, 54, 0);
