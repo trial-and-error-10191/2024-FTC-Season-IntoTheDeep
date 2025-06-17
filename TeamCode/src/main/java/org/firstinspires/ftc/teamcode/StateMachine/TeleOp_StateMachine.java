@@ -17,6 +17,9 @@ public class TeleOp_StateMachine extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
+            robot.updateState(gamepad1, gamepad2);
+            robot.run(gamepad1, gamepad2);
+
             telemetry.addData("Status:", "OpMode is Active");
             telemetry.update();
         }

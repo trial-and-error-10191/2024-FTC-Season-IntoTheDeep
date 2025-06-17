@@ -44,6 +44,7 @@ public class DriveTrain {
     private double headingError = 0;
     private double extensionPowerReductionIntensity = 7560;
     private int CurrentLiftCounts = 0;
+
     // All subsystems should have a hardware function that labels all of the hardware required of it.
     public DriveTrain(HardwareMap hwMap, Telemetry telemetry) {
 
@@ -139,7 +140,7 @@ public class DriveTrain {
         leftFrontPower *= 0.7; // this motor is 312 rpm, others are 223. 223/312 ~ 0.7
 
         // The next four lines gives the calculated power to each motor.
-        leftFrontDrive.setPower(leftFrontPower);
+        leftFrontDrive.setPower(leftFrontPower * 0.7);
         rightFrontDrive.setPower(rightFrontPower);
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);

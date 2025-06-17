@@ -29,23 +29,26 @@ public class RobotSM {
         DEFAULT // debugging state, robot in this state shouldn't do anything
     }
 
-    public void updateState(Gamepad gamepad) {
+    public void updateState(Gamepad gamepad, Gamepad gamepad2) {
         // How do we want to change state?
         // Option 1) Reserve one button for each state
         // Option 2) Create loop of states, have one button to more forward and separate one to move backward
         // Option 3) Use sensor input to automatically switch between states (somehow)
-        state = getState(gamepad);
+        state = getState(gamepad, gamepad2);
         updateSubsystems();
     }
 
     // This is assuming we pick Option 1 listed in updateState function.
     // May need to take a different form otherwise.
-    private RobotState getState(Gamepad gamepad) {
-        if (gamepad.x) {
-            return RobotState.MANUAL;
-        } else {
-            return RobotState.DEFAULT;
-        }
+    private RobotState getState(Gamepad gamepad, Gamepad gamepad2) {
+//        if (gamepad.x) {
+//            return RobotState.MANUAL;
+//        } else if (gamepad.y) {
+//            return RobotState.DEFAULT;
+//        } else {
+//            return RobotState.MANUAL;
+//        }
+        return RobotState.MANUAL;
     }
 
     // This is to update subsystem properties to align with current robot states
