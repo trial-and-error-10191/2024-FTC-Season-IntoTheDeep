@@ -65,6 +65,58 @@ public class DriveTrainSM {
         this.telemetry = telemetry;
     }
 
+    public void drive(float axial, float lateral, float yaw) {
+
+        // initializes deadzone
+        double deadzone = 0.05;
+        // initializes sensitivity
+        double sensitivity = 0.75;
+
+        double leftFrontPower = 0;
+        double rightFrontPower = 0;
+        double leftBackPower = 0;
+        double rightBackPower = 0;
+
+        if (Math.abs(axial) > deadzone || Math.abs(lateral) > deadzone || Math.abs(yaw) > deadzone) {
+            leftFrontPower = axial + lateral + yaw;
+            rightFrontPower = axial - lateral - yaw;
+            leftBackPower = axial - lateral + yaw;
+            rightBackPower = axial + lateral - yaw;
+        }
+        double max;
+
+        // All code below this comment normalizes the values so no wheel power exceeds 100%.
+        max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+        max = Math.max(max, Math.abs(leftBackPower));
+        max = Math.max(max, Math.abs(rightBackPower));
+
+
+        if (max > 1.0) {
+            leftFrontPower /= max; // leftFrontPower = leftFrontPower / max;
+            rightFrontPower /= max;
+            leftBackPower /= max;
+            rightBackPower /= max;
+        }
+
+        // Calculates power using sensitivity variable.
+        leftFrontPower *= sensitivity;
+        leftBackPower *= sensitivity;
+        rightFrontPower *= sensitivity;
+        rightBackPower *= sensitivity;
+//        leftFrontPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
+//        leftBackPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
+//        rightFrontPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
+//        rightBackPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
+
+        leftFrontPower *= 0.7; // this motor is 312 rpm, others are 223. 223/312 ~ 0.7
+
+        // The next four lines gives the calculated power to each motor.
+        leftFrontDrive.setPower(leftFrontPower);
+        rightFrontDrive.setPower(rightFrontPower);
+        leftBackDrive.setPower(leftBackPower);
+        rightBackDrive.setPower(rightBackPower);
+    }
+
     public void setManualMode() {
         forwardDrivePower = 1.0;
         lateralDrivePower = 1.0;

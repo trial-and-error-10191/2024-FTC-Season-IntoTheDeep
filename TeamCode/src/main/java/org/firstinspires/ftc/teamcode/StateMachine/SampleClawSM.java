@@ -36,6 +36,60 @@ public class SampleClawSM {
         this.telemetry = telemetry;
     }
 
+    public void clawClamp(boolean open) {
+        if (!lastInput && open) {
+            ClawOpen = !ClawOpen;
+            if (ClawOpen) {
+                servoClamp.setPosition(openPos);
+            } else {
+                servoClamp.setPosition(closePos);
+            }
+        }
+        lastInput = open;
+    }
+
+    public void clawExtend(boolean extend, boolean contracting, boolean slow) {
+        if (slow) {
+            INCREMENT = 0.0005;
+        }
+        if (!slow) {
+            INCREMENT = 0.01;
+        }
+        if (extend) {                        // Makes the claw extend up?
+            extendPosition += INCREMENT;
+            if (extendPosition >= MAX_POS) {
+                extendPosition = MAX_POS;
+            }
+        } else if (contracting) {              // Makes the claw extend down?
+            extendPosition -= INCREMENT;
+            if (extendPosition <= MIN_POS) {
+                extendPosition = MIN_POS;
+            }
+        }
+        servoExtend.setPosition(extendPosition);
+    }
+
+    public void clawRotate(float left, float right, boolean slow) {
+        if (slow) {
+            INCREMENT = 0.0005;
+        }
+        if (!slow) {
+            INCREMENT = 0.01;
+        }
+        if (left > 0) {                                     // rotates claw to the left
+            rotatePosition += INCREMENT;
+            if (rotatePosition >= MAX_POS) {
+                rotatePosition = MAX_POS;
+            }
+        } else if (right > 0) {                               // rotates claw to the right
+            rotatePosition -= INCREMENT;
+            if (rotatePosition <= MIN_POS) {
+                rotatePosition = MIN_POS;
+            }
+        }
+        servoRotation.setPosition(rotatePosition);
+    }
+
     public void setManualMode() {
         testVar = true;
     }

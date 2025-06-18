@@ -9,14 +9,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class RobotSM {
     public DriveTrainSM driveTrain;
-    public AscentMechanismSM ascentMechanism;
     public SampleClawSM sampleClaw;
     public LimbArmSM limbArm;
     private Telemetry telemetry;
 
     public RobotSM(HardwareMap hwMap, Telemetry telemetry) {
         driveTrain = new DriveTrainSM(hwMap, telemetry);
-        ascentMechanism = new AscentMechanismSM(hwMap, telemetry);
         sampleClaw = new SampleClawSM(hwMap, telemetry);
         limbArm = new LimbArmSM(hwMap, telemetry);
         this.telemetry = telemetry;
@@ -58,7 +56,6 @@ public class RobotSM {
             case MANUAL:
                 // Change subsytem properties to allow manual control
                 driveTrain.setManualMode();
-                ascentMechanism.setManualMode();
                 sampleClaw.setManualMode();
                 limbArm.setManualMode();
                 break;
@@ -72,11 +69,13 @@ public class RobotSM {
     }
 
     public void run(Gamepad gamepad1, Gamepad gamepad2) {
+
         switch (state) {
             case MANUAL:
-                driveTrain.manualRun(gamepad1, gamepad2);
-                ascentMechanism.manualRun(gamepad1, gamepad2);
-                sampleClaw.manualRun(gamepad1, gamepad2);
+                driveTrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+                sampleClaw.clawClamp(gamepad2.a);
+                sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper,  gamepad2.y);
+                sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger,  gamepad2.y);
                 limbArm.manualRun(gamepad1, gamepad2);
                 telemetry.addData("State:", "MANUAL");
                 break;
