@@ -76,7 +76,10 @@ public class RobotSM {
                 sampleClaw.clawClamp(gamepad2.a);
                 sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper,  gamepad2.y);
                 sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger,  gamepad2.y);
-                limbArm.manualRun(gamepad1, gamepad2);
+                limbArm.initRotateByPower();
+                limbArm.RunMotor(-gamepad2.left_stick_y);
+                limbArm.rotateByPower(-gamepad2.right_stick_y);
+                limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
                 telemetry.addData("State:", "MANUAL");
                 break;
             case DEFAULT: // explicit state to do nothing in

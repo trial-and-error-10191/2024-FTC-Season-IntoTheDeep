@@ -52,6 +52,76 @@ public class LimbArmSM {
         this.telemetry = telemetry;
     }
 
+    public void RunMotor(float extend) {
+        float servoExtend = extend;
+        extendLimit();
+
+        if (extend != 0) {
+            targetPosition = limbExtend.getCurrentPosition() + (int) (extend * EXTENSION_RATE);
+        }
+        if (targetPosition > extensionLimit) { // If going up, guard against overextending
+            targetPosition = extensionLimit;
+            servoExtend = 0;
+        } else if (extend < 0 && !limitExtend.getState()) { // If going down, guard against retracting too far
+            limbExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            targetPosition = limbExtend.getCurrentPosition();
+            servoExtend = 0;
+            limbExtend.setTargetPosition(targetPosition);
+            limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+        limbExtend.setTargetPosition(targetPosition);
+        spoolServo.setPower(servoExtend * 0.85);
+        telemetry.addData("ExtendLimit", "%b", !limitExtend.getState());
+    }
+    public void spoolCorrection(boolean expel, boolean reverse) { // Thing that allows the spool to be corrected manually
+        if (expel) {
+            spoolServo.setPower(0.5);
+        }
+        else if (reverse) {
+            spoolServo.setPower(-0.5);
+        }
+        telemetry.addData("SpoolPower", "%4.2f", spoolServo.getPower());
+    }
+
+    public void rotateByPower(float turn) {
+        float rotatePower = 0.0f;
+        if (Math.abs(turn) > 0.05f) {
+            rotatePower = turn;
+        }
+        rotatePos = limbRotate.getCurrentPosition();
+
+        // Guard against rotating too far forward
+        if (limbRotate.getCurrentPosition() <= maxRotatePos && turn < 0) {
+            rotatePower = 0;
+        }
+        // Guard against rotating too far backward
+        else if (turn >= 0 && !limitRotate.getState()) {
+            rotatePower = 0;
+            limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        else if (rotatePos >= -200 && rotatePower > 0) {
+            rotatePower *= 0.5f;
+        }
+        limbRotate.setPower(rotatePower);
+        telemetry.addData("Rotate Encoders", "%d", limbRotate.getCurrentPosition());
+        telemetry.addData("Rotate Limit", "%b", !limitRotate.getState());
+    }
+
+    public void initRotateByPower() {
+        limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void extendLimit() {
+        int rotatePos = limbRotate.getCurrentPosition();
+        if (rotatePos <= 0 && rotatePos > -849) {                  // This one reaches to the corner of our reach
+            extensionLimit = maxExtendPos;
+        }
+        else if (rotatePos <= -849 && rotatePos > maxRotatePos) {        // This one rises up slightly
+            extensionLimit = 2282;
+        }
+    }
+
     public void setManualMode() {
         testVar = true;
     }
