@@ -18,7 +18,7 @@ public class SampleClawSM {
     static final double closePos = 0.47;     // servo position for closed claw
     double rotatePosition = 0.5;                  // Start at halfway position
     double extendPosition = 0.8;                  // Start at halfway position
-    private Telemetry telemetry = null;
+    final Telemetry telemetry;
 
     boolean testVar = false;
 

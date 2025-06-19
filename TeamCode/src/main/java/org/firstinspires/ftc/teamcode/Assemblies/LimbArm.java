@@ -17,12 +17,12 @@ public class LimbArm {
     int extensionLimit = 3780;                     // Limit for extension
     public final int maxExtendPos = 3780;             // Encoder counter max for lift extension
     int maxRotatePos = -2356;                  // max encoder counter for lift rotation
-    int rotatePos = 0;                         // Encoder counter for lift rotation
-    int targetPosition = 0;
+    int rotatePos;                         // Encoder counter for lift rotation
+    int targetPosition;
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
     private final int EXTENSION_RATE = 160;
-    private final int ROTATION_RATE = 40;
+
 public int LimbExtendCount() {
     return limbRotate.getCurrentPosition();
 }
@@ -96,20 +96,20 @@ public int LimbExtendCount() {
         }
     }
 
-    public void armRotate(float turn) {
-//        if (limbExtend.getCurrentPosition() > extensionLimit) {
-//            targetPosition = extensionLimit;
-//            limbExtend.setTargetPosition(targetPosition);
+//    public void armRotate(float turn) {
+////        if (limbExtend.getCurrentPosition() > extensionLimit) {
+////            targetPosition = extensionLimit;
+////            limbExtend.setTargetPosition(targetPosition);
+////        }
+//        //if (turn != 0) {
+//        if (Math.abs(turn) >= 0.05f) {
+//            rotatePos = limbRotate.getCurrentPosition() + (int) (turn * ROTATION_RATE);
 //        }
-        //if (turn != 0) {
-        if (Math.abs(turn) >= 0.05f) {
-            rotatePos = limbRotate.getCurrentPosition() + (int) (turn * ROTATION_RATE);
-        }
-        if (rotatePos < maxRotatePos) {
-            rotatePos = maxRotatePos;
-        }
-        limbRotate.setTargetPosition(rotatePos);
-    }
+//        if (rotatePos < maxRotatePos) {
+//            rotatePos = maxRotatePos;
+//        }
+//        limbRotate.setTargetPosition(rotatePos);
+//    }
 
     public void rotateByPower(float turn) {
         float rotatePower = 0.0f;
@@ -161,33 +161,8 @@ public int LimbExtendCount() {
         }
         spoolServo.setPower(0);
     }
-
-    public void auto_armRotate(double Speed, int Counts) {
-        limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        limbRotate.setTargetPosition(Counts);
-        limbRotate.setPower(Speed);
-    }
     public void armRotateAuto(int rotateAuto) { // Allows the arm to rotate in autonomous
         limbRotate.setTargetPosition(rotateAuto);
         telemetry.addData("Rotation Encoders", "%d", limbRotate.getCurrentPosition());
-    }
-    public void goUpToHighNet(boolean goUp) {
-        if (goUp) {
-            limbRotate.setTargetPosition(0);
-            limbExtend.setTargetPosition(extensionLimit);
-        }
-    }
-    public void turnToSubmersible(boolean getSample) {
-        if (getSample) {
-            limbExtend.setTargetPosition(500);
-            limbRotate.setTargetPosition(-1170);
-        }
-    }
-    public void goUpToHighBar(boolean specimenPlace) {
-        if (specimenPlace) {
-            limbRotate.setTargetPosition(0);
-            limbExtend.setTargetPosition(3000);
-        }
     }
 }

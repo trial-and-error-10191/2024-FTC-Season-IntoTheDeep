@@ -2,20 +2,17 @@
 // All drive train stuff should be found here.
 
 package org.firstinspires.ftc.teamcode.StateMachine;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class DriveTrainSM {
     DcMotor leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive;
-    private IMU imu = null;
+    final IMU imu;
     Telemetry telemetry;
     double forwardDrivePower = 1.0;
     double lateralDrivePower = 1.0;
@@ -103,10 +100,6 @@ public class DriveTrainSM {
         leftBackPower *= sensitivity;
         rightFrontPower *= sensitivity;
         rightBackPower *= sensitivity;
-//        leftFrontPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
-//        leftBackPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
-//        rightFrontPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
-//        rightBackPower *=  (1 - (CurrentLiftCounts / extensionPowerReductionIntensity));
 
         leftFrontPower *= 0.7; // this motor is 312 rpm, others are 223. 223/312 ~ 0.7
 
