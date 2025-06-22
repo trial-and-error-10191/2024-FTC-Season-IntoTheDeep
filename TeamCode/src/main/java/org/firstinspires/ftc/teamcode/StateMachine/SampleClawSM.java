@@ -11,13 +11,13 @@ public class SampleClawSM {
     boolean ClawOpen = false;
     boolean lastInput = false;
 
-    static double INCREMENT = 0.01;     // amount to slew servo each CYCLE_MS cycle
+    static double INCREMENT = 0.01;        // amount to slew servo each CYCLE_MS cycle
     static final double MAX_POS = 1.0;     // Maximum rotational position
     static final double MIN_POS = 0.0;     // Minimum rotational position
-    static final double openPos = 0.8;    // servo position for open claw
-    static final double closePos = 0.47;     // servo position for closed claw
-    double rotatePosition = 0.5;                  // Start at halfway position
-    double extendPosition = 0.8;                  // Start at halfway position
+    static final double openPos = 0.8;     // servo position for open claw
+    static final double closePos = 0.47;   // servo position for closed claw
+    double rotatePosition = 0.5;           // Start at halfway position
+    double extendPosition = 0.8;           // Start at halfway position
     final Telemetry telemetry;
 
     boolean testVar = false;
@@ -55,12 +55,12 @@ public class SampleClawSM {
         if (!slow) {
             INCREMENT = 0.01;
         }
-        if (extend) {                        // Makes the claw extend up?
+        if (extend) {                                       // Makes the claw extend up?
             extendPosition += INCREMENT;
             if (extendPosition >= MAX_POS) {
                 extendPosition = MAX_POS;
             }
-        } else if (contracting) {              // Makes the claw extend down?
+        } else if (contracting) {                           // Makes the claw extend down?
             extendPosition -= INCREMENT;
             if (extendPosition <= MIN_POS) {
                 extendPosition = MIN_POS;
@@ -81,7 +81,7 @@ public class SampleClawSM {
             if (rotatePosition >= MAX_POS) {
                 rotatePosition = MAX_POS;
             }
-        } else if (right > 0) {                               // rotates claw to the right
+        } else if (right > 0) {                             // rotates claw to the right
             rotatePosition -= INCREMENT;
             if (rotatePosition <= MIN_POS) {
                 rotatePosition = MIN_POS;
@@ -98,8 +98,3 @@ public class SampleClawSM {
         testVar = false;
     }
 }
-
-
-
-
-

@@ -18,6 +18,11 @@ public class TeleOp_StateMachine extends LinearOpMode {
             robot.run(gamepad1, gamepad2);
 
             telemetry.addData("Status:", "OpMode is Active");
+            telemetry.addData("Claw flip up", gamepad2.left_bumper);
+            telemetry.addData("Claw flip down", gamepad2.right_bumper);
+            telemetry.addData("Claw slow", gamepad2.y);
+            telemetry.addData("Claw rotate left", gamepad2.left_trigger);
+            telemetry.addData("Claw rotate right", gamepad2.right_trigger);
             telemetry.update();
         }
     }

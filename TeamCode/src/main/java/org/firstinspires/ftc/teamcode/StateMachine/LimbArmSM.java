@@ -43,8 +43,10 @@ public class LimbArmSM {
 
         spoolServo = hwMap.get(CRServo.class, "spoolServo");
 
+        // Set up limit switches
         limitExtend = hwMap.get(DigitalChannel.class, "limitExtend");
         limitRotate = hwMap.get(DigitalChannel.class, "limitRotate");
+
         this.telemetry = telemetry;
     }
 
@@ -70,6 +72,7 @@ public class LimbArmSM {
         spoolServo.setPower(servoExtend * 0.85);
         telemetry.addData("ExtendLimit", "%b", !limitExtend.getState());
     }
+
     public void spoolCorrection(boolean expel, boolean reverse) { // Thing that allows the spool to be corrected manually
         if (expel) {
             spoolServo.setPower(0.5);
