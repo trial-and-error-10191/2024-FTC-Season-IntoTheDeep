@@ -19,8 +19,10 @@ public class LimbArmSM {
     int extensionLimit = 3780;                  // Limit for extension
     public final int maxExtendPos = 3780;       // Encoder counter max for lift extension
     int maxRotatePos = -2356;                   // max encoder counter for lift rotation
+    int minRotatePos = 0;
     int rotatePos;                              // Encoder counter for lift rotation
     int targetPosition;
+    float rotationSensitivity = 1;
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
     boolean testVar = false;
@@ -100,10 +102,11 @@ public class LimbArmSM {
             limbRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
+        // Prevents lift from rotating past limit switch by slowing down the lift whenever it gets close to the 0 position
         else if (rotatePos >= -200 && rotatePower > 0) {
             rotatePower *= 0.5f;
         }
-        limbRotate.setPower(rotatePower);
+        limbRotate.setPower(rotatePower * rotationSensitivity);
         telemetry.addData("Rotate Encoders", "%d", limbRotate.getCurrentPosition());
         telemetry.addData("Rotate Limit", "%b", !limitRotate.getState());
     }
@@ -123,9 +126,18 @@ public class LimbArmSM {
     }
 
     public void setManualMode() {
-        testVar = true;
+        rotationSensitivity = 1;
+        initRotateByPower();
+        maxRotatePos = -2356;
+        minRotatePos = 0;
     }
 
+    public void setSamplePlaceMode() {
+        rotationSensitivity = 0.5f;
+        initRotateByPower();
+        maxRotatePos = -400;
+        minRotatePos = 0;
+    }
     public void manualRun(Gamepad gamepad1, Gamepad gamepad2) {
         testVar = false;
     }

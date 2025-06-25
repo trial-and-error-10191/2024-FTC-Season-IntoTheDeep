@@ -23,8 +23,9 @@ public class RobotSM {
     private RobotState state = RobotState.DEFAULT;
 
     private enum RobotState {
-        MANUAL, // Full manual control of robot
-        DEFAULT // debugging state, robot in this state shouldn't do anything
+        MANUAL,       // Full manual control of robot
+        SAMPLE_PLACE, // Sets the robot up to place a sample
+        DEFAULT       // debugging state, robot in this state shouldn't do anything
     }
 
     public void updateState(Gamepad gamepad, Gamepad gamepad2) {
@@ -39,14 +40,16 @@ public class RobotSM {
     // This is assuming we pick Option 1 listed in updateState function.
     // May need to take a different form otherwise.
     private RobotState getState(Gamepad gamepad, Gamepad gamepad2) {
-//        if (gamepad.x) {
-//            return RobotState.MANUAL;
-//        } else if (gamepad.y) {
-//            return RobotState.DEFAULT;
-//        } else {
-//            return RobotState.MANUAL;
-//        }
-        return RobotState.MANUAL;
+        if (gamepad.y) {
+            return RobotState.MANUAL;
+        } else if (gamepad.x) {
+            return RobotState.DEFAULT;
+        } else if (gamepad2.dpad_up) {
+            return RobotState.SAMPLE_PLACE;
+        } else {
+            return state;
+        }
+        //return RobotState.MANUAL;
     }
 
     // This is to update subsystem properties to align with current robot states
@@ -58,6 +61,11 @@ public class RobotSM {
                 driveTrain.setManualMode();
                 sampleClaw.setManualMode();
                 limbArm.setManualMode();
+                break;
+            case SAMPLE_PLACE:
+                driveTrain.setManualMode();
+                sampleClaw.setManualMode();
+                limbArm.setSamplePlaceMode();
                 break;
             case DEFAULT:
                 telemetry.addData("Warning:", "In Default (Do Nothing) State");
@@ -76,11 +84,22 @@ public class RobotSM {
                 sampleClaw.clawClamp(gamepad2.a);
                 sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper,  gamepad2.y);
                 sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger,  gamepad2.y);
-                limbArm.initRotateByPower();
                 limbArm.RunMotor(-gamepad2.left_stick_y);
                 limbArm.rotateByPower(-gamepad2.right_stick_y);
                 limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
                 telemetry.addData("State:", "MANUAL");
+                break;
+            case SAMPLE_PLACE:
+                driveTrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+                sampleClaw.clawClamp(gamepad2.a);
+                sampleClaw.clawExtend(gamepad2.left_bumper, gamepad2.right_bumper,  gamepad2.y);
+                sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger,  gamepad2.y);
+                limbArm.rotateByPower(-gamepad2.right_stick_y);
+                limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
+                if (limbArm.limbExtend.getCurrentPosition() < limbArm.maxExtendPos) { // Making the robot stay at the max extension it can go to
+                    limbArm.RunMotor(limbArm.maxExtendPos);
+                }
+                telemetry.addData("State:", "SAMPLE_PLACE");
                 break;
             case DEFAULT: // explicit state to do nothing in
                 telemetry.addData("State:", "DEFAULT");
