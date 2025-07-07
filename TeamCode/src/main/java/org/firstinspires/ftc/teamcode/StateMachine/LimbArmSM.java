@@ -131,6 +131,7 @@ public class LimbArmSM {
         rotationSensitivity = 1;
         extensionSensitivity = 1;
         initRotateByPower();
+        extensionLimit = 3780;
         maxRotatePos = -2356;
         minRotatePos = 0;
     }
@@ -149,6 +150,7 @@ public class LimbArmSM {
     public void setSpecimenPlaceMode() {
         rotationSensitivity = 0.5f;
         extensionSensitivity = 0.5f;
+        extensionLimit = 2500;
         initRotateByPower();
         maxRotatePos = -500;
         minRotatePos = 0;
