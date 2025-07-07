@@ -23,6 +23,7 @@ public class LimbArmSM {
     int rotatePos;                              // Encoder counter for lift rotation
     int targetPosition;
     float rotationSensitivity = 1;
+    float extensionSensitivity = 1;
     DigitalChannel limitExtend;                 // Limit switch for bottom lift position
     DigitalChannel limitRotate;                 // Limit switch to prevent lift rotation
     boolean testVar = false;
@@ -70,6 +71,7 @@ public class LimbArmSM {
             limbExtend.setTargetPosition(targetPosition);
             limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
+        limbExtend.setPower(servoExtend * extensionSensitivity);
         limbExtend.setTargetPosition(targetPosition);
         spoolServo.setPower(servoExtend * 0.85);
         telemetry.addData("ExtendLimit", "%b", !limitExtend.getState());
@@ -127,6 +129,7 @@ public class LimbArmSM {
 
     public void setManualMode() {
         rotationSensitivity = 1;
+        extensionSensitivity = 1;
         initRotateByPower();
         maxRotatePos = -2356;
         minRotatePos = 0;
@@ -145,6 +148,7 @@ public class LimbArmSM {
     }
     public void setSpecimenPlaceMode() {
         rotationSensitivity = 0.5f;
+        extensionSensitivity = 0.5f;
         initRotateByPower();
         maxRotatePos = -500;
         minRotatePos = 0;
