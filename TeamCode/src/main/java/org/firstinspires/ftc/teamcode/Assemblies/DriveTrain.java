@@ -307,5 +307,4 @@ public void Small_Wheels() {
     rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
     rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 }
-
 }

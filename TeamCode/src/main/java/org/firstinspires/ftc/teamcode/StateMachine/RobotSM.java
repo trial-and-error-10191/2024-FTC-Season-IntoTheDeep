@@ -1,7 +1,6 @@
 // This file is a system file.
 package org.firstinspires.ftc.teamcode.StateMachine;
 
-
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -23,9 +22,12 @@ public class RobotSM {
     private RobotState state = RobotState.DEFAULT;
 
     private enum RobotState {
-        MANUAL,       // Full manual control of robot
-        SAMPLE_PLACE, // Sets the robot up to place a sample
-        DEFAULT       // debugging state, robot in this state shouldn't do anything
+        MANUAL,         // Full manual control of robot
+        SAMPLE_PLACE,   // Sets the robot up to place a sample
+        SAMPLE_GRAB,    // Sets the robot up to grab a sample
+        SPECIMEN_PLACE, // Sets the robot up to place a specimen
+        SPECIMEN_GRAB,  // Sets the robot up to grab a specimen
+        DEFAULT         // Debugging state, robot in this state shouldn't do anything
     }
 
     public void updateState(Gamepad gamepad, Gamepad gamepad2) {
@@ -34,7 +36,7 @@ public class RobotSM {
         // Option 2) Create loop of states, have one button to more forward and separate one to move backward
         // Option 3) Use sensor input to automatically switch between states (somehow)
         state = getState(gamepad, gamepad2);
-        updateSubsystems();
+        updateSubsystems(-gamepad2.right_stick_y);
     }
 
     // This is assuming we pick Option 1 listed in updateState function.
@@ -46,6 +48,12 @@ public class RobotSM {
             return RobotState.DEFAULT;
         } else if (gamepad2.dpad_up) {
             return RobotState.SAMPLE_PLACE;
+        } else if (gamepad2.dpad_down) {
+            return RobotState.SAMPLE_GRAB;
+        } else if (gamepad2.x) {
+            return RobotState.SPECIMEN_PLACE;
+        } else if (gamepad2.b) {
+            return RobotState.SPECIMEN_GRAB;
         } else {
             return state;
         }
@@ -54,7 +62,7 @@ public class RobotSM {
 
     // This is to update subsystem properties to align with current robot states
     // Examples: max lift height, lift rotation speed, etc.
-    private void updateSubsystems() {
+    private void updateSubsystems(double rotationPosition) {
         switch (state) {
             case MANUAL:
                 // Change subsytem properties to allow manual control
@@ -66,6 +74,21 @@ public class RobotSM {
                 driveTrain.setManualMode();
                 sampleClaw.setManualMode();
                 limbArm.setSamplePlaceMode();
+                break;
+            case SAMPLE_GRAB:
+                driveTrain.setManualMode();
+                sampleClaw.setSampleGrabMode(rotationPosition);
+                limbArm.setSampleGrabMode();
+                break;
+            case SPECIMEN_PLACE:
+                driveTrain.setManualMode();
+                sampleClaw.setSpecimenPlaceMode(rotationPosition);
+                limbArm.setSpecimenPlaceMode();
+                break;
+            case SPECIMEN_GRAB:
+                driveTrain.setManualMode();
+                sampleClaw.setSpecimenGrabMode(rotationPosition);
+                limbArm.setSpecimenGrabMode();
                 break;
             case DEFAULT:
                 telemetry.addData("Warning:", "In Default (Do Nothing) State");
@@ -100,6 +123,39 @@ public class RobotSM {
                     limbArm.RunMotor(limbArm.maxExtendPos);
                 }
                 telemetry.addData("State:", "SAMPLE_PLACE");
+                break;
+            case SAMPLE_GRAB:
+                driveTrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+                sampleClaw.clawClamp(gamepad2.a);
+                limbArm.RunMotor(-gamepad2.left_stick_y);
+                limbArm.rotateByPower(-gamepad2.right_stick_y);
+                limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
+                if (limbArm.limbExtend.getCurrentPosition() < limbArm.maxExtendPos) { // Making the robot stay at the max extension it can go to
+                    limbArm.RunMotor(limbArm.maxExtendPos);
+                }
+                telemetry.addData("State:", "SAMPLE_GRAB");
+                break;
+            case SPECIMEN_PLACE:
+                driveTrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+                sampleClaw.clawClamp(gamepad2.a);
+                limbArm.RunMotor(-gamepad2.left_stick_y);
+                limbArm.rotateByPower(-gamepad2.right_stick_y);
+                limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
+                if (limbArm.limbExtend.getCurrentPosition() < limbArm.maxExtendPos) { // Making the robot stay at the max extension it can go to
+                    limbArm.RunMotor(limbArm.maxExtendPos);
+                }
+                telemetry.addData("State:", "SPECIMEN_PLACE");
+                break;
+            case SPECIMEN_GRAB:
+                driveTrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+                sampleClaw.clawClamp(gamepad2.a);
+                limbArm.RunMotor(-gamepad2.left_stick_y);
+                limbArm.rotateByPower(-gamepad2.right_stick_y);
+                limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
+                if (limbArm.limbExtend.getCurrentPosition() < limbArm.maxExtendPos) { // Making the robot stay at the max extension it can go to
+                    limbArm.RunMotor(limbArm.maxExtendPos);
+                }
+                telemetry.addData("State:", "SPECIMEN_GRAB");
                 break;
             case DEFAULT: // explicit state to do nothing in
                 telemetry.addData("State:", "DEFAULT");

@@ -90,8 +90,35 @@ public class SampleClawSM {
         servoRotation.setPosition(rotatePosition);
     }
 
+    public void PositionServoDown(double RotationEC) {
+        double Theta = (RotationEC / 22.64) + 90;
+        double servoAngle = 90 - Theta;
+        double requiredServoPosistion = (servoAngle * 0.0041) - 0.2;
+        servoExtend.setPosition(requiredServoPosistion);
+    }
+
+    public void PositionServoHorizontal(double RotationEC) {
+        double Theta = (RotationEC / 22.64) + 90;
+        double servoAngle = 180 - Theta;
+        double requiredServoPosistion = (servoAngle * 0.0041) - 0.2;
+        servoExtend.setPosition(requiredServoPosistion);
+        servoRotation.setPosition(0.52); // was 0.7
+    }
+
     public void setManualMode() {
         testVar = true;
+    }
+
+    public void setSampleGrabMode(double rotationPosition) {
+        PositionServoDown(rotationPosition);
+    }
+
+    public void setSpecimenPlaceMode(double rotationPosition) {
+        PositionServoHorizontal(rotationPosition);
+    }
+
+    public void setSpecimenGrabMode(double rotationPosition) {
+        PositionServoHorizontal(rotationPosition);
     }
 
     public void manualRun(Gamepad gamepad1, Gamepad gamepad2) {

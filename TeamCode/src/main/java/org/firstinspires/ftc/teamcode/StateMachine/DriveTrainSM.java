@@ -20,8 +20,6 @@ public class DriveTrainSM {
 
     boolean testVar = false;
 
-
-
     public DriveTrainSM(HardwareMap hwMap, Telemetry telemetry) {
         // Initializes motor names:
         leftFrontDrive = hwMap.get(DcMotor.class, "leftFront");
