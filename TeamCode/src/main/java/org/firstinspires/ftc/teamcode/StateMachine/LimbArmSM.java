@@ -135,32 +135,43 @@ public class LimbArmSM {
         maxRotatePos = -2356;
         minRotatePos = 0;
     }
+
     public void setSamplePlaceMode() {
         rotationSensitivity = 0.5f;
         initRotateByPower();
+        if (limbExtend.getCurrentPosition() < maxExtendPos) { // Making the robot stay at the max extension it can go to
+            RunMotor(maxExtendPos);
+        }
         maxRotatePos = -400;
         minRotatePos = 0;
     }
+
     public void setSampleGrabMode() {
         rotationSensitivity = 0.5f;
         initRotateByPower();
         maxRotatePos = -2200;
         minRotatePos = -2000;
     }
+
     public void setSpecimenPlaceMode() {
         rotationSensitivity = 0.5f;
+        initRotateByPower();
         extensionSensitivity = 0.5f;
         extensionLimit = 2500;
-        initRotateByPower();
+        if (limbExtend.getCurrentPosition() < maxExtendPos) { // Making the robot stay at the max extension it can go to
+            RunMotor(1500);
+        }
         maxRotatePos = -500;
         minRotatePos = 0;
     }
+
     public void setSpecimenGrabMode() {
         rotationSensitivity = 0.5f;
         initRotateByPower();
         maxRotatePos = -2000;
         minRotatePos = -1800;
     }
+
     public void manualRun(Gamepad gamepad1, Gamepad gamepad2) {
         testVar = false;
     }

@@ -42,10 +42,8 @@ public class RobotSM {
     // This is assuming we pick Option 1 listed in updateState function.
     // May need to take a different form otherwise.
     private RobotState getState(Gamepad gamepad, Gamepad gamepad2) {
-        if (gamepad.y) {
+        if (gamepad2.y) {
             return RobotState.MANUAL;
-        } else if (gamepad.x) {
-            return RobotState.DEFAULT;
         } else if (gamepad2.dpad_up) {
             return RobotState.SAMPLE_PLACE;
         } else if (gamepad2.dpad_down) {
@@ -54,7 +52,10 @@ public class RobotSM {
             return RobotState.SPECIMEN_PLACE;
         } else if (gamepad2.b) {
             return RobotState.SPECIMEN_GRAB;
-        } else {
+        } // else if (gamepad.x) {
+            //return RobotState.DEFAULT;
+        //}
+        else {
             return state;
         }
         //return RobotState.MANUAL;
@@ -64,21 +65,21 @@ public class RobotSM {
     // Examples: max lift height, lift rotation speed, etc.
     private void updateSubsystems(double rotationPosition) {
         switch (state) {
-            case MANUAL:
+            case MANUAL: // All parts of the robot can be moved freely
                 // Change subsytem properties to allow manual control
                 driveTrain.setManualMode();
                 sampleClaw.setManualMode();
                 limbArm.setManualMode();
                 break;
-            case SAMPLE_PLACE:
+            case SAMPLE_PLACE: // Everything can move freely except for the limb rotation
                 driveTrain.setManualMode();
                 sampleClaw.setManualMode();
                 limbArm.setSamplePlaceMode();
                 break;
             case SAMPLE_GRAB:
-                driveTrain.setManualMode();
-                sampleClaw.setSampleGrabMode(rotationPosition);
-                limbArm.setSampleGrabMode();
+                driveTrain.setManualMode(); // The drivetrain & limb extension can move freely
+                sampleClaw.setSampleGrabMode(rotationPosition); // The Claw will always face down
+                limbArm.setSampleGrabMode(); // The limb rotation cannot move freely
                 break;
             case SPECIMEN_PLACE:
                 driveTrain.setManualMode();
@@ -119,9 +120,6 @@ public class RobotSM {
                 sampleClaw.clawRotate(gamepad2.left_trigger, gamepad2.right_trigger,  gamepad2.y);
                 limbArm.rotateByPower(-gamepad2.right_stick_y);
                 limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
-                if (limbArm.limbExtend.getCurrentPosition() < limbArm.maxExtendPos) { // Making the robot stay at the max extension it can go to
-                    limbArm.RunMotor(limbArm.maxExtendPos);
-                }
                 telemetry.addData("State:", "SAMPLE_PLACE");
                 break;
             case SAMPLE_GRAB:
@@ -130,9 +128,6 @@ public class RobotSM {
                 limbArm.RunMotor(-gamepad2.left_stick_y);
                 limbArm.rotateByPower(-gamepad2.right_stick_y);
                 limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
-                if (limbArm.limbExtend.getCurrentPosition() < limbArm.maxExtendPos) { // Making the robot stay at the max extension it can go to
-                    limbArm.RunMotor(limbArm.maxExtendPos);
-                }
                 telemetry.addData("State:", "SAMPLE_GRAB");
                 break;
             case SPECIMEN_PLACE:
@@ -141,9 +136,6 @@ public class RobotSM {
                 limbArm.RunMotor(-gamepad2.left_stick_y);
                 limbArm.rotateByPower(-gamepad2.right_stick_y);
                 limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
-                if (limbArm.limbExtend.getCurrentPosition() < limbArm.maxExtendPos) { // Making the robot stay at the max extension it can go to
-                    limbArm.RunMotor(limbArm.maxExtendPos);
-                }
                 telemetry.addData("State:", "SPECIMEN_PLACE");
                 break;
             case SPECIMEN_GRAB:
@@ -152,9 +144,6 @@ public class RobotSM {
                 limbArm.RunMotor(-gamepad2.left_stick_y);
                 limbArm.rotateByPower(-gamepad2.right_stick_y);
                 limbArm.spoolCorrection(gamepad1.dpad_up, gamepad1.dpad_down);
-                if (limbArm.limbExtend.getCurrentPosition() < limbArm.maxExtendPos) { // Making the robot stay at the max extension it can go to
-                    limbArm.RunMotor(limbArm.maxExtendPos);
-                }
                 telemetry.addData("State:", "SPECIMEN_GRAB");
                 break;
             case DEFAULT: // explicit state to do nothing in

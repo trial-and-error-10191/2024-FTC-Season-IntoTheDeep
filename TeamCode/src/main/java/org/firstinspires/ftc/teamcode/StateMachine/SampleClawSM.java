@@ -11,7 +11,7 @@ public class SampleClawSM {
     boolean ClawOpen = false;
     boolean lastInput = false;
 
-    static double INCREMENT = 0.01;        // amount to slew servo each CYCLE_MS cycle
+    static double INCREMENT = 0.01;        // amount to slow servo each CYCLE_MS cycle
     static final double MAX_POS = 1.0;     // Maximum rotational position
     static final double MIN_POS = 0.0;     // Minimum rotational position
     static final double openPos = 0.8;     // servo position for open claw
