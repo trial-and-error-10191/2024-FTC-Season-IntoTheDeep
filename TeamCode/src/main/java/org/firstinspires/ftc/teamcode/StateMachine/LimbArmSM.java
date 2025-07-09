@@ -169,7 +169,7 @@ public class LimbArmSM {
         initRotateByPower();
         extensionSensitivity = 0.5f;
         extensionLimit = 2500;
-        if (limbExtend.getCurrentPosition() < maxExtendPos) { // Making the robot stay at the max extension it can go to
+        if (limbExtend.getCurrentPosition() > maxExtendPos) { // Making the robot stay at the max extension it can go to
             limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             RunMotor(1500);
             limbExtend.setPower(0.2);
