@@ -36,7 +36,7 @@ public class RobotSM {
         // Option 2) Create loop of states, have one button to more forward and separate one to move backward
         // Option 3) Use sensor input to automatically switch between states (somehow)
         state = getState(gamepad, gamepad2);
-        updateSubsystems(-gamepad2.right_stick_y);
+        updateSubsystems(limbArm.limbRotate.getCurrentPosition());
     }
 
     // This is assuming we pick Option 1 listed in updateState function.
@@ -68,28 +68,28 @@ public class RobotSM {
             case MANUAL: // All parts of the robot can be moved freely
                 // Change subsytem properties to allow manual control
                 driveTrain.setManualMode();
-                sampleClaw.setManualMode();
                 limbArm.setManualMode();
+                sampleClaw.setManualMode();
                 break;
             case SAMPLE_PLACE: // Everything can move freely except for the limb rotation
                 driveTrain.setManualMode();
-                sampleClaw.setManualMode();
                 limbArm.setSamplePlaceMode();
+                sampleClaw.setManualMode();
                 break;
             case SAMPLE_GRAB:
                 driveTrain.setManualMode(); // The drivetrain & limb extension can move freely
-                sampleClaw.setSampleGrabMode(rotationPosition); // The Claw will always face down
                 limbArm.setSampleGrabMode(); // The limb rotation cannot move freely
+                sampleClaw.setSampleGrabMode(rotationPosition); // The Claw will always face down
                 break;
             case SPECIMEN_PLACE:
                 driveTrain.setManualMode();
-                sampleClaw.setSpecimenPlaceMode(rotationPosition);
                 limbArm.setSpecimenPlaceMode();
+                sampleClaw.setSpecimenPlaceMode(rotationPosition);
                 break;
             case SPECIMEN_GRAB:
                 driveTrain.setManualMode();
-                sampleClaw.setSpecimenGrabMode(rotationPosition);
                 limbArm.setSpecimenGrabMode();
+                sampleClaw.setSpecimenGrabMode(rotationPosition);
                 break;
             case DEFAULT:
                 telemetry.addData("Warning:", "In Default (Do Nothing) State");

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -148,31 +149,71 @@ public class LimbArmSM {
 
     public void setSampleGrabMode() {
         rotationSensitivity = 0.5f;
+        limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         initRotateByPower();
         maxRotatePos = -2200;
         minRotatePos = -2000;
+        if (limbRotate.getCurrentPosition() < maxRotatePos || limbRotate.getCurrentPosition() > minRotatePos) {
+            limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            limbRotate.setTargetPosition(-2100);
+            limbRotate.setPower(0.2);
+            limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Wait(3);
+            limbRotate.setPower(0);
+        }
     }
 
     public void setSpecimenPlaceMode() {
         rotationSensitivity = 0.5f;
+        limbExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         initRotateByPower();
         extensionSensitivity = 0.5f;
         extensionLimit = 2500;
         if (limbExtend.getCurrentPosition() < maxExtendPos) { // Making the robot stay at the max extension it can go to
+            limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             RunMotor(1500);
+            limbExtend.setPower(0.2);
+            limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Wait(3);
+            limbExtend.setPower(0);
         }
         maxRotatePos = -500;
         minRotatePos = 0;
+        if (limbRotate.getCurrentPosition() < maxRotatePos) {
+            limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            limbRotate.setTargetPosition(-250);
+            limbRotate.setPower(0.2);
+            limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Wait(3);
+            limbRotate.setPower(0);
+        }
     }
 
     public void setSpecimenGrabMode() {
         rotationSensitivity = 0.5f;
+        limbRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         initRotateByPower();
         maxRotatePos = -2000;
         minRotatePos = -1800;
+        if (limbRotate.getCurrentPosition() < maxRotatePos || limbRotate.getCurrentPosition() > minRotatePos) {
+            limbRotate.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            limbRotate.setTargetPosition(-1900);
+            limbRotate.setPower(0.2);
+            limbRotate.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Wait(3);
+            limbRotate.setPower(0);
+        }
     }
 
     public void manualRun(Gamepad gamepad1, Gamepad gamepad2) {
         testVar = false;
     }
+
+    public void Wait(double seconds) {
+        ElapsedTime Time   = new ElapsedTime();
+        Time.reset();
+        while (Time.milliseconds()  < seconds * 1000) {
+            // doesn't need anything
+        } // end of while loop
+    } // end of public void Wait
 }
