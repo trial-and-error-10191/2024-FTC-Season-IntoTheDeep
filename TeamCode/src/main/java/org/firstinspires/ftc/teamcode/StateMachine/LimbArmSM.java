@@ -128,6 +128,29 @@ public class LimbArmSM {
         }
     }
 
+    public void ExtendAutoArm(int Counts) {
+        if (Counts < 0) {
+            limbExtend.setTargetPosition(0);
+        } else if (Counts > maxExtendPos) {
+            limbExtend.setTargetPosition(maxExtendPos);
+        } else {
+            limbExtend.setTargetPosition(Counts);
+        }
+        limbExtend.setPower(EXTEND_POWER);
+        limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        boolean isUp = ((Counts - limbExtend.getCurrentPosition()) > 0);
+        while (limbExtend.isBusy()) {
+            telemetry.addData("isBusy", spoolServo.getPower() );
+            telemetry.addData("LifeExtension", limbExtend.getCurrentPosition() );
+            telemetry.addData("LiftRotation: ", limbRotate.getCurrentPosition() );
+            spoolServo.setPower(isUp ? -1 : 1);
+            telemetry.addData("SpoolServoValue", "%1.2f", spoolServo.getPower());
+            telemetry.update();
+        }
+        limbExtend.setPower(0);
+        spoolServo.setPower(0);
+    }
+
     public void setManualMode() {
         rotationSensitivity = 1;
         extensionSensitivity = 1;
@@ -141,15 +164,9 @@ public class LimbArmSM {
         rotationSensitivity = 0.5f;
         initRotateByPower();
         extensionLimit = 3780;
-        if (limbExtend.getCurrentPosition() < maxExtendPos) { // Making the robot stay at the max extension it can go to
-            double servoExtend = limbExtend.getPower();
-            spoolServo.setPower(servoExtend * 0.85);
-            limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            RunMotor(maxExtendPos);
-            limbExtend.setPower(0.2);
-            limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            Wait(3);
-            limbExtend.setPower(0);
+        if (limbExtend.getCurrentPosition() < extensionLimit) { // Making the robot stay at the max extension it can go to
+            ExtendAutoArm(maxExtendPos);
+            //Wait(3);
         }
         maxRotatePos = -400;
         minRotatePos = 0;
@@ -177,15 +194,9 @@ public class LimbArmSM {
         initRotateByPower();
         extensionSensitivity = 0.5f;
         extensionLimit = 2500;
-        if (limbExtend.getCurrentPosition() > maxExtendPos) { // Making the robot stay at the max extension it can go to
-            double servoExtend = limbExtend.getPower();
-            spoolServo.setPower(servoExtend * 0.85);
-            limbExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            RunMotor(1500);
-            limbExtend.setPower(0.2);
-            limbExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            Wait(3);
-            limbExtend.setPower(0);
+        if (limbExtend.getCurrentPosition() > extensionLimit) { // Making the robot stay at the max extension it can go to
+            ExtendAutoArm(1500);
+//            Wait(3);
         }
         maxRotatePos = -500;
         minRotatePos = 0;
