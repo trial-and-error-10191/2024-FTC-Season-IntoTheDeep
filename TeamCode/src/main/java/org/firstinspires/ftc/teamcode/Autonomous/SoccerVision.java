@@ -187,6 +187,12 @@ public class SoccerVision extends LinearOpMode {
          *     eg: Green may be reported as YELLOW, as this may be the "closest" match.
          */
 
+        // Initialize the drive system variables.
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftFront");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
+
         final double TURN_SPEED              = 0.7;     // Max turn speed to limit turn rate.
 
         PredominantColorProcessor colorSensor = new PredominantColorProcessor.Builder()
