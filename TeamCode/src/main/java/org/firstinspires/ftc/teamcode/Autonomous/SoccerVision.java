@@ -116,6 +116,20 @@ public class SoccerVision extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } // end of if statement
     } // end of public void driveStraight
+    public void driveStraightPower(double power, int time) { // Makes the robot move using power
+        leftFrontDrive.setPower(power);
+        leftBackDrive.setPower(power);
+        rightFrontDrive.setPower(power);
+        rightBackDrive.setPower(power);
+        while (time > 0) { // Basically a timer for when the wheels lose power
+            time -= 1;
+            Wait (1);
+        }
+        leftFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        rightBackDrive.setPower(0);
+    }
     public void moveRobot(double drive, double turn) {
         driveSpeed = drive;     // save this value as a class member so it can be used by telemetry.
         turnSpeed  = turn;      // save this value as a class member so it can be used by telemetry.
@@ -193,6 +207,11 @@ public class SoccerVision extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
         leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
 
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
         final double TURN_SPEED              = 0.7;     // Max turn speed to limit turn rate.
 
         PredominantColorProcessor colorSensor = new PredominantColorProcessor.Builder()
@@ -250,7 +269,7 @@ public class SoccerVision extends LinearOpMode {
             telemetry.addData("Op Mode Is Active", opModeIsActive());
             telemetry.update();
             if (result.closestSwatch == PredominantColorProcessor.Swatch.RED) {
-                driveStraight(TURN_SPEED, 10, 0);
+                driveStraightPower(0.1, 3);
             }
         }
     }
