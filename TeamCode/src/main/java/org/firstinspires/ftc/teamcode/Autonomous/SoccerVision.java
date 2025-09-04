@@ -271,7 +271,7 @@ public class SoccerVision extends LinearOpMode {
             if (result.closestSwatch == PredominantColorProcessor.Swatch.RED) {
                 driveStraightPower(0.1, 3);
             }
-            Wait(27);
+            Wait(30); // To make sure this while doesn't loop again
         }
     }
 }
