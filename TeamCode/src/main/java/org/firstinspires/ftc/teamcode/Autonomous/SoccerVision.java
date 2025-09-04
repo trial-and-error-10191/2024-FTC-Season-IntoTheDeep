@@ -42,7 +42,6 @@ public class SoccerVision extends LinearOpMode {
     int rightFrontTarget  = 0;
 
     private void sendTelemetry(boolean straight) {
-
         if (straight) {
             telemetry.addData("Heading", getHeading());
             telemetry.addData("Motion", "Drive Straight");
@@ -116,15 +115,16 @@ public class SoccerVision extends LinearOpMode {
             rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } // end of if statement
     } // end of public void driveStraight
-    public void driveStraightPower(double power, int time) { // Makes the robot move using power
+    public void driveStraightPower(double power, double time) { // Makes the robot move using power
         leftFrontDrive.setPower(power);
         leftBackDrive.setPower(power);
         rightFrontDrive.setPower(power);
         rightBackDrive.setPower(power);
-        while (time > 0) { // Basically a timer for when the wheels lose power
-            time -= 1;
-            Wait (1);
-        }
+        final ElapsedTime Time   = new ElapsedTime();
+        Time.reset();
+        while (Time.milliseconds()  < time * 1000) {
+            // doesn't need anything
+        } // end of while loop
         leftFrontDrive.setPower(0);
         leftBackDrive.setPower(0);
         rightFrontDrive.setPower(0);
@@ -269,9 +269,11 @@ public class SoccerVision extends LinearOpMode {
             telemetry.addData("Op Mode Is Active", opModeIsActive());
             telemetry.update();
             if (result.closestSwatch == PredominantColorProcessor.Swatch.RED) {
-                driveStraightPower(0.1, 3);
+                driveStraightPower(0.5, 1);
+                Wait(1);
+                driveStraightPower(-0.5, 1);
+                Wait(30); // To make sure this while doesn't loop again
             }
-            Wait(30); // To make sure this while doesn't loop again
         }
     }
 }
