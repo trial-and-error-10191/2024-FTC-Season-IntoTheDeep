@@ -270,7 +270,7 @@ public class SoccerVision extends LinearOpMode {
             telemetry.update();
             if (result.closestSwatch == PredominantColorProcessor.Swatch.RED) {
                 driveStraightPower(0.5, 1);
-                Wait(1);
+                Wait(0.5);
                 driveStraightPower(-0.5, 1);
                 Wait(30); // To make sure this while doesn't loop again
             }
