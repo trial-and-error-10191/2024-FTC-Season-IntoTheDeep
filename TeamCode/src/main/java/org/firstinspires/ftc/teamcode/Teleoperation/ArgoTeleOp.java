@@ -23,12 +23,9 @@ public class ArgoTeleOp extends LinearOpMode {
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
         waitForStart();
+        Robot robot = new Robot(hardwareMap, telemetry);
         while (opModeIsActive()) {
-            YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-            angles = -orientation.getYaw(AngleUnit.RADIANS);
-
-            telemetry.addData("angles", "%4.2f", angles);
-            telemetry.update();
+            robot.driveTrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         }
     }
 }
