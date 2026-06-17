@@ -97,7 +97,7 @@ public class Field_TeleOp extends LinearOpMode {
 
             double sensitivity = 0.65;
             // The next four lines gives the calculated power to each motor.
-            leftFrontDrive.setPower((leftFrontPower * sensitivity) * 0.71474358974358974358974358974359);
+            leftFrontDrive.setPower(leftFrontPower * sensitivity);
             rightFrontDrive.setPower(rightFrontPower * sensitivity);
             leftBackDrive.setPower(leftBackPower * sensitivity);
             rightBackDrive.setPower(rightBackPower * sensitivity);
